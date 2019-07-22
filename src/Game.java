@@ -75,24 +75,12 @@ public class Game
     return newMurderScenario;
   }
 
-  public int numberOfMurderScenario()
-  {
-    int number = murderScenario.size();
-    return number;
-  }
-
-  public boolean hasMurderScenario()
-  {
-    boolean has = murderScenario.size() > 0;
-    return has;
-  }
-
   public int indexOfMurderScenario(Card aMurderScenario)
   {
     int index = murderScenario.indexOf(aMurderScenario);
     return index;
   }
-  /* Code from template association_GetMany */
+
   public Player getPlayer(int index)
   {
     Player aStore = players.get(index);
