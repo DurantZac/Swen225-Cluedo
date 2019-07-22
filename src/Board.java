@@ -38,7 +38,13 @@ public class Board
   //------------------------
   // INTERFACE
   //------------------------
-  /* Code from template association_GetMany */
+
+  /**
+   *  Gets the tile corresponding to XY coordinates.
+   *  String must be 2 letters, with one being upper case and one being lower
+   * @param tile the tile to get according to its coordinates
+   * @return the tile.
+   */
   public Tile getBoardTile(String tile)
   {
     try {
@@ -123,7 +129,9 @@ public class Board
   /* Code from template association_SetUnidirectionalN */
 
 
-
+  /**
+   * Prints the board based on the 2D array of tiles.
+   */
   public void printBoard(){
     String s = "";
     char c = 'a';

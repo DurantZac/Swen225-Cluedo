@@ -302,7 +302,6 @@ public class Game
      return roll1+roll2;
    }
 
-  // line 9 "model.ump"
    private void playGame(){
     
   }
