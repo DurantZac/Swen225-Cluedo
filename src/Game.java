@@ -2,6 +2,9 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 // line 2 "model.ump"
 // line 96 "model.ump"
@@ -26,6 +29,25 @@ public class Game
    */
   public Game() {
     board = createBoard();
+
+    while (true) { //Try to find out how many players there are
+      try {
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("How many players are playing?");
+        int numberOfPlayers = Integer.parseInt(input.readLine());
+        System.out.println(numberOfPlayers);
+
+        input.close();//Close buffered reader
+        break;
+      } catch (NumberFormatException n) {
+        System.out.println("Please enter a number only");
+      }
+      catch (IOException e){
+        System.out.println("Error on input, please try again" + e);
+      }
+    }
+
+
   }
 
   /** Generate board from string
@@ -302,8 +324,13 @@ public class Game
      return roll1+roll2;
    }
 
-   private void playGame(){
-    
+  /**
+   * Runs the main game loop while the murder has not been guessed and there are still players in the game
+   */
+  private void playGame(){
+
+
+
   }
 
   // line 10 "model.ump"
