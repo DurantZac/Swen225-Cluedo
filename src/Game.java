@@ -13,7 +13,7 @@ public class Game
   //------------------------
 
   //Game Associations
-  private Board contains;
+  private Board board;
   private List<Card> murderScenario;
   private List<Player> stores;
 
@@ -21,33 +21,6 @@ public class Game
   // CONSTRUCTOR
   //------------------------
 
-  public Game(Board aContains, Card[] allMurderScenario, Player[] allStores)
-  {
-    if (aContains == null || aContains.getGame() != null)
-    {
-      throw new RuntimeException("Unable to create Game due to aContains. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    contains = aContains;
-    murderScenario = new ArrayList<Card>();
-    boolean didAddMurderScenario = setMurderScenario(allMurderScenario);
-    if (!didAddMurderScenario)
-    {
-      throw new RuntimeException("Unable to create Game, must have 3 murderScenario. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    stores = new ArrayList<Player>();
-    boolean didAddStores = setStores(allStores);
-    if (!didAddStores)
-    {
-      throw new RuntimeException("Unable to create Game, must have 3 to 6 stores. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-  }
-
-  public Game(Tile[] allBoardTilesForContains, Card[] allMurderScenario, Player[] allStores)
-  {
-    contains = new Board(this, allBoardTilesForContains);
-    murderScenario = new ArrayList<Card>();
-    stores = new ArrayList<Player>();
-  }
 
   public Game() {
 
@@ -57,9 +30,9 @@ public class Game
   // INTERFACE
   //------------------------
   /* Code from template association_GetOne */
-  public Board getContains()
+  public Board getBoard()
   {
-    return contains;
+    return board;
   }
   /* Code from template association_GetMany */
   public Card getMurderScenario(int index)
@@ -259,8 +232,8 @@ public class Game
 
   public void delete()
   {
-    Board existingContains = contains;
-    contains = null;
+    Board existingContains = board;
+    board = null;
     if (existingContains != null)
     {
       existingContains.delete();
