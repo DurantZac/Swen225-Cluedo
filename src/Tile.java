@@ -27,8 +27,28 @@ public class Tile
 
   public Tile(char symbol)
   {
-    isAccessable = false;
     this.symbol=symbol;
+
+    switch (this.symbol){
+      case '_':
+        isAccessable = true;
+        break;
+      case '>':
+        isAccessable=true;
+        break;
+      case '<':
+        isAccessable=true;
+        break;
+      case '^':
+        isAccessable=true;
+        break;
+      case 'v':
+        isAccessable=true;
+        break;
+      default: // must be a wall or a person
+        isAccessable=false;
+    }
+
   }
 
   //------------------------

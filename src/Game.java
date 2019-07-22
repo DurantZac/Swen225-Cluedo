@@ -15,7 +15,7 @@ public class Game
   //Game Associations
   private Board board;
   private List<Card> murderScenario;
-  private List<Player> stores;
+  private List<Player> players;
 
   //------------------------
   // CONSTRUCTOR
@@ -103,33 +103,33 @@ public class Game
     return index;
   }
   /* Code from template association_GetMany */
-  public Player getStore(int index)
+  public Player getPlayer(int index)
   {
-    Player aStore = stores.get(index);
+    Player aStore = players.get(index);
     return aStore;
   }
 
-  public List<Player> getStores()
+  public List<Player> getPlayers()
   {
-    List<Player> newStores = Collections.unmodifiableList(stores);
+    List<Player> newStores = Collections.unmodifiableList(players);
     return newStores;
   }
 
-  public int numberOfStores()
+  public int numberOfPlayers()
   {
-    int number = stores.size();
+    int number = players.size();
     return number;
   }
 
-  public boolean hasStores()
+  public boolean hasPlayers()
   {
-    boolean has = stores.size() > 0;
+    boolean has = players.size() > 0;
     return has;
   }
 
-  public int indexOfStore(Player aStore)
+  public int indexOfPlayer(Player aStore)
   {
-    int index = stores.indexOf(aStore);
+    int index = players.indexOf(aStore);
     return index;
   }
   /* Code from template association_RequiredNumberOfMethod */
@@ -185,10 +185,10 @@ public class Game
   public boolean addStore(Player aStore)
   {
     boolean wasAdded = false;
-    if (stores.contains(aStore)) { return false; }
-    if (numberOfStores() < maximumNumberOfStores())
+    if (players.contains(aStore)) { return false; }
+    if (numberOfPlayers() < maximumNumberOfStores())
     {
-      stores.add(aStore);
+      players.add(aStore);
       wasAdded = true;
     }
     return wasAdded;
@@ -197,17 +197,17 @@ public class Game
   public boolean removeStore(Player aStore)
   {
     boolean wasRemoved = false;
-    if (!stores.contains(aStore))
+    if (!players.contains(aStore))
     {
       return wasRemoved;
     }
 
-    if (numberOfStores() <= minimumNumberOfStores())
+    if (numberOfPlayers() <= minimumNumberOfStores())
     {
       return wasRemoved;
     }
 
-    stores.remove(aStore);
+    players.remove(aStore);
     wasRemoved = true;
     return wasRemoved;
   }
@@ -230,8 +230,8 @@ public class Game
       return wasSet;
     }
 
-    stores.clear();
-    stores.addAll(verifiedStores);
+    players.clear();
+    players.addAll(verifiedStores);
     wasSet = true;
     return wasSet;
   }
@@ -242,9 +242,9 @@ public class Game
     if(addStore(aStore))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfStores()) { index = numberOfStores() - 1; }
-      stores.remove(aStore);
-      stores.add(index, aStore);
+      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
+      players.remove(aStore);
+      players.add(index, aStore);
       wasAdded = true;
     }
     return wasAdded;
@@ -253,12 +253,12 @@ public class Game
   public boolean addOrMoveStoreAt(Player aStore, int index)
   {
     boolean wasAdded = false;
-    if(stores.contains(aStore))
+    if(players.contains(aStore))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfStores()) { index = numberOfStores() - 1; }
-      stores.remove(aStore);
-      stores.add(index, aStore);
+      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
+      players.remove(aStore);
+      players.add(index, aStore);
       wasAdded = true;
     } 
     else 
@@ -277,13 +277,25 @@ public class Game
       existingContains.delete();
     }
     murderScenario.clear();
-    stores.clear();
+    players.clear();
   }
 
-  // line 8 "model.ump"
+  /**
+   * Creates two "dice" which pick a random number from 1-6
+   * @return sum of roll
+   */
    private int RollDice(){
-    return 0;
-  }
+     Random dice1 = new Random();
+     Random dice2 = new Random();
+
+     int roll1 = dice1.nextInt(6); //random int from 0-5
+     int roll2 = dice2.nextInt(6);
+
+     roll1+=1; // add 1 to make interval 1-6
+     roll2+=1;
+
+     return roll1+roll2;
+   }
 
   // line 9 "model.ump"
    private void playGame(){
