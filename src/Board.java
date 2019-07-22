@@ -14,7 +14,7 @@ public class Board
   //------------------------
 
   //Board Associations
-  private Tile[][] BoardTiles = new Tile[25][24];
+  private Tile[][] boardTiles = new Tile[25][24];
   private Game game;
 
   //------------------------
@@ -26,7 +26,7 @@ public class Board
     int i = 0;
     for(int row = 0; row < 25; row++){
       for(int col = 0; col < 24; col++){
-        BoardTiles[row][col] = allBoardTiles.get(i);
+        boardTiles[row][col] = allBoardTiles.get(i);
         i++;
       }
     }
@@ -39,9 +39,44 @@ public class Board
   // INTERFACE
   //------------------------
   /* Code from template association_GetMany */
-  public Tile getBoardTile(int index)
+  public Tile getBoardTile(String tile)
   {
-    return null;
+    try {
+      if (tile.length() != 2) { // needs to be exactly 2 letters long
+        throw new moveInvalidException ("Move invalid.");
+      }
+
+      char letter1 = tile.charAt(0);
+      char letter2 = tile.charAt(1);
+
+      //Needs to be one upper case and one lower case
+
+      //Case X followed by Y
+      if (Character.isUpperCase(letter1)){
+        if (Character.isLowerCase(letter2)){
+          int x = letter1 - 'A';
+          int y = letter2 - 'a';
+          return boardTiles[x][y];
+        }
+        throw new moveInvalidException ("Move invalid.");
+      }
+
+      //Case Y followed by X
+      else if (Character.isUpperCase(letter2)) {
+        if (Character.isLowerCase(letter1)) {
+          int y = letter1 - 'a';
+          int x = letter2 - 'A';
+          return boardTiles[x][y];
+        }
+        throw new moveInvalidException("Move invalid.");
+      }
+
+      //Neither letters upper case
+      throw new moveInvalidException ("Move invalid.");
+    }
+    catch (moveInvalidException e){ //Invalid input.
+      return null;
+    }
   }
 
   public List<Tile> getBoardTiles()
@@ -51,13 +86,13 @@ public class Board
 
   public int numberOfBoardTiles()
   {
-    int number = BoardTiles.length;
+    int number = boardTiles.length;
     return 0;
   }
 
   public boolean hasBoardTiles()
   {
-    boolean has = BoardTiles.length > 0;
+    boolean has = boardTiles.length > 0;
     return false;
   }
 
@@ -103,4 +138,10 @@ public class Board
     return false;
   }
 
+
+
+  private class moveInvalidException extends Throwable {
+    public moveInvalidException(String s) {
+    }
+  }
 }
