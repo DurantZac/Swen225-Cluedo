@@ -27,7 +27,7 @@ public class Game
   public Game() {
     board = createBoard();
     List<Card> allCards = createCards();
-    
+
   }
 
   /** Generate board from string
