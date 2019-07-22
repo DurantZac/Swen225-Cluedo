@@ -21,15 +21,22 @@ public class Board
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Constructor of Board,
+   * Makes a new game
+   * @param aGame
+   * @param allBoardTiles
+   */
   public Board(Game aGame, List<Tile>allBoardTiles)
   {
     int i = 0;
     for(int row = 0; row < 25; row++){
       for(int col = 0; col < 24; col++){
-        boardTiles[row][col] = allBoardTiles.get(i);
+        boardTiles[row][col] = allBoardTiles.get(i); // converts list of tiles to 2D array
         i++;
       }
     }
+
     game = aGame;
     printBoard();
   }
