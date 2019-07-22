@@ -23,7 +23,7 @@ public class Game
 
 
   public Game() {
-    String s = "|X|X|X|X|X|X|X|X|X|W|#|#|#|#|G|X|X|X|X|X|X|X|X|X|"  + "\n" +
+      String gameBoard = "|X|X|X|X|X|X|X|X|X|W|#|#|#|#|G|X|X|X|X|X|X|X|X|X|"  + "\n" +
             "|#|#|#|#|#|#|X|_|_|_|#|_|_|#|_|_|_|X|#|#|#|#|#|#|"  + "\n" +
             "|#|K|_|_|_|#|_|_|#|#|#|_|_|#|#|#|_|_|#|_|_|_|C|#|"  + "\n" +
             "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|#|_|_|_|_|#|"  + "\n" +
@@ -48,9 +48,19 @@ public class Game
             "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|#|"  + "\n" +
             "|#|L|_|_|_|_|#|_|_|#|H|_|_|_|#|_|_|#|_|_|_|_|S|#|"  + "\n" +
             "|#|#|#|#|#|#|#|R|X|#|#|#|#|#|#|X|_|#|#|#|#|#|#|#|"  + "\n";
-      System.out.println(s);
+      List<Tile> tiles = new ArrayList<>();
+      String[] lines = gameBoard.split("\n");
+      for (String l : lines){
+          String[] values = l.split("|");
+          for(int i = 0; i < values.length; i++ ){
+              if(i % 2 != 0){
+                  Tile t = new Tile(values[i].charAt(0));
+                  tiles.add(t);
+              }
+          }
+      }
 
-      Scanner sc = new Scanner(s).useDelimiter("\\|");
+      Board b = new Board(this, tiles);
 
   }
 
@@ -294,6 +304,7 @@ public class Game
    private boolean checkAccusation(){
     return false;
   }
+
   public static void main(String args[]){
     new Game();
   }

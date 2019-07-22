@@ -21,18 +21,9 @@ public class Board
   // CONSTRUCTOR
   //------------------------
 
-  public Board(Game aGame, Tile... allBoardTiles)
+  public Board(Game aGame, List<Tile>allBoardTiles)
   {
-    BoardTiles = new ArrayList<Tile>();
-    boolean didAddBoardTiles = setBoardTiles(allBoardTiles);
-    if (!didAddBoardTiles)
-    {
-      throw new RuntimeException("Unable to create Board, must have 600 BoardTiles. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (aGame == null || aGame.getBoard() != null)
-    {
-      throw new RuntimeException("Unable to create Board due to aGame. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    BoardTiles = allBoardTiles;
     game = aGame;
   }
 
@@ -91,29 +82,7 @@ public class Board
     return 600;
   }
   /* Code from template association_SetUnidirectionalN */
-  public boolean setBoardTiles(Tile... newBoardTiles)
-  {
-    boolean wasSet = false;
-    ArrayList<Tile> verifiedBoardTiles = new ArrayList<Tile>();
-    for (Tile aBoardTile : newBoardTiles)
-    {
-      if (verifiedBoardTiles.contains(aBoardTile))
-      {
-        continue;
-      }
-      verifiedBoardTiles.add(aBoardTile);
-    }
 
-    if (verifiedBoardTiles.size() != newBoardTiles.length || verifiedBoardTiles.size() != requiredNumberOfBoardTiles())
-    {
-      return wasSet;
-    }
-
-    BoardTiles.clear();
-    BoardTiles.addAll(verifiedBoardTiles);
-    wasSet = true;
-    return wasSet;
-  }
 
   public void delete()
   {
@@ -124,6 +93,10 @@ public class Board
     {
       existingGame.delete();
     }
+  }
+
+  public String printBoard(){
+
   }
 
   // line 24 "model.ump"
