@@ -31,7 +31,6 @@ public class Board
       }
     }
     game = aGame;
-    printBoard();
   }
 
 

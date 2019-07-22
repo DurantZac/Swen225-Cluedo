@@ -21,9 +21,19 @@ public class Game
   // CONSTRUCTOR
   //------------------------
 
-
+  /**
+   * Create new game by initialising board,
+   */
   public Game() {
-      String gameBoard = "|X|X|X|X|X|X|X|X|X|W|#|#|#|#|G|X|X|X|X|X|X|X|X|X|"  + "\n" +
+    board = createBoard();
+  }
+
+  /** Generate board from string
+   * @return boadrd
+   */
+  public Board createBoard(){
+
+    String gameBoard = "|X|X|X|X|X|X|X|X|X|W|#|#|#|#|G|X|X|X|X|X|X|X|X|X|"  + "\n" +
             "|#|#|#|#|#|#|X|_|_|_|#|_|_|#|_|_|_|X|#|#|#|#|#|#|"  + "\n" +
             "|#|K|_|_|_|#|_|_|#|#|#|_|_|#|#|#|_|_|#|_|_|_|C|#|"  + "\n" +
             "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|#|_|_|_|_|#|"  + "\n" +
@@ -48,22 +58,35 @@ public class Game
             "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|#|"  + "\n" +
             "|#|L|_|_|_|_|#|_|_|#|H|_|_|_|#|_|_|#|_|_|_|_|S|#|"  + "\n" +
             "|#|#|#|#|#|#|#|R|X|#|#|#|#|#|#|X|_|#|#|#|#|#|#|#|"  + "\n";
-      List<Tile> tiles = new ArrayList<>();
-      String[] lines = gameBoard.split("\n");
-      for (String l : lines){
-          String[] values = l.split("|");
-          for(int i = 0; i < values.length; i++ ){
-              if(i % 2 != 0){
-                  Tile t = new Tile(values[i].charAt(0));
-                  tiles.add(t);
-              }
-          }
+
+    List<Tile> tiles = new ArrayList<>();
+    String[] lines = gameBoard.split("\n");
+    for (String l : lines){
+      String[] values = l.split("|");
+      for(int i = 0; i < values.length; i++ ){
+        if(i % 2 != 0){
+          Tile t = new Tile(values[i].charAt(0));
+          tiles.add(t);
+        }
       }
-
-      Board b = new Board(this, tiles);
-
   }
 
+    return new Board(this, tiles);
+  }
+
+  public Set<Card> createCards(){
+    Set<Card> allCards = new HashSet<>();
+    // Characters
+    allCards.add(new CharacterCard("Col. Mustard"));
+    allCards.add(new CharacterCard("Mrs White"));
+    allCards.add(new CharacterCard("Rev. Green"));
+    allCards.add(new CharacterCard("Prof. Plum"));
+    allCards.add(new CharacterCard("Ms Turquoise"));
+    allCards.add(new CharacterCard("Miss Red"));
+
+    //Rooms
+    return null;
+  }
   //------------------------
   // INTERFACE
   //------------------------
