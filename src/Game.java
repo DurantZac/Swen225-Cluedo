@@ -1,11 +1,5 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
-
-
 import java.util.*;
 
-// line 2 "model.ump"
-// line 96 "model.ump"
 public class Game
 {
 
@@ -16,7 +10,7 @@ public class Game
   //Game Associations
   private Board board;
   private List<Card> murderScenario;
-  private List<Player> stores;
+  private List<Player> players;
 
   //------------------------
   // CONSTRUCTOR
@@ -93,31 +87,31 @@ public class Game
   /* Code from template association_GetMany */
   public Player getStore(int index)
   {
-    Player aStore = stores.get(index);
+    Player aStore = players.get(index);
     return aStore;
   }
 
   public List<Player> getStores()
   {
-    List<Player> newStores = Collections.unmodifiableList(stores);
+    List<Player> newStores = Collections.unmodifiableList(players);
     return newStores;
   }
 
   public int numberOfStores()
   {
-    int number = stores.size();
+    int number = players.size();
     return number;
   }
 
   public boolean hasStores()
   {
-    boolean has = stores.size() > 0;
+    boolean has = players.size() > 0;
     return has;
   }
 
   public int indexOfStore(Player aStore)
   {
-    int index = stores.indexOf(aStore);
+    int index = players.indexOf(aStore);
     return index;
   }
   /* Code from template association_RequiredNumberOfMethod */
@@ -170,22 +164,22 @@ public class Game
     return 6;
   }
   /* Code from template association_AddUnidirectionalMN */
-  public boolean addStore(Player aStore)
+  public boolean addStore(Player aPlayer)
   {
     boolean wasAdded = false;
-    if (stores.contains(aStore)) { return false; }
+    if (players.contains(aPlayer)) { return false; }
     if (numberOfStores() < maximumNumberOfStores())
     {
-      stores.add(aStore);
+      players.add(aPlayer);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean removeStore(Player aStore)
+  public boolean removeStore(Player aPlayer)
   {
     boolean wasRemoved = false;
-    if (!stores.contains(aStore))
+    if (!players.contains(aPlayer))
     {
       return wasRemoved;
     }
@@ -195,7 +189,7 @@ public class Game
       return wasRemoved;
     }
 
-    stores.remove(aStore);
+    players.remove(aPlayer);
     wasRemoved = true;
     return wasRemoved;
   }
@@ -218,40 +212,40 @@ public class Game
       return wasSet;
     }
 
-    stores.clear();
-    stores.addAll(verifiedStores);
+    players.clear();
+    players.addAll(verifiedStores);
     wasSet = true;
     return wasSet;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addStoreAt(Player aStore, int index)
+  public boolean addStoreAt(Player aPlayer, int index)
   {  
     boolean wasAdded = false;
-    if(addStore(aStore))
+    if(addStore(aPlayer))
     {
       if(index < 0 ) { index = 0; }
       if(index > numberOfStores()) { index = numberOfStores() - 1; }
-      stores.remove(aStore);
-      stores.add(index, aStore);
+      players.remove(aPlayer);
+      players.add(index, aPlayer);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveStoreAt(Player aStore, int index)
+  public boolean addOrMoveStoreAt(Player aPlayer, int index)
   {
     boolean wasAdded = false;
-    if(stores.contains(aStore))
+    if(players.contains(aPlayer))
     {
       if(index < 0 ) { index = 0; }
       if(index > numberOfStores()) { index = numberOfStores() - 1; }
-      stores.remove(aStore);
-      stores.add(index, aStore);
+      players.remove(aPlayer);
+      players.add(index, aPlayer);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addStoreAt(aStore, index);
+      wasAdded = addStoreAt(aPlayer, index);
     }
     return wasAdded;
   }
@@ -265,11 +259,14 @@ public class Game
       existingContains.delete();
     }
     murderScenario.clear();
-    stores.clear();
+    players.clear();
   }
 
-  // line 8 "model.ump"
-   private int rollDice(){
+  /**
+   * Creates 2 random number generators and "rolls" the dice. Returns the result.
+   * @return result of dice roll
+   */
+  private int rollDice(){
      Random dice1 = new Random();
      Random dice2 = new Random();
 
@@ -279,8 +276,6 @@ public class Game
      roll1+=1; // add 1 to get range 1-6.
      roll2+=1;
 
-     System.out.println(roll1);
-     System.out.println(roll2);
      return roll1+roll2;
   }
 
