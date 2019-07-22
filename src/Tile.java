@@ -19,14 +19,16 @@ public class Tile
   private CharacterCard isOccupiedBy;
   private Room isPartOf;
   private WeaponCard occupiedBy;
+  private char symbol;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Tile()
+  public Tile(char symbol)
   {
     isAccessable = false;
+    this.symbol=symbol;
   }
 
   //------------------------
