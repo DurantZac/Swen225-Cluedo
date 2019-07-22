@@ -3,6 +3,7 @@
 
 
 import java.util.*;
+
 // line 2 "model.ump"
 // line 96 "model.ump"
 public class Game
@@ -48,7 +49,7 @@ public class Game
             "|_|_|_|_|_|_|_|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|#|"  + "\n" +
             "|_|_|_|_|_|_|_|_|_|#|H|_|_|_|#|_|_|#|_|_|_|_|S|#|"  + "\n" +
             "|_|_|_|_|_|_|_|_|_|#|#|#|#|#|#|_|_|#|#|#|#|#|#|#|"  + "\n";
-      System.out.println(s);
+     // System.out.println(s);
   }
 
   //------------------------
@@ -268,8 +269,19 @@ public class Game
   }
 
   // line 8 "model.ump"
-   private int RollDice(){
-    return 0;
+   private int rollDice(){
+     Random dice1 = new Random();
+     Random dice2 = new Random();
+
+     int roll1 = dice1.nextInt(6); // random number from 0-5
+     int roll2 = dice2.nextInt(6);
+
+     roll1+=1; // add 1 to get range 1-6.
+     roll2+=1;
+
+     System.out.println(roll1);
+     System.out.println(roll2);
+     return roll1+roll2;
   }
 
   // line 9 "model.ump"
