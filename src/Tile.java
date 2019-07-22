@@ -19,14 +19,16 @@ public class Tile
   private CharacterCard isOccupiedBy;
   private Room isPartOf;
   private WeaponCard occupiedBy;
+  private char symbol;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Tile()
+  public Tile(char symbol)
   {
     isAccessable = false;
+    this.symbol=symbol;
   }
 
   //------------------------
@@ -111,17 +113,21 @@ public class Tile
   }
 
 
-  public String toString()
+  public String toStringFull()
   {
     return super.toString() + "["+
             "isAccessable" + ":" + getIsAccessable()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "isOccupiedBy = "+(getIsOccupiedBy()!=null?Integer.toHexString(System.identityHashCode(getIsOccupiedBy())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "isPartOf = "+(getIsPartOf()!=null?Integer.toHexString(System.identityHashCode(getIsPartOf())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "occupiedBy = "+(getOccupiedBy()!=null?Integer.toHexString(System.identityHashCode(getOccupiedBy())):"null");
-  }  
-  //------------------------
-  // DEVELOPER CODE - PROVIDED AS-IS
-  //------------------------
-  
-  // line 32 model.ump
+  }
+
+  public String toString(){
+    String s="|";
+    s+=symbol;
+    s+="|";
+    
+    return s;
+  }
+
 }
