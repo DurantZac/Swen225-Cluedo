@@ -15,6 +15,7 @@ public class Room
 
   //Room Associations
   private RoomCard roomCard;
+  private String name;
   private WeaponCard Contains;
   private List<Tile> entrances;
   private List<Tile> playerReserved;
@@ -36,12 +37,13 @@ public class Room
     weaponReserved = new ArrayList<Tile>();
   }
 
-  public Room()
+  public Room(String n)
   {
     roomCard = new RoomCard(this);
     entrances = new ArrayList<Tile>();
     playerReserved = new ArrayList<Tile>();
     weaponReserved = new ArrayList<Tile>();
+    name  = n;
   }
 
   //------------------------
@@ -173,6 +175,7 @@ public class Room
     if (entrances.contains(aEntrance)) { return false; }
     entrances.add(aEntrance);
     wasAdded = true;
+    aEntrance.setIsPartOf(this);
     return wasAdded;
   }
 
