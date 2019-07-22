@@ -142,6 +142,10 @@ public class Tile
             "  " + "occupiedBy = "+(getOccupiedBy()!=null?Integer.toHexString(System.identityHashCode(getOccupiedBy())):"null");
   }
 
+  /**
+   * To String used for printing the board to the console
+   * @return The symbol of this tile with a divider
+   */
   public String toString(){
     String s="|";
     s+=symbol;

@@ -21,15 +21,22 @@ public class Board
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Constructor of Board,
+   * Makes a new game
+   * @param aGame
+   * @param allBoardTiles
+   */
   public Board(Game aGame, List<Tile>allBoardTiles)
   {
     int i = 0;
     for(int row = 0; row < 25; row++){
       for(int col = 0; col < 24; col++){
-        boardTiles[row][col] = allBoardTiles.get(i);
+        boardTiles[row][col] = allBoardTiles.get(i); // converts list of tiles to 2D array
         i++;
       }
     }
+
     game = aGame;
     printBoard();
   }
@@ -38,7 +45,13 @@ public class Board
   //------------------------
   // INTERFACE
   //------------------------
-  /* Code from template association_GetMany */
+
+  /**
+   *  Gets the tile corresponding to XY coordinates.
+   *  String must be 2 letters, with one being upper case and one being lower
+   * @param tile the tile to get according to its coordinates
+   * @return the tile.
+   */
   public Tile getBoardTile(String tile)
   {
     try {
@@ -123,22 +136,22 @@ public class Board
   /* Code from template association_SetUnidirectionalN */
 
 
-
-  public void printBoard() {
+  /**
+   * Prints the board based on the 2D array of tiles.
+   */
+  public void printBoard(){
     String s = "";
     char c = 'a';
-    for (int row = 0; row < 25; row++) {
-      for (int col = 0; col < 24; col++) {
+    for(int row = 0; row < 25; row++){
+      for(int col = 0; col < 24; col++){
         String str = "";
-        if (col == 0) System.out.print(c++ + " ");
+        if(col == 0) System.out.print(c++ + " ");
         str += boardTiles[row][col];
         System.out.print(str);
       }
       System.out.println("|");
     }
-    System.out.println("   A B C D E F G H I J K L M N O P Q R S T U V W X\n\n");
-    System.out.println("KEY: X - Invalid Space. # - Wall ^><v - Indicates direction room must be entered from");
-    System.out.println("W - Mrs White. G - Rev. Green. M - Col. Mustard. R - Miss Red. P - Prof. Plum. T - Mrs Turquoise. \nK - Kitchen. D - Dining Room. L - Lounge. H - Hall. S - Study. B - Book Room. E - Entertainment Room. C - Conservatory. A - Auditorium");
+    System.out.println("   A B C D E F G H I J K L M N O P Q R S T U V W X");
   }
 
   // line 24 "model.ump"
