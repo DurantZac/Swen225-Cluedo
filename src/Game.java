@@ -267,18 +267,7 @@ public class Game
     }
     return wasAdded;
   }
-
-  public void delete()
-  {
-    Board existingContains = board;
-    board = null;
-    if (existingContains != null)
-    {
-      existingContains.delete();
-    }
-    murderScenario.clear();
-    players.clear();
-  }
+  
 
   /**
    * Creates two "dice" which pick a random number from 1-6

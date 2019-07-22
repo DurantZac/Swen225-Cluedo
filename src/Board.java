@@ -14,7 +14,7 @@ public class Board
   //------------------------
 
   //Board Associations
-  private List<Tile> BoardTiles;
+  private Tile[][] BoardTiles = new Tile[25][24];
   private Game game;
 
   //------------------------
@@ -23,8 +23,15 @@ public class Board
 
   public Board(Game aGame, List<Tile>allBoardTiles)
   {
-    BoardTiles = allBoardTiles;
+    int i = 0;
+    for(int row = 0; row < 25; row++){
+      for(int col = 0; col < 24; col++){
+        BoardTiles[row][col] = allBoardTiles.get(i);
+        i++;
+      }
+    }
     game = aGame;
+    printBoard();
   }
 
 
@@ -34,32 +41,29 @@ public class Board
   /* Code from template association_GetMany */
   public Tile getBoardTile(int index)
   {
-    Tile aBoardTile = BoardTiles.get(index);
-    return aBoardTile;
+    return null;
   }
 
   public List<Tile> getBoardTiles()
   {
-    List<Tile> newBoardTiles = Collections.unmodifiableList(BoardTiles);
-    return newBoardTiles;
+    return null;
   }
 
   public int numberOfBoardTiles()
   {
-    int number = BoardTiles.size();
-    return number;
+    int number = BoardTiles.length;
+    return 0;
   }
 
   public boolean hasBoardTiles()
   {
-    boolean has = BoardTiles.size() > 0;
-    return has;
+    boolean has = BoardTiles.length > 0;
+    return false;
   }
 
   public int indexOfBoardTile(Tile aBoardTile)
   {
-    int index = BoardTiles.indexOf(aBoardTile);
-    return index;
+    return 0;
   }
   /* Code from template association_GetOne */
   public Game getGame()
@@ -84,19 +88,14 @@ public class Board
   /* Code from template association_SetUnidirectionalN */
 
 
-  public void delete()
-  {
-    BoardTiles.clear();
-    Game existingGame = game;
-    game = null;
-    if (existingGame != null)
-    {
-      existingGame.delete();
+
+  public void printBoard(){
+    String s = "";
+    for(int i = 0; i < getBoardTiles().size(); i++){
+      if(i % 24 == 0) s+= "\n";
+      s+= getBoardTile(i).toString();
     }
-  }
-
-  public String printBoard(){
-
+    System.out.println(s);
   }
 
   // line 24 "model.ump"
