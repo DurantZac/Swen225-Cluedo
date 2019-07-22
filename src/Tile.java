@@ -126,7 +126,7 @@ public class Tile
     String s="|";
     s+=symbol;
     s+="|";
-    
+
     return s;
   }
 
