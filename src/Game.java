@@ -14,7 +14,7 @@ public class Game
 
   //Game Associations
   private Board board;
-  private List<Card> murderScenario;
+  private List<Card> murderScenario = new ArrayList<>();
   private List<Player> players;
 
   //------------------------
@@ -26,7 +26,7 @@ public class Game
    */
   public Game() {
     board = createBoard();
-    List<Card> allCards = createCards();
+    List<Card> cardsToBeDealt = createCards();
 
   }
 
@@ -76,6 +76,11 @@ public class Game
     return new Board(this, tiles);
   }
 
+  /**
+   * Create character cards, room cards and weapon cards
+   * Also generates rooms, marks entrances and chooses murder scenario
+   * @return List of all cards after murder scenario removed
+   */
   public List<Card> createCards(){
     List<Card> allCards = new ArrayList<>();
     // Characters
@@ -109,6 +114,10 @@ public class Game
     return allCards;
   }
 
+  /**
+   * Create rooms and add entrances
+   * @return
+   */
   public List<RoomCard> createRooms(){
     List<RoomCard> cards = new ArrayList<>();
     Room kitchen = new Room("Kitchen");
@@ -135,6 +144,7 @@ public class Game
     Room auditorium = new Room("Auditorium");
     auditorium.addEntrance(board.getBoardTile("Jh"));
     auditorium.addEntrance(board.getBoardTile("Oh"));
+
     cards.add(kitchen.getRoomCard());
     cards.add(dining.getRoomCard());
     cards.add(lounge.getRoomCard());
@@ -150,6 +160,16 @@ public class Game
     cards.remove(0);
     return cards;
   }
+
+  /**
+   * Mark room tiles as being part of a room
+   */
+  public void markRoom(){
+
+
+  }
+
+
   //------------------------
   // INTERFACE
   //------------------------

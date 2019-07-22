@@ -175,6 +175,7 @@ public class Room
     if (entrances.contains(aEntrance)) { return false; }
     entrances.add(aEntrance);
     wasAdded = true;
+    aEntrance.setIsPartOf(this);
     return wasAdded;
   }
 
