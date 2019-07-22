@@ -87,6 +87,11 @@ public class Game
     //Rooms
     return null;
   }
+
+  public Set<Room> createRooms(){
+
+    return null;
+  }
   //------------------------
   // INTERFACE
   //------------------------

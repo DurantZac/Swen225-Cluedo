@@ -31,6 +31,7 @@ public class Board
       }
     }
     game = aGame;
+    printBoard();
   }
 
 
@@ -133,9 +134,9 @@ public class Board
         str += boardTiles[row][col];
         System.out.print(str);
       }
-      System.out.println();
+      System.out.println("|");
     }
-    System.out.println("   A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X");
+    System.out.println("   A B C D E F G H I J K L M N O P Q R S T U V W X");
   }
 
   // line 24 "model.ump"

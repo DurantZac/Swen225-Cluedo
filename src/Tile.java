@@ -145,7 +145,6 @@ public class Tile
   public String toString(){
     String s="|";
     s+=symbol;
-    s+="|";
 
     return s;
   }
