@@ -26,6 +26,8 @@ public class Game
    */
   public Game() {
     board = createBoard();
+    List<Card> allCards = createCards();
+    
   }
 
   /** Generate board from string
@@ -35,7 +37,7 @@ public class Game
 
     String gameBoard = "|X|X|X|X|X|X|X|X|X|W|#|#|#|#|G|X|X|X|X|X|X|X|X|X|"  + "\n" +
             "|#|#|#|#|#|#|X|_|_|_|#|_|_|#|_|_|_|X|#|#|#|#|#|#|"  + "\n" +
-            "|#|K|_|_|_|#|_|_|#|#|#|_|_|#|#|#|_|_|#|_|_|_|C|#|"  + "\n" +
+            "|#|K|_|_|_|#|_|_|#|#|#|A|_|#|#|#|_|_|#|_|_|_|C|#|"  + "\n" +
             "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|#|_|_|_|_|#|"  + "\n" +
             "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|v|#|_|_|_|#|"  + "\n" +
             "|#|#|_|_|_|#|_|_|<|_|_|_|_|_|_|>|_|_|_|#|#|#|#|X|"  + "\n" +
@@ -74,8 +76,8 @@ public class Game
     return new Board(this, tiles);
   }
 
-  public Set<Card> createCards(){
-    Set<Card> allCards = new HashSet<>();
+  public List<Card> createCards(){
+    List<Card> allCards = new ArrayList<>();
     // Characters
     allCards.add(new CharacterCard("Col. Mustard"));
     allCards.add(new CharacterCard("Mrs White"));
@@ -84,22 +86,69 @@ public class Game
     allCards.add(new CharacterCard("Ms Turquoise"));
     allCards.add(new CharacterCard("Miss Red"));
 
+    Collections.shuffle(allCards);
+    murderScenario.add(allCards.get(0));
+    allCards.remove(0);
+
     //Rooms
-    return null;
+    allCards.addAll(createRooms());
+
+    //Weapons
+    List<Card> weapons = new ArrayList<>();
+    weapons.add(new WeaponCard("Dagger"));
+    weapons.add(new WeaponCard("Rope"));
+    weapons.add(new WeaponCard("CandleStick"));
+    weapons.add(new WeaponCard("Revolver"));
+    weapons.add(new WeaponCard("Spanner"));
+    weapons.add(new WeaponCard("Lead Pipe"));
+    Collections.shuffle(weapons);
+    murderScenario.add(weapons.get(0));
+    weapons.remove(weapons.get(0));
+    allCards.addAll(weapons);
+
+    return allCards;
   }
 
-  public Set<RoomCard> createRooms(){
+  public List<RoomCard> createRooms(){
     List<RoomCard> cards = new ArrayList<>();
     Room kitchen = new Room("Kitchen");
+    kitchen.addEntrance(board.getBoardTile("Eg"));
     Room dining = new Room("Dining Room");
+    dining.addEntrance(board.getBoardTile("Gp"));
+    dining.addEntrance(board.getBoardTile("Hm"));
     Room lounge = new Room("Lounge");
+    lounge.addEntrance(board.getBoardTile("Gt"));
     Room hall = new Room("Hall");
+    hall.addEntrance(board.getBoardTile("Ls"));
+    hall.addEntrance(board.getBoardTile("Ms"));
+    hall.addEntrance(board.getBoardTile("Ov"));
     Room study = new Room("Study");
+    study.addEntrance(board.getBoardTile("Rv"));
     Room bookRoom = new Room("Book Room");
+    bookRoom.addEntrance(board.getBoardTile("Rq"));
+    bookRoom.addEntrance(board.getBoardTile("Uo"));
     Room entertainmentRoom = new Room("Entertainment Room");
+    entertainmentRoom.addEntrance(board.getBoardTile("Wm"));
+    entertainmentRoom.addEntrance(board.getBoardTile("Sj"));
     Room cons = new Room("Conservatory");
+    cons.addEntrance(board.getBoardTile("Se"));
     Room auditorium = new Room("Auditorium");
-    return null;
+    auditorium.addEntrance(board.getBoardTile("Jh"));
+    auditorium.addEntrance(board.getBoardTile("Oh"));
+    cards.add(kitchen.getRoomCard());
+    cards.add(dining.getRoomCard());
+    cards.add(lounge.getRoomCard());
+    cards.add(hall.getRoomCard());
+    cards.add(study.getRoomCard());
+    cards.add(bookRoom.getRoomCard());
+    cards.add(entertainmentRoom.getRoomCard());
+    cards.add(cons.getRoomCard());
+    cards.add(auditorium.getRoomCard());
+
+    Collections.shuffle(cards);
+    murderScenario.add(cards.get(0));
+    cards.remove(0);
+    return cards;
   }
   //------------------------
   // INTERFACE
