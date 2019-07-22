@@ -124,19 +124,21 @@ public class Board
 
 
 
-  public void printBoard(){
+  public void printBoard() {
     String s = "";
     char c = 'a';
-    for(int row = 0; row < 25; row++){
-      for(int col = 0; col < 24; col++){
+    for (int row = 0; row < 25; row++) {
+      for (int col = 0; col < 24; col++) {
         String str = "";
-        if(col == 0) System.out.print(c++ + " ");
+        if (col == 0) System.out.print(c++ + " ");
         str += boardTiles[row][col];
         System.out.print(str);
       }
       System.out.println("|");
     }
-    System.out.println("   A B C D E F G H I J K L M N O P Q R S T U V W X");
+    System.out.println("   A B C D E F G H I J K L M N O P Q R S T U V W X\n\n");
+    System.out.println("KEY: X - Invalid Space. # - Wall ^><v - Indicates direction room must be entered from");
+    System.out.println("W - Mrs White. G - Rev. Green. M - Col. Mustard. R - Miss Red. P - Prof. Plum. T - Mrs Turquoise. \nK - Kitchen. D - Dining Room. L - Lounge. H - Hall. S - Study. B - Book Room. E - Entertainment Room. C - Conservatory. A - Auditorium");
   }
 
   // line 24 "model.ump"

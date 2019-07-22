@@ -88,8 +88,17 @@ public class Game
     return null;
   }
 
-  public Set<Room> createRooms(){
-
+  public Set<RoomCard> createRooms(){
+    List<RoomCard> cards = new ArrayList<>();
+    Room kitchen = new Room("Kitchen");
+    Room dining = new Room("Dining Room");
+    Room lounge = new Room("Lounge");
+    Room hall = new Room("Hall");
+    Room study = new Room("Study");
+    Room bookRoom = new Room("Book Room");
+    Room entertainmentRoom = new Room("Entertainment Room");
+    Room cons = new Room("Conservatory");
+    Room auditorium = new Room("Auditorium");
     return null;
   }
   //------------------------
