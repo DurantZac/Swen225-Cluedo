@@ -31,7 +31,6 @@ public class Board
       }
     }
     game = aGame;
-    printBoard();
   }
 
 
@@ -126,11 +125,17 @@ public class Board
 
   public void printBoard(){
     String s = "";
-    for(int i = 0; i < getBoardTiles().size(); i++){
-      if(i % 24 == 0) s+= "\n";
-      s+= getBoardTile(i).toString();
+    char c = 'a';
+    for(int row = 0; row < 25; row++){
+      for(int col = 0; col < 24; col++){
+        String str = "";
+        if(col == 0) System.out.print(c++ + " ");
+        str += BoardTiles[row][col];
+        System.out.print(str);
+      }
+      System.out.println();
     }
-    System.out.println(s);
+    System.out.println("   A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X");
   }
 
   // line 24 "model.ump"
