@@ -130,7 +130,7 @@ public class Board
       for(int col = 0; col < 24; col++){
         String str = "";
         if(col == 0) System.out.print(c++ + " ");
-        str += BoardTiles[row][col];
+        str += boardTiles[row][col];
         System.out.print(str);
       }
       System.out.println();
