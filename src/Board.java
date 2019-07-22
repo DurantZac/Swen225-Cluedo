@@ -29,18 +29,13 @@ public class Board
     {
       throw new RuntimeException("Unable to create Board, must have 600 BoardTiles. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    if (aGame == null || aGame.getContains() != null)
+    if (aGame == null || aGame.getBoard() != null)
     {
       throw new RuntimeException("Unable to create Board due to aGame. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
     game = aGame;
   }
 
-  public Board(Card[] allMurderScenarioForGame, Player[] allStoresForGame, Tile... allBoardTiles)
-  {
-    BoardTiles = new ArrayList<Tile>();
-    game = new Game(this, allMurderScenarioForGame, allStoresForGame);
-  }
 
   //------------------------
   // INTERFACE
