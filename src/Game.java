@@ -59,7 +59,7 @@ public class Game
     unusedCharacters.add(new CharacterCard("Rev. Green",board.getBoardTile("Oa")));
     unusedCharacters.add(new CharacterCard("Prof. Plum",board.getBoardTile("Xt")));
     unusedCharacters.add(new CharacterCard("Ms Turquoise",board.getBoardTile("Xg")));
-    unusedCharacters.add(new CharacterCard("Miss Red",board.getBoardTile("Hy")));
+    unusedCharacters.add(new CharacterCard("Miss Red", board.getBoardTile("Hy")));
 
     List<Card> cardsToBeDealt = createCards(unusedCharacters);
 
