@@ -54,18 +54,14 @@ public class Game
 
 
     //Make all the characters
-      unusedCharacters.add(new CharacterCard("Col. Mustard"));
-      unusedCharacters.add(new CharacterCard("Mrs White"));
-      unusedCharacters.add(new CharacterCard("Rev. Green"));
-      unusedCharacters.add(new CharacterCard("Prof. Plum"));
-      unusedCharacters.add(new CharacterCard("Ms Turquoise"));
-      unusedCharacters.add(new CharacterCard("Miss Red"));
-
-
-
+    unusedCharacters.add(new CharacterCard("Col. Mustard",board.getBoardTile("Ar")));
+    unusedCharacters.add(new CharacterCard("Mrs White",board.getBoardTile("Ja")));
+    unusedCharacters.add(new CharacterCard("Rev. Green",board.getBoardTile("Oa")));
+    unusedCharacters.add(new CharacterCard("Prof. Plum",board.getBoardTile("Xt")));
+    unusedCharacters.add(new CharacterCard("Ms Turquoise",board.getBoardTile("Xg")));
+    unusedCharacters.add(new CharacterCard("Miss Red",board.getBoardTile("Hy")));
 
     List<Card> cardsToBeDealt = createCards(unusedCharacters);
-    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
 
     for (int i = 0; i < playerNum; i++){
@@ -76,6 +72,7 @@ public class Game
 
       validityCheck: while (true) { //Check who they want to be
         try {
+          BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
           String characterToPlay = input.readLine();
 
           for (CharacterCard c: unusedCharacters) {
@@ -99,7 +96,7 @@ public class Game
         }
       }
     }
-  input.close();
+    //close buffer
   }
 
   /** Generate board from string
