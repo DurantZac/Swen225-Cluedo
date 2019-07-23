@@ -3,6 +3,8 @@
 
 
 import java.util.*;
+import java.util.stream.Stream;
+
 // line 2 "model.ump"
 // line 96 "model.ump"
 public class Game
@@ -71,7 +73,6 @@ public class Game
         }
       }
   }
-
     return new Board(this, tiles);
   }
 
@@ -121,25 +122,33 @@ public class Game
     List<RoomCard> cards = new ArrayList<>();
     Room kitchen = new Room("Kitchen");
     kitchen.addEntrance(board.getBoardTile("Eg"));
+
     Room dining = new Room("Dining Room");
     dining.addEntrance(board.getBoardTile("Gp"));
     dining.addEntrance(board.getBoardTile("Hm"));
+
     Room lounge = new Room("Lounge");
     lounge.addEntrance(board.getBoardTile("Gt"));
+
     Room hall = new Room("Hall");
     hall.addEntrance(board.getBoardTile("Ls"));
     hall.addEntrance(board.getBoardTile("Ms"));
     hall.addEntrance(board.getBoardTile("Ov"));
+
     Room study = new Room("Study");
     study.addEntrance(board.getBoardTile("Rv"));
+
     Room bookRoom = new Room("Book Room");
     bookRoom.addEntrance(board.getBoardTile("Rq"));
     bookRoom.addEntrance(board.getBoardTile("Uo"));
+
     Room entertainmentRoom = new Room("Entertainment Room");
     entertainmentRoom.addEntrance(board.getBoardTile("Wm"));
     entertainmentRoom.addEntrance(board.getBoardTile("Sj"));
+
     Room cons = new Room("Conservatory");
     cons.addEntrance(board.getBoardTile("Se"));
+
     Room auditorium = new Room("Auditorium");
     auditorium.addEntrance(board.getBoardTile("Jh"));
     auditorium.addEntrance(board.getBoardTile("Oh"));
@@ -168,7 +177,7 @@ public class Game
     //Kitchen
     for(char r = 'c'; r < 'g'; r++){
       for(char c = 'b'; c < 'f'; c++){
-        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
         t.setIsPartOf(roomCards.get(0).getRoom());
       }
     }
@@ -176,7 +185,7 @@ public class Game
     //Dining
     for(char r = 'l'; r < 'p'; r++){
       for(char c = 'b'; c < 'h'; c++){
-        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
         t.setIsPartOf(roomCards.get(1).getRoom());
       }
     }
@@ -187,7 +196,7 @@ public class Game
     //Lounge
     for(char r = 'u'; r < 'y'; r++){
       for(char c = 'b'; c < 'g'; c++){
-        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
         t.setIsPartOf(roomCards.get(2).getRoom());
       }
     }
@@ -195,7 +204,7 @@ public class Game
     //Hall
     for(char r = 't'; r < 'y'; r++){
       for(char c = 'k'; c < 'o'; c++){
-        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
         t.setIsPartOf(roomCards.get(3).getRoom());
       }
     }
@@ -203,7 +212,7 @@ public class Game
     //Study
     for(char r = 'w'; r < 'y'; r++){
       for(char c = 's'; c < 'y'; c++){
-        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
         t.setIsPartOf(roomCards.get(4).getRoom());
       }
     }
@@ -211,7 +220,7 @@ public class Game
     //BookRoom
     for(char r = 'p'; r < 's'; r++){
       for(char c = 't'; c < 'x'; c++){
-        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
         t.setIsPartOf(roomCards.get(5).getRoom());
       }
     }
@@ -220,7 +229,7 @@ public class Game
     //EntertainmentRoom
     for(char r = 'j'; r < 'm'; r++){
       for(char c = 't'; c < 'x'; c++){
-        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
         t.setIsPartOf(roomCards.get(6).getRoom());
       }
     }
@@ -228,7 +237,7 @@ public class Game
     //Cons
     for(char r = 'c'; r < 'f'; r++){
       for(char c = 't'; c < 'x'; c++){
-        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
         t.setIsPartOf(roomCards.get(7).getRoom());
       }
     }
@@ -236,7 +245,7 @@ public class Game
     //Auditorium
     for(char r = 'd'; r < 'h'; r++){
       for(char c = 'J'; c < 'P'; c++){
-        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
         t.setIsPartOf(roomCards.get(8).getRoom());
       }
     }
