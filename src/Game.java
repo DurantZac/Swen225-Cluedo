@@ -96,23 +96,16 @@ public class Game
     }
 
     //Deals hand
-    int currentPlayerIndex=0;
-    Player currentPlayer = players.get(currentPlayerIndex);
+    dealCards(cardsToBeDealt);
 
-    while (!cardsToBeDealt.isEmpty()){
-      currentPlayer.addCardToHand(cardsToBeDealt.remove(0));
 
-      if (currentPlayerIndex<players.size()-1)
-        currentPlayerIndex++;
-      else
-        currentPlayerIndex=0;
-
-      currentPlayer=players.get(currentPlayerIndex);
-    }
-
-    for (Player p: players){
-      System.out.println(p.getCharacter()+" "+p.returnHand());
-    }
+//    getMurderScenario().stream().forEach(j -> System.out.println(j.toString()));
+//    System.out.println();
+//    System.out.println();
+//
+//    for (Player p : players){
+//      System.out.println(p.returnHand());
+//    }
 
     //Game play begins
     playGame();
@@ -560,9 +553,25 @@ public class Game
 
   }
 
-  // line 10 "model.ump"
-   private void dealCards(){
-    
+  /**
+   * Deals all of the cards excluding the murder scenario to the players.
+   * @param cardsToBeDealt the remaining cards
+   */
+   private void dealCards(List <Card> cardsToBeDealt){
+     int currentPlayerIndex=0;
+     Player currentPlayer = players.get(currentPlayerIndex);
+
+     while (!cardsToBeDealt.isEmpty()){
+       currentPlayer.addCardToHand(cardsToBeDealt.remove(0));
+
+       if (currentPlayerIndex<players.size()-1)
+         currentPlayerIndex++;
+       else
+         currentPlayerIndex=0;
+
+       currentPlayer=players.get(currentPlayerIndex);
+     }
+
   }
 
   // line 11 "model.ump"
