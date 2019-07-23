@@ -2,6 +2,7 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
+import java.io.CharConversionException;
 import java.util.*;
 
 // line 17 "model.ump"
@@ -42,7 +43,10 @@ public class Board
 
     for(char row = 'a'; row < 'z'; row++){
       for(char col = 'A'; col < 'Y'; col++){
-        Tile t  = getBoardTile((Character.toUpperCase(col)) + String.valueOf(row));
+        Tile t  = getBoardTile(col + String.valueOf(row));
+        if(row != 'a'){t.addAdjacent(getBoardTile(col + String.valueOf(row-1)));}
+        if(row != 'y'){t.addAdjacent(getBoardTile(col + String.valueOf(row+1)));}
+        if(col != 'A'){t.addAdjacent(getBoardTile(col-1 + String.valueOf(row)));}
       }
     }
     printBoard();

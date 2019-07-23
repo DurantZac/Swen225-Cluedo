@@ -61,6 +61,9 @@ public class Game
       unusedCharacters.add(new CharacterCard("Ms Turquoise"));
       unusedCharacters.add(new CharacterCard("Miss Red"));
 
+
+
+
     List<Card> cardsToBeDealt = createCards(unusedCharacters);
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 

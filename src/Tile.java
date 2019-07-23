@@ -2,6 +2,8 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
+import java.util.ArrayList;
+import java.util.List;
 
 // line 29 "model.ump"
 // line 110 "model.ump"
@@ -20,6 +22,7 @@ public class Tile
   private Room isPartOf;
   private WeaponCard occupiedBy;
   private char symbol;
+  private List<Tile> adjacent = new ArrayList<>();
 
   //------------------------
   // CONSTRUCTOR
@@ -130,6 +133,14 @@ public class Tile
     isOccupiedBy = null;
     isPartOf = null;
     occupiedBy = null;
+  }
+
+  public List<Tile> getAdjacent(){
+    return adjacent;
+  }
+
+  public void addAdjacent(Tile t){
+    adjacent.add(t);
   }
 
 
