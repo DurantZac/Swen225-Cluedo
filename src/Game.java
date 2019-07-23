@@ -58,8 +58,6 @@ public class Game
       //Check validity, maybe re-ask
       //create player
 
-
-
     }
 
   }
