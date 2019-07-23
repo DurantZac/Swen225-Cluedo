@@ -60,6 +60,10 @@ public class Player
   public void delete()
   {}
 
+  public Tile getPosition(){
+    return position;
+  }
+
   // line 63 "model.ump"
    public Card refute(RoomCard r, CharacterCard c, WeaponCard w){
     return null;
