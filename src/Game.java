@@ -140,7 +140,7 @@ public class Game
           tiles.add(t);
         }
       }
-  }
+    }
 
     return new Board(this, tiles);
   }

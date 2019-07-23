@@ -38,6 +38,13 @@ public class Board
     }
 
     game = aGame;
+
+
+    for(char row = 'a'; row < 'z'; row++){
+      for(char col = 'A'; col < 'Y'; col++){
+        Tile t  = getBoardTile((Character.toUpperCase(col)) + String.valueOf(row));
+      }
+    }
     printBoard();
   }
 
@@ -156,6 +163,8 @@ public class Board
 
   // line 24 "model.ump"
    public boolean movePlayer(Player p, Tile t, int moves) {
+    Tile startTile = p.getPosition();
+
     return false;
   }
 
