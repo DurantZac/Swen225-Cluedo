@@ -52,4 +52,7 @@ public class RoomCard implements Card
     }
   }
 
+  @Override
+  public String toString() {
+    return room.toString();}
 }

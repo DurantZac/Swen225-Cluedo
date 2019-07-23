@@ -62,7 +62,6 @@ public class Game
 
     List<Card> cardsToBeDealt = createCards(unusedCharacters);
 
-
     for (int i = 0; i < playerNum; i++){
       System.out.println("Player "+ (i+1) + ". Please select your character");
       System.out.println("The available players are:");
@@ -95,6 +94,30 @@ public class Game
         }
       }
     }
+
+    //Deals hand
+    int currentPlayerIndex=0;
+    Player currentPlayer = players.get(currentPlayerIndex);
+
+    while (!cardsToBeDealt.isEmpty()){
+      currentPlayer.addCardToHand(cardsToBeDealt.remove(0));
+
+      if (currentPlayerIndex<players.size()-1)
+        currentPlayerIndex++;
+      else
+        currentPlayerIndex=0;
+
+      currentPlayer=players.get(currentPlayerIndex);
+    }
+
+    for (Player p: players){
+      System.out.println(p.getCharacter()+" "+p.returnHand());
+    }
+
+    //Game play begins
+    playGame();
+
+
     //close buffer
   }
 

@@ -350,4 +350,8 @@ public class Room
     weaponReserved.clear();
   }
 
+  @Override
+  public String toString() {
+    return  name;
+  }
 }

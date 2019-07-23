@@ -47,7 +47,6 @@ public class WeaponCard implements Card
 
   public String toString()
   {
-    return super.toString() + "["+
-            "weapon" + ":" + getWeapon()+ "]";
+    return getWeapon();
   }
 }

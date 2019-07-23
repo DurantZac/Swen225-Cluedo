@@ -2,6 +2,8 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
+import java.util.HashSet;
+import java.util.Set;
 
 // line 58 "model.ump"
 // line 115 "model.ump"
@@ -16,6 +18,7 @@ public class Player
   private CharacterCard character;
   private boolean isStillPlaying;
   private Tile position;
+  private Set <Card> hand = new HashSet<>();
 
   //------------------------
   // CONSTRUCTOR
@@ -57,9 +60,6 @@ public class Player
     return isStillPlaying;
   }
 
-  public void delete()
-  {}
-
   public Tile getPosition(){
     return position;
   }
@@ -68,6 +68,20 @@ public class Player
    public Card refute(RoomCard r, CharacterCard c, WeaponCard w){
     return null;
   }
+
+  public void addCardToHand(Card c){
+    hand.add(c);
+  }
+
+  public String returnHand(){
+    String s="You have "+ hand.size()+" cards, they are:";
+    for (Card c: hand){
+      s+=c.toString();
+      s+=" ";
+    }
+    return s;
+  }
+
 
 
   public String toString()
