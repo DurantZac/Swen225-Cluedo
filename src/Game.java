@@ -62,6 +62,7 @@ public class Game
       unusedCharacters.add(new CharacterCard("Miss Red"));
 
     List<Card> cardsToBeDealt = createCards(unusedCharacters);
+    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
 
     for (int i = 0; i < playerNum; i++){
@@ -72,7 +73,6 @@ public class Game
 
       validityCheck: while (true) { //Check who they want to be
         try {
-          BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
           String characterToPlay = input.readLine();
 
           for (CharacterCard c: unusedCharacters) {
@@ -96,7 +96,7 @@ public class Game
         }
       }
     }
-  //Close buffered reader
+  input.close();
   }
 
   /** Generate board from string
