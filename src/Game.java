@@ -52,7 +52,11 @@ public class Game
     }
 
     for (int i = 0; i < playerNum; i++){
-
+      // Go through each of the players
+      //Print available players
+      //Ask what player they want to be
+      //Check validity, maybe re-ask
+      //create player
 
 
 
