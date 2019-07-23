@@ -36,7 +36,7 @@ public class Game
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("How many players are playing? (3-6) ");
         int numberOfPlayers = Integer.parseInt(input.readLine());
-        if(numberOfPlayers < 3 || numberOfPlayers > 6){ throw new IncorrectNumberOfPlayersException(); }
+        if(numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()){ throw new IncorrectNumberOfPlayersException(); }
         playerNum=numberOfPlayers;
         input.close();//Close buffered reader
         break;
@@ -222,47 +222,47 @@ public class Game
     return wasSet;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfStores()
+  public static int minimumNumberOfPlayers()
   {
     return 3;
   }
   /* Code from template association_MaximumNumberOfMethod */
-  public static int maximumNumberOfStores()
+  public static int maximumNumberOfPlayers()
   {
     return 6;
   }
   /* Code from template association_AddUnidirectionalMN */
-  public boolean addStore(Player aStore)
+  public boolean addStore(Player aPlayer)
   {
     boolean wasAdded = false;
-    if (players.contains(aStore)) { return false; }
-    if (numberOfPlayers() < maximumNumberOfStores())
+    if (players.contains(aPlayer)) { return false; }
+    if (numberOfPlayers() < maximumNumberOfPlayers())
     {
-      players.add(aStore);
+      players.add(aPlayer);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean removeStore(Player aStore)
+  public boolean removeStore(Player aPlayer)
   {
     boolean wasRemoved = false;
-    if (!players.contains(aStore))
+    if (!players.contains(aPlayer))
     {
       return wasRemoved;
     }
 
-    if (numberOfPlayers() <= minimumNumberOfStores())
+    if (numberOfPlayers() <= minimumNumberOfPlayers())
     {
       return wasRemoved;
     }
 
-    players.remove(aStore);
+    players.remove(aPlayer);
     wasRemoved = true;
     return wasRemoved;
   }
   /* Code from template association_SetUnidirectionalMN */
-  public boolean setStores(Player... newStores)
+  public boolean setPlayers(Player... newStores)
   {
     boolean wasSet = false;
     ArrayList<Player> verifiedStores = new ArrayList<Player>();
@@ -275,7 +275,7 @@ public class Game
       verifiedStores.add(aStore);
     }
 
-    if (verifiedStores.size() != newStores.length || verifiedStores.size() < minimumNumberOfStores() || verifiedStores.size() > maximumNumberOfStores())
+    if (verifiedStores.size() != newStores.length || verifiedStores.size() < minimumNumberOfPlayers() || verifiedStores.size() > maximumNumberOfPlayers())
     {
       return wasSet;
     }
