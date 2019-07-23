@@ -39,7 +39,6 @@ public class Game
         int numberOfPlayers = Integer.parseInt(input.readLine());
         if(numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()){ throw new IncorrectNumberOfPlayersException(); }
         playerNum=numberOfPlayers;
-        input.close();//Close buffered reader
         break;
       } catch (NumberFormatException n) {
         System.out.println("Please enter a number between 3-6 only");
@@ -67,26 +66,24 @@ public class Game
 
 
     for (int i = 0; i < playerNum; i++){
+      System.out.println("Player "+ (i+1) + ". Please select your character");
       System.out.println("The available players are:");
       unusedCharacters.stream().forEach(j -> System.out.println(j.toString()));
-      System.out.println("\n What player would you like to be?");
+      System.out.println("\nWhat player would you like to be?");
 
       validityCheck: while (true) { //Check who they want to be
         try {
           BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
           String characterToPlay = input.readLine();
 
-          System.out.println(characterToPlay);
-
-
           for (CharacterCard c: unusedCharacters) {
             if (c.getCharacter().equalsIgnoreCase(characterToPlay)) {
 
               Player p = new Player(c);
               players.add(p);
-
               unusedCharacters.remove(c);
-              input.close();//Close buffered reader
+
+              System.out.println("You have selected the character: " + c + "\n");
               break validityCheck;
             }
           }
@@ -100,6 +97,7 @@ public class Game
         }
       }
     }
+  //Close buffered reader
   }
 
   /** Generate board from string
