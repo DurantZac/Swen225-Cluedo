@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Stream;
+
 // line 2 "model.ump"
 // line 96 "model.ump"
 public class Game
@@ -17,8 +19,8 @@ public class Game
 
   //Game Associations
   private Board board;
-  private List<Card> murderScenario;
-  private List<Player> players;
+  private List<Card> murderScenario = new ArrayList<>();
+  private List<Player> players = new ArrayList<>();
   private int playerNum;
 
   //------------------------
@@ -51,15 +53,54 @@ public class Game
       }
     }
 
+    List<CharacterCard> unusedCharacters= new ArrayList<>();
+
+
+    //Make all the characters
+      unusedCharacters.add(new CharacterCard("Col. Mustard"));
+      unusedCharacters.add(new CharacterCard("Mrs White"));
+      unusedCharacters.add(new CharacterCard("Rev. Green"));
+      unusedCharacters.add(new CharacterCard("Prof. Plum"));
+      unusedCharacters.add(new CharacterCard("Ms Turquoise"));
+      unusedCharacters.add(new CharacterCard("Miss Red"));
+
+    List<Card> cardsToBeDealt = createCards(unusedCharacters);
+
+
     for (int i = 0; i < playerNum; i++){
-      // Go through each of the players
-      //Print available players
-      //Ask what player they want to be
-      //Check validity, maybe re-ask
-      //create player
+      System.out.println("The available players are:");
+      unusedCharacters.stream().forEach(j -> System.out.println(j.toString()));
+      System.out.println("\n What player would you like to be?");
 
+      validityCheck: while (true) { //Check who they want to be
+        try {
+          BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+          String characterToPlay = input.readLine();
+
+          System.out.println(characterToPlay);
+
+
+          for (CharacterCard c: unusedCharacters) {
+            if (c.getCharacter().equalsIgnoreCase(characterToPlay)) {
+
+              Player p = new Player(c);
+              players.add(p);
+
+              unusedCharacters.remove(c);
+              input.close();//Close buffered reader
+              break validityCheck;
+            }
+          }
+          throw new InvalidCharacterException();
+        }
+        catch (IOException e){
+          System.out.println("Error on input, please try again" + e);
+        }
+        catch (InvalidCharacterException c){
+          System.out.println("Please enter a valid character from the list");
+        }
+      }
     }
-
   }
 
   /** Generate board from string
@@ -69,29 +110,29 @@ public class Game
 
     String gameBoard = "|X|X|X|X|X|X|X|X|X|W|#|#|#|#|G|X|X|X|X|X|X|X|X|X|"  + "\n" +
             "|#|#|#|#|#|#|X|_|_|_|#|_|_|#|_|_|_|X|#|#|#|#|#|#|"  + "\n" +
-            "|#|K|_|_|_|#|_|_|#|#|#|_|_|#|#|#|_|_|#|_|_|_|C|#|"  + "\n" +
+            "|#|_|_|_|_|#|_|_|#|#|A|_|_|#|#|#|_|_|#|_|_|_|_|C|"  + "\n" +
             "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|#|_|_|_|_|#|"  + "\n" +
-            "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|v|#|_|_|_|#|"  + "\n" +
-            "|#|#|_|_|_|#|_|_|<|_|_|_|_|_|_|>|_|_|_|#|#|#|#|X|"  + "\n" +
+            "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|v|_|_|_|_|#|"  + "\n" +
+            "|#|K|_|_|_|#|_|_|<|_|_|_|_|_|_|>|_|_|_|#|#|#|#|X|"  + "\n" +
             "|X|#|#|#|v|#|_|_|#|_|_|_|_|_|_|#|_|_|_|_|_|_|_|T|"  + "\n" +
             "|_|_|_|_|_|_|_|_|#|v|#|#|#|#|v|#|_|_|_|_|_|_|_|X|"  + "\n" +
             "|X|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|#|#|#|#|"  + "\n" +
-            "|#|#|#|#|#|_|_|_|_|_|_|_|_|_|_|_|_|_|<|_|_|_|E|#|"  + "\n" +
+            "|#|#|#|#|#|_|_|_|_|_|_|_|_|_|_|_|_|_|<|_|_|_|_|E|"  + "\n" +
             "|#|_|_|_|#|#|#|#|_|_|X|X|X|X|X|_|_|_|#|_|_|_|_|#|"  + "\n" +
             "|#|_|_|_|_|_|_|#|_|_|X|X|X|X|X|_|_|_|#|_|_|_|_|#|"  + "\n" +
-            "|#|_|_|_|_|_|_|>|_|_|X|X|X|X|X|_|_|_|#|#|#|#|^|#|"  + "\n" +
+            "|D|_|_|_|_|_|_|>|_|_|X|X|X|X|X|_|_|_|#|#|#|#|^|#|"  + "\n" +
             "|#|_|_|_|_|_|_|#|_|_|X|X|X|X|X|_|_|_|_|_|_|_|_|X|"  + "\n" +
-            "|#|D|_|_|_|_|_|#|_|_|X|X|X|X|X|_|_|_|#|#|^|#|#|X|"  + "\n" +
-            "|#|#|#|#|#|#|v|#|_|_|X|X|X|X|X|_|_|#|#|_|_|_|B|#|"  + "\n" +
+            "|#|_|_|_|_|_|_|#|_|_|X|X|X|X|X|_|_|_|#|#|^|#|#|X|"  + "\n" +
+            "|#|#|#|#|#|#|v|#|_|_|X|X|X|X|X|_|_|#|#|_|_|_|_|B|"  + "\n" +
             "|X|_|_|_|_|_|_|_|_|_|X|X|X|X|X|_|_|<|_|_|_|_|_|#|"  + "\n" +
-            "|M|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|_|_|_|#|#|"  + "\n" +
+            "|M|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|_|_|_|_|#|"  + "\n" +
             "|X|_|_|_|_|_|_|_|_|#|#|^|^|#|#|_|_|_|#|#|#|#|#|X|"  + "\n" +
             "|#|#|#|#|#|#|^|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|P|"  + "\n" +
             "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|X|"  + "\n" +
-            "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|>|_|_|^|#|#|#|#|#|#|"  + "\n" +
-            "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|#|"  + "\n" +
-            "|#|L|_|_|_|_|#|_|_|#|H|_|_|_|#|_|_|#|_|_|_|_|S|#|"  + "\n" +
-            "|#|#|#|#|#|#|#|R|X|#|#|#|#|#|#|X|_|#|#|#|#|#|#|#|"  + "\n";
+            "|L|_|_|_|_|_|#|_|_|#|_|_|_|_|>|_|_|^|S|#|#|#|#|#|"  + "\n" +
+            "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|"  + "\n" +
+            "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|"  + "\n" +
+            "|#|#|#|#|#|#|#|R|X|#|#|H|#|#|#|X|_|#|#|#|#|#|#|#|"  + "\n";
 
     List<Tile> tiles = new ArrayList<>();
     String[] lines = gameBoard.split("\n");
@@ -108,24 +149,166 @@ public class Game
     return new Board(this, tiles);
   }
 
-  public Set<Card> createCards(){
-    Set<Card> allCards = new HashSet<>();
+  /**
+   * Create character cards, room cards and weapon cards
+   * Also generates rooms, marks entrances and chooses murder scenario
+   * @return List of all cards after murder scenario removed
+   */
+  public List<Card> createCards(List <CharacterCard> characters){
+    List<Card> allCards = new ArrayList<>();
     // Characters
-    allCards.add(new CharacterCard("Col. Mustard"));
-    allCards.add(new CharacterCard("Mrs White"));
-    allCards.add(new CharacterCard("Rev. Green"));
-    allCards.add(new CharacterCard("Prof. Plum"));
-    allCards.add(new CharacterCard("Ms Turquoise"));
-    allCards.add(new CharacterCard("Miss Red"));
+      allCards.addAll(characters);
+    Collections.shuffle(allCards);
+    murderScenario.add(allCards.get(0));
+    allCards.remove(0);
 
     //Rooms
-    return null;
+    allCards.addAll(createRooms());
+
+    //Weapons
+    List<Card> weapons = new ArrayList<>();
+    weapons.add(new WeaponCard("Dagger"));
+    weapons.add(new WeaponCard("Rope"));
+    weapons.add(new WeaponCard("CandleStick"));
+    weapons.add(new WeaponCard("Revolver"));
+    weapons.add(new WeaponCard("Spanner"));
+    weapons.add(new WeaponCard("Lead Pipe"));
+    Collections.shuffle(weapons);
+    murderScenario.add(weapons.get(0));
+    weapons.remove(weapons.get(0));
+    allCards.addAll(weapons);
+
+    return allCards;
   }
 
-  public Set<Room> createRooms(){
+  /**
+   * Create rooms and add entrances
+   * @return
+   */
+  public List<RoomCard> createRooms(){
+    List<RoomCard> cards = new ArrayList<>();
+    Room kitchen = new Room("Kitchen");
+    kitchen.addEntrance(board.getBoardTile("Eg"));
+    Room dining = new Room("Dining Room");
+    dining.addEntrance(board.getBoardTile("Gp"));
+    dining.addEntrance(board.getBoardTile("Hm"));
+    Room lounge = new Room("Lounge");
+    lounge.addEntrance(board.getBoardTile("Gt"));
+    Room hall = new Room("Hall");
+    hall.addEntrance(board.getBoardTile("Ls"));
+    hall.addEntrance(board.getBoardTile("Ms"));
+    hall.addEntrance(board.getBoardTile("Ov"));
+    Room study = new Room("Study");
+    study.addEntrance(board.getBoardTile("Rv"));
+    Room bookRoom = new Room("Book Room");
+    bookRoom.addEntrance(board.getBoardTile("Rq"));
+    bookRoom.addEntrance(board.getBoardTile("Uo"));
+    Room entertainmentRoom = new Room("Entertainment Room");
+    entertainmentRoom.addEntrance(board.getBoardTile("Wm"));
+    entertainmentRoom.addEntrance(board.getBoardTile("Sj"));
+    Room cons = new Room("Conservatory");
+    cons.addEntrance(board.getBoardTile("Se"));
+    Room auditorium = new Room("Auditorium");
+    auditorium.addEntrance(board.getBoardTile("Jh"));
+    auditorium.addEntrance(board.getBoardTile("Oh"));
 
-    return null;
+    cards.add(kitchen.getRoomCard());
+    cards.add(dining.getRoomCard());
+    cards.add(lounge.getRoomCard());
+    cards.add(hall.getRoomCard());
+    cards.add(study.getRoomCard());
+    cards.add(bookRoom.getRoomCard());
+    cards.add(entertainmentRoom.getRoomCard());
+    cards.add(cons.getRoomCard());
+    cards.add(auditorium.getRoomCard());
+    markRoom(cards);
+
+    Collections.shuffle(cards);
+    murderScenario.add(cards.get(0));
+    cards.remove(0);
+    return cards;
   }
+
+  /**
+   * Mark room tiles as being part of a room
+   */
+  public void markRoom(List<RoomCard> roomCards){
+    //Kitchen
+    for(char r = 'c'; r < 'g'; r++){
+      for(char c = 'b'; c < 'f'; c++){
+        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        t.setIsPartOf(roomCards.get(0).getRoom());
+      }
+    }
+
+    //Dining
+    for(char r = 'c'; r < 'g'; r++){
+      for(char c = 'b'; c < 'f'; c++){
+        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        t.setIsPartOf(roomCards.get(1).getRoom());
+      }
+    }
+
+    //Lounge
+    for(char r = 'l'; r < 'n'; r++){
+      for(char c = 'b'; c < 'e'; c++){
+        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        t.setIsPartOf(roomCards.get(2).getRoom());
+      }
+    }
+
+    //Hall
+    for(char r = 'u'; r < 'w'; r++){
+      for(char c = 'k'; c < 'n'; c++){
+        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        t.setIsPartOf(roomCards.get(3).getRoom());
+      }
+    }
+
+    //Study
+    for(char r = 'w'; r < 'x'; r++){
+      for(char c = 's'; c < 'x'; c++){
+        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        t.setIsPartOf(roomCards.get(4).getRoom());
+      }
+    }
+
+    //BookRoom
+    for(char r = 'p'; r < 'r'; r++){
+      for(char c = 't'; c < 'v'; c++){
+        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        t.setIsPartOf(roomCards.get(5).getRoom());
+      }
+    }
+    board.getBoardTile("Sq").setIsPartOf(roomCards.get(5).getRoom());
+    board.getBoardTile("Wq").setIsPartOf(roomCards.get(5).getRoom());
+
+    //EntertainmentRoom
+    for(char r = 'j'; r < 'l'; r++){
+      for(char c = 't'; c < 'w'; c++){
+        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        t.setIsPartOf(roomCards.get(6).getRoom());
+      }
+    }
+
+    //Cons
+    for(char r = 'c'; r < 'e'; r++){
+      for(char c = 't'; c < 'w'; c++){
+        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        t.setIsPartOf(roomCards.get(7).getRoom());
+      }
+    }
+
+    //Auditorium
+    for(char r = 'd'; r < 'e'; r++){
+      for(char c = 'j'; c < 'o'; c++){
+        Tile t = board.getBoardTile(String.valueOf(Character.toUpperCase(c)) + String.valueOf(r));
+        t.setIsPartOf(roomCards.get(8).getRoom());
+      }
+    }
+  }
+
+
   //------------------------
   // INTERFACE
   //------------------------
@@ -365,6 +548,9 @@ public class Game
   }
 
   private class IncorrectNumberOfPlayersException extends Throwable {
+  }
+
+  private class InvalidCharacterException extends Throwable {
   }
 }
 

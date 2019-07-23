@@ -2,6 +2,7 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
+import java.util.Objects;
 
 // line 72 "model.ump"
 // line 125 "model.ump"
@@ -47,7 +48,8 @@ public class CharacterCard implements Card
 
   public String toString()
   {
-    return super.toString() + "["+
-            "character" + ":" + getCharacter()+ "]";
+    return getCharacter();
   }
+
+
 }
