@@ -15,6 +15,7 @@ public class Player
   //Player Attributes
   private CharacterCard character;
   private boolean isStillPlaying;
+  private Tile position;
 
   //------------------------
   // CONSTRUCTOR
