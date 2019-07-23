@@ -44,9 +44,10 @@ public class Board
     for(char row = 'a'; row < 'z'; row++){
       for(char col = 'A'; col < 'Y'; col++){
         Tile t  = getBoardTile(col + String.valueOf(row));
-        if(row != 'a'){t.addAdjacent(getBoardTile(col + String.valueOf(row-1)));}
-        if(row != 'y'){t.addAdjacent(getBoardTile(col + String.valueOf(row+1)));}
-        if(col != 'A'){t.addAdjacent(getBoardTile(col-1 + String.valueOf(row)));}
+        if(row != 'a'){t.addAdjacent(getBoardTile(col + String.valueOf((char)(row-1))));}
+        if(row != 'y'){t.addAdjacent(getBoardTile(col + String.valueOf((char)(row+1))));}
+        if(col != 'A'){t.addAdjacent(getBoardTile((char)(col-1) + String.valueOf(row)));}
+        if(col != 'X'){t.addAdjacent(getBoardTile((char)(col+1) + String.valueOf(row)));}
       }
     }
     printBoard();
@@ -80,7 +81,7 @@ public class Board
         if (Character.isLowerCase(letter2)){
           int x = letter1 - 'A';
           int y = letter2 - 'a';
-          return boardTiles[x][y];
+          return boardTiles[y][x];
         }
         throw new moveInvalidException ("Move invalid.");
       }

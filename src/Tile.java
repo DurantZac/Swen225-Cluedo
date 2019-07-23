@@ -143,6 +143,12 @@ public class Tile
     adjacent.add(t);
   }
 
+  public void printAdajent(){
+    for(Tile t : adjacent){
+      System.out.println(t.toString());
+    }
+  }
+
 
   public String toStringFull()
   {

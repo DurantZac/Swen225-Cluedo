@@ -31,7 +31,6 @@ public class Game
    */
   public Game() {
     board = createBoard();
-
     while (true) { //Try to find out how many players there are
       try {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
