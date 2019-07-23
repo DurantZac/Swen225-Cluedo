@@ -23,6 +23,8 @@ public class Tile
   private WeaponCard occupiedBy;
   private char symbol;
   private List<Tile> adjacent = new ArrayList<>();
+  private int row;
+  private int col;
 
   //------------------------
   // CONSTRUCTOR
@@ -143,12 +145,21 @@ public class Tile
     adjacent.add(t);
   }
 
-  public void printAdajent(){
-    for(Tile t : adjacent){
-      System.out.println(t.toString());
-    }
+  public int getRow(){
+    return row;
   }
 
+  public int getCol(){
+    return col;
+  }
+
+  public void setRow(int r){
+    row = r;
+  }
+
+  public void setCol(int c){
+    col = c;
+  }
 
   public String toStringFull()
   {
