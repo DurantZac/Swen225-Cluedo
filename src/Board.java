@@ -67,8 +67,8 @@ public class Board
       //Case X followed by Y
       if (Character.isUpperCase(letter1)){
         if (Character.isLowerCase(letter2)){
-          int x = letter1 - 'A';
-          int y = letter2 - 'a';
+          int y = letter1 - 'A';
+          int x = letter2 - 'a';
           return boardTiles[x][y];
         }
         throw new moveInvalidException ("Move invalid.");
