@@ -15,14 +15,16 @@ public class CharacterCard implements Card
 
   //CharacterCard Attributes
   private String character;
+  private Tile startPos;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public CharacterCard(String aCharacter)
+  public CharacterCard(String aCharacter,Tile t)
   {
     character = aCharacter;
+    startPos = t;
   }
 
   //------------------------
@@ -49,6 +51,10 @@ public class CharacterCard implements Card
   public String toString()
   {
     return getCharacter();
+  }
+
+  public Tile getStartPos(){
+    return startPos;
   }
 
 

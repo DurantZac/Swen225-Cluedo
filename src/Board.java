@@ -155,7 +155,7 @@ public class Board
   }
 
   // line 24 "model.ump"
-   public boolean movePlayer(Player p, Tile t, int moves){
+   public boolean movePlayer(Player p, Tile t, int moves) {
     return false;
   }
 
