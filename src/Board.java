@@ -34,6 +34,8 @@ public class Board
     for(int row = 0; row < 25; row++){
       for(int col = 0; col < 24; col++){
         boardTiles[row][col] = allBoardTiles.get(i); // converts list of tiles to 2D array
+        allBoardTiles.get(i).setCol(col);
+        allBoardTiles.get(i).setRow(row);
         i++;
       }
     }
@@ -167,10 +169,16 @@ public class Board
   }
 
   // line 24 "model.ump"
-   public boolean movePlayer(Player p, Tile t, int moves) {
+   public boolean movePlayer(Player p, Tile goal, int moves) {
     Tile startTile = p.getPosition();
 
     return false;
+  }
+
+  public int heuristic(Tile node, Tile goal){
+    int dRow = Math.abs(goal.getRow() - node.getRow());
+    int dCol = Math.abs(goal.getCol() - node.getCol());
+    return (int)Math.sqrt(Math.pow(dRow,2) + Math.pow(dCol,2));
   }
 
 
