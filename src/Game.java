@@ -19,6 +19,7 @@ public class Game
   private Board board;
   private List<Card> murderScenario;
   private List<Player> players;
+  private int playerNum;
 
   //------------------------
   // CONSTRUCTOR
@@ -33,20 +34,29 @@ public class Game
     while (true) { //Try to find out how many players there are
       try {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("How many players are playing?");
+        System.out.println("How many players are playing? (3-6) ");
         int numberOfPlayers = Integer.parseInt(input.readLine());
-        System.out.println(numberOfPlayers);
-
+        if(numberOfPlayers < 3 || numberOfPlayers > 6){ throw new IncorrectNumberOfPlayersException(); }
+        playerNum=numberOfPlayers;
         input.close();//Close buffered reader
         break;
       } catch (NumberFormatException n) {
-        System.out.println("Please enter a number only");
+        System.out.println("Please enter a number between 3-6 only");
       }
       catch (IOException e){
         System.out.println("Error on input, please try again" + e);
       }
+      catch (IncorrectNumberOfPlayersException i){
+        System.out.println("Please enter a number between 3-6 only");
+      }
     }
 
+    for (int i = 0; i < playerNum; i++){
+
+
+
+
+    }
 
   }
 
@@ -350,6 +360,9 @@ public class Game
 
   public static void main(String args[]){
     new Game();
+  }
+
+  private class IncorrectNumberOfPlayersException extends Throwable {
   }
 }
 
