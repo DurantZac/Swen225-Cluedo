@@ -3,7 +3,6 @@
 
 
 import java.util.*;
-import java.util.stream.Stream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -38,7 +37,6 @@ public class Game
         int numberOfPlayers = Integer.parseInt(input.readLine());
         if(numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()){ throw new IncorrectNumberOfPlayersException(); }
         playerNum=numberOfPlayers;
-        input.close();//Close buffered reader
         break;
       } catch (NumberFormatException n) {
         System.out.println("Please enter a number between 3-6 only");
@@ -50,42 +48,40 @@ public class Game
         System.out.println("Please enter a number between 3-6 only");
       }
     }
+
     List<CharacterCard> unusedCharacters= new ArrayList<>();
 
 
     //Make all the characters
-      unusedCharacters.add(new CharacterCard("Col. Mustard",board.getBoardTile("Ar")));
-      unusedCharacters.add(new CharacterCard("Mrs White",board.getBoardTile("Ja")));
-      unusedCharacters.add(new CharacterCard("Rev. Green",board.getBoardTile("Oa")));
-      unusedCharacters.add(new CharacterCard("Prof. Plum",board.getBoardTile("Xt")));
-      unusedCharacters.add(new CharacterCard("Ms Turquoise",board.getBoardTile("Xg")));
-      unusedCharacters.add(new CharacterCard("Miss Red",board.getBoardTile("Hy")));
-
-
-
+    unusedCharacters.add(new CharacterCard("Col. Mustard",board.getBoardTile("Ar")));
+    unusedCharacters.add(new CharacterCard("Mrs White",board.getBoardTile("Ja")));
+    unusedCharacters.add(new CharacterCard("Rev. Green",board.getBoardTile("Oa")));
+    unusedCharacters.add(new CharacterCard("Prof. Plum",board.getBoardTile("Xt")));
+    unusedCharacters.add(new CharacterCard("Ms Turquoise",board.getBoardTile("Xg")));
+    unusedCharacters.add(new CharacterCard("Miss Red", board.getBoardTile("Hy")));
 
     List<Card> cardsToBeDealt = createCards(unusedCharacters);
 
 
     for (int i = 0; i < playerNum; i++){
+      System.out.println("Player "+ (i+1) + ". Please select your character");
       System.out.println("The available players are:");
       unusedCharacters.stream().forEach(j -> System.out.println(j.toString()));
-      System.out.println("\n What player would you like to be?");
+      System.out.println("\nWhat player would you like to be?");
+
       validityCheck: while (true) { //Check who they want to be
         try {
           BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
           String characterToPlay = input.readLine();
-          System.out.println(characterToPlay);
-
 
           for (CharacterCard c: unusedCharacters) {
             if (c.getCharacter().equalsIgnoreCase(characterToPlay)) {
 
               Player p = new Player(c);
               players.add(p);
-
               unusedCharacters.remove(c);
-              input.close();//Close buffered reader
+
+              System.out.println("You have selected the character: " + c + "\n");
               break validityCheck;
             }
           }
@@ -99,6 +95,7 @@ public class Game
         }
       }
     }
+    //close buffer
   }
 
   /** Generate board from string
