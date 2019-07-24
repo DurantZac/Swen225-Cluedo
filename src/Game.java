@@ -531,7 +531,7 @@ public class Game
    * Creates two "dice" which pick a random number from 1-6
    * @return sum of roll
    */
-   private int RollDice(){
+   private int rollDice(){
      Random dice1 = new Random();
      Random dice2 = new Random();
 
@@ -548,7 +548,62 @@ public class Game
    * Runs the main game loop while the murder has not been guessed and there are still players in the game
    */
   private void playGame(){
+    int currentPlayer=0;
+    for (int i=0; i<players.size();i++) {
+      if (players.get(i).getCharacter().getCharacter().equalsIgnoreCase("Miss Red")) { // Rule "Miss Scarlet always goes first"
+        currentPlayer=i;
+        break;
+      }
+    }
 
+
+
+    try {
+      game:while (true) { // play the game
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.println(players.get(currentPlayer) + " turn.");
+        int numMoves = rollDice();
+        System.out.println("You have rolled a: " + numMoves);
+        System.out.println("Where would you like to move to?");
+        String move = input.readLine();
+
+        Tile goal = board.getBoardTile(move);
+        //Assuming move player actually moves the player
+        boolean valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
+
+        while (!valid){
+          System.out.println("That move is not valid, please try a different move");
+          move = input.readLine();
+          goal = board.getBoardTile(move);
+          valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
+        }
+
+        System.out.println("Would you like to make a suggestion?");
+        //get input, call check suggestion
+        System.out.println("Would you like to make an accusation?");
+        //get input, call check accusation
+        //Maybe remove player from game if wrong
+        
+
+        currentPlayer = getNextCharacter(currentPlayer);
+      }
+    }
+    catch (IOException e ){
+      System.out.println("Error on input, please try again"+e);
+    }
+  }
+
+  /**
+   * Gets the next character
+   * @param current the character currently playing
+   * @return the next player
+   */
+  private int getNextCharacter(int current){
+    if (current<players.size()-1)
+      return current+1;
+    else
+     return 0;
   }
 
   /**
