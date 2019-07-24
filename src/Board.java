@@ -181,8 +181,10 @@ public class Board
 
   public boolean depthFirstSearch(Tile node, Tile goal,List<Tile> unvisited, int movesLeft){
     if(movesLeft < 0) return false;
+    if(node.getIsPartOf() != null && node.getIsPartOf() != goal.getIsPartOf()) return false;
     unvisited.remove(node);
     if(node == goal) return true;
+    if(node.getIsPartOf() == goal.getIsPartOf()) return true;
     for(Tile neigh : node.getAdjacent()){
       if(depthFirstSearch(neigh,goal,unvisited,movesLeft-1)) return true;
     }
