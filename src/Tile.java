@@ -26,6 +26,17 @@ public class Tile
   private int row;
   private int col;
 
+  //Colours
+  public static final String ANSI_RESET = "\u001B[0m";
+  public static final String ANSI_BLACK = "\u001B[30m";
+  public static final String ANSI_RED = "\u001B[31m";
+  public static final String ANSI_GREEN = "\u001B[32m";
+  public static final String ANSI_YELLOW = "\u001B[33m";
+  public static final String ANSI_BLUE = "\u001B[34m";
+  public static final String ANSI_PURPLE = "\u001B[35m";
+  public static final String ANSI_CYAN = "\u001B[36m";
+  public static final String ANSI_WHITE = "\u001B[37m";
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -176,6 +187,20 @@ public class Tile
    */
   public String toString(){
     String s="|";
+    switch(this.symbol){
+      case 'R':
+        return "|" + ANSI_RED + symbol + ANSI_RESET;
+      case 'G':
+        return "|" + ANSI_GREEN + symbol + ANSI_RESET;
+      case 'T':
+        return "|" + ANSI_CYAN + symbol + ANSI_RESET;
+      case 'W':
+        return "|" + ANSI_BLUE + symbol + ANSI_RESET;
+      case 'M':
+        return "|" + ANSI_YELLOW + symbol + ANSI_RESET;
+      case 'P':
+        return "|" + ANSI_PURPLE + symbol + ANSI_RESET;
+    }
     s+=symbol;
 
     return s;
