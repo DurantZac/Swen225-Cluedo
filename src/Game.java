@@ -562,9 +562,9 @@ public class Game
       game:while (true) { // play the game
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-        System.out.println(players.get(currentPlayer) + " turn.");
+        System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
         int numMoves = rollDice();
-        System.out.println("You have rolled a: " + numMoves);
+        System.out.println("You have " + numMoves+" moves.");
         System.out.println("Where would you like to move to?");
         String move = input.readLine();
 
@@ -579,13 +579,16 @@ public class Game
           valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
         }
 
+        //Re-print the board with the updated move?
+
         System.out.println("Would you like to make a suggestion?");
         //get input, call check suggestion
         System.out.println("Would you like to make an accusation?");
         //get input, call check accusation
         //Maybe remove player from game if wrong
-        
 
+
+        System.out.println();// blank line, maybe want to clear the screen later?
         currentPlayer = getNextCharacter(currentPlayer);
       }
     }
