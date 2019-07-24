@@ -28,6 +28,7 @@ public class Player
   {
     character = aCharacter;
     isStillPlaying = true;
+    position = character.getStartPos();
   }
 
   //------------------------

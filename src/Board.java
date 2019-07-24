@@ -16,6 +16,7 @@ public class Board
 
   //Board Associations
   private Tile[][] boardTiles = new Tile[25][24];
+  private List<Tile> listBoardTiles;
   private Game game;
 
   //------------------------
@@ -30,6 +31,7 @@ public class Board
    */
   public Board(Game aGame, List<Tile>allBoardTiles)
   {
+    listBoardTiles = allBoardTiles;
     int i = 0;
     for(int row = 0; row < 25; row++){
       for(int col = 0; col < 24; col++){
@@ -170,18 +172,21 @@ public class Board
 
   // line 24 "model.ump"
    public boolean movePlayer(Player p, Tile goal, int moves) {
+    if(goal.getIsAccessable() == false) return false;
     Tile startTile = p.getPosition();
+    List<Tile> unvisited = new ArrayList<>(listBoardTiles);
+    return depthFirstSearch(startTile,goal,unvisited,moves);
+  }
 
+  public boolean depthFirstSearch(Tile node, Tile goal,List<Tile> unvisited, int movesLeft){
+    if(movesLeft < 0) return false;
+    unvisited.remove(node);
+    if(node == goal) return true;
+    for(Tile neigh : node.getAdjacent()){
+      if(depthFirstSearch(neigh,goal,unvisited,movesLeft-1)) return true;
+    }
     return false;
   }
-
-  public int heuristic(Tile node, Tile goal){
-    int dRow = Math.abs(goal.getRow() - node.getRow());
-    int dCol = Math.abs(goal.getCol() - node.getCol());
-    return (int)Math.sqrt(Math.pow(dRow,2) + Math.pow(dCol,2));
-  }
-
-
 
   private class moveInvalidException extends Throwable {
     public moveInvalidException(String s) {
