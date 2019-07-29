@@ -544,19 +544,19 @@ public class Game
             processSuggestion(players.get(currentPlayer), input);
         }
 
-        System.out.println("Would you like to make an accusation?");
+        System.out.println("Would you like to make an accusation? (Y/N)");
         String accuse = input.readLine();
         if (accuse.equalsIgnoreCase("yes")||accuse.equalsIgnoreCase("y")){
             boolean accusation = checkAccusation(input);
             if (accusation){
-                System.out.println("Congratulations, "+players.get(currentPlayer)+" has solved the murder!");
+                System.out.println("Congratulations, "+players.get(currentPlayer).getCharacter().toString()+" has solved the murder!");
                 System.out.println("The murder occurred as follows:");
                 System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the "+ murderScenario.get(2));
 
                 return;
             }
             else{
-                System.out.println("The accusation is incorrect, "+ players.get(currentPlayer));
+                System.out.println("The accusation is incorrect, "+ players.get(currentPlayer).getCharacter().toString());
                 System.out.println("You can no longer win the game");
                 removePlayer(players.get(currentPlayer));
             }
@@ -623,7 +623,7 @@ public class Game
 
     Card dispute = checkSuggestion(player,weapon,character,room.getRoomCard(),input);
     if (dispute!=null){
-        System.out.printf("%s, your suggestion has been refuted with the following card: %s.", player.toString(), dispute.toString());
+        System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
     }
     else{
         System.out.printf("%s, your suggestion has not been refuted.", player.toString());
@@ -699,9 +699,10 @@ public class Game
 
                //Clear the screen
                System.out.println(p.getCharacter() + "'s turn to check the suggestion:");
+               System.out.println(p.returnHand());
                System.out.printf("You have %d cards matching the suggestion\n",suggestions.size());
                if (suggestions.size()==1){
-                   System.out.println("Since you only have one card, you must use "+suggestions.get(0).toString()+ " to disprove the suggestion");
+                   System.out.println("Since you only have one card, you must use the "+suggestions.get(0).toString()+ " to disprove the suggestion");
                    return suggestions.get(0);
                }
                if (suggestions.size()>1){
