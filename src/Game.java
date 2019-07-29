@@ -538,11 +538,15 @@ public class Game
 
         board.printBoard();
 
-        System.out.println("Would you like to make a suggestion? (Y/N)");
-        String suggest = input.readLine();
-        if (suggest.equalsIgnoreCase("yes")||suggest.equalsIgnoreCase("y")){
+        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
+        if (room!=null) { // only allow them to make suggestions in a room
+          System.out.println("Would you like to make a suggestion? (Y/N)");
+          String suggest = input.readLine();
+          if (suggest.equalsIgnoreCase("yes")||suggest.equalsIgnoreCase("y")){
             processSuggestion(players.get(currentPlayer), input);
+          }
         }
+
 
         System.out.println("Would you like to make an accusation? (Y/N)");
         String accuse = input.readLine();
@@ -697,7 +701,6 @@ public class Game
                if (hand.contains(character)) suggestions.add(character);
                if (hand.contains(room)) suggestions.add(room);
 
-               //Clear the screen
                System.out.println(p.getCharacter() + "'s turn to check the suggestion:");
                System.out.println(p.returnHand());
                System.out.printf("You have %d cards matching the suggestion\n",suggestions.size());
@@ -708,7 +711,7 @@ public class Game
                if (suggestions.size()>1){
                    System.out.println("What card would you like to use to disprove the suggestion? ");
                    for (int i = 0; i < suggestions.size(); i++){
-                       System.out.printf("[%d] %s", i, suggestions.get(i).toString());
+                       System.out.printf("[%d] %s \n", i, suggestions.get(i).toString());
                    }
 
                    int dispute =-1;
@@ -723,7 +726,7 @@ public class Game
                    }
                    return suggestions.get(dispute);
                }
-
+             System.out.printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
            }
        }
        return null; // no one could disprove the suggestion, so return null
