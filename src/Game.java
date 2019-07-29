@@ -21,6 +21,11 @@ public class Game
   private List<Player> players = new ArrayList<>();
   private int playerNum;
 
+  private Map <String, WeaponCard> weaponMap = new HashMap<>();
+  private Map <String, CharacterCard> characterMap = new HashMap<>();
+  private Map <String, RoomCard> roomMap = new HashMap<>();
+
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -61,6 +66,8 @@ public class Game
     unusedCharacters.add(new CharacterCard("Miss Red", board.getBoardTile("Hy")));
 
     List<Card> cardsToBeDealt = createCards(unusedCharacters);
+
+    unusedCharacters.stream().forEach(j -> characterMap.put(j.toString().toLowerCase(),j));
 
     for (int i = 0; i < playerNum; i++){
       System.out.println("Player "+ (i+1) + ". Please select your character");
@@ -184,6 +191,9 @@ public class Game
     weapons.add(new WeaponCard("Revolver"));
     weapons.add(new WeaponCard("Spanner"));
     weapons.add(new WeaponCard("Lead Pipe"));
+
+    weapons.stream().forEach(j -> weaponMap.put(j.toString().toLowerCase(),(WeaponCard)j)); // add all weapons to a map
+
     Collections.shuffle(weapons);
     murderScenario.add(weapons.get(0));
     weapons.remove(weapons.get(0));
@@ -241,6 +251,8 @@ public class Game
     cards.add(cons.getRoomCard());
     cards.add(auditorium.getRoomCard());
     markRoom(cards);
+
+    cards.stream().forEach(j -> roomMap.put(j.toString().toLowerCase(),j)); // add all room to a map
 
     Collections.shuffle(cards);
     murderScenario.add(cards.get(0));
@@ -457,20 +469,8 @@ public class Game
   {
     return 6;
   }
-  /* Code from template association_AddUnidirectionalMN */
-  public boolean addStore(Player aPlayer)
-  {
-    boolean wasAdded = false;
-    if (players.contains(aPlayer)) { return false; }
-    if (numberOfPlayers() < maximumNumberOfPlayers())
-    {
-      players.add(aPlayer);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
 
-  public boolean removeStore(Player aPlayer)
+  public boolean removePlayer(Player aPlayer)
   {
     boolean wasRemoved = false;
     if (!players.contains(aPlayer))
@@ -487,63 +487,6 @@ public class Game
     wasRemoved = true;
     return wasRemoved;
   }
-  /* Code from template association_SetUnidirectionalMN */
-  public boolean setPlayers(Player... newStores)
-  {
-    boolean wasSet = false;
-    ArrayList<Player> verifiedStores = new ArrayList<Player>();
-    for (Player aStore : newStores)
-    {
-      if (verifiedStores.contains(aStore))
-      {
-        continue;
-      }
-      verifiedStores.add(aStore);
-    }
-
-    if (verifiedStores.size() != newStores.length || verifiedStores.size() < minimumNumberOfPlayers() || verifiedStores.size() > maximumNumberOfPlayers())
-    {
-      return wasSet;
-    }
-
-    players.clear();
-    players.addAll(verifiedStores);
-    wasSet = true;
-    return wasSet;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addStoreAt(Player aStore, int index)
-  {  
-    boolean wasAdded = false;
-    if(addStore(aStore))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
-      players.remove(aStore);
-      players.add(index, aStore);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveStoreAt(Player aStore, int index)
-  {
-    boolean wasAdded = false;
-    if(players.contains(aStore))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
-      players.remove(aStore);
-      players.add(index, aStore);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addStoreAt(aStore, index);
-    }
-    return wasAdded;
-  }
-
 
   /**
    * Creates two "dice" which pick a random number from 1-6
@@ -574,8 +517,6 @@ public class Game
       }
     }
 
-
-
     try {
       game:while (true) { // play the game
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -597,10 +538,17 @@ public class Game
           valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
         }
 
-        //Re-print the board with the updated move?
+        board.printBoard();
 
-        System.out.println("Would you like to make a suggestion?");
-        //get input, call check suggestion
+        System.out.println("Would you like to make a suggestion? (Y/N)");
+        String suggest = input.readLine();
+        if (suggest.equalsIgnoreCase("yes")||suggest.equalsIgnoreCase("y")){
+          processSuggestion(players.get(currentPlayer), input);
+        }
+
+
+
+
         System.out.println("Would you like to make an accusation?");
         //get input, call check accusation
         //Maybe remove player from game if wrong
@@ -648,9 +596,92 @@ public class Game
 
   }
 
-  // line 11 "model.ump"
-   private void checkSuggestion(){
-    
+  /**
+   * Checks the current player is able to make a suggestion, and gets the room, character and weapon they are suggesting
+   * @param player the current input
+   * @param input input stream
+   */
+  private void processSuggestion(Player player, BufferedReader input){
+    Room room = player.getPosition().getIsPartOf();
+    if (room==null) {
+      System.out.println("You are not in a room, you cannot make a suggestion.");
+      return;
+    }
+    WeaponCard weapon = checkWeapon(input);
+    CharacterCard character = checkCharacter(input);
+
+    boolean valid = checkSuggestion(weapon,character,room.getRoomCard());
+    if (valid){
+
+    }
+  }
+
+
+  private WeaponCard checkWeapon(BufferedReader input){
+     try {
+       System.out.println("What do you suggest is the murder weapon?");
+       String weapon = input.readLine();
+       WeaponCard suggestedWeapon = weaponMap.get(weapon.toLowerCase());
+       while (suggestedWeapon == null) {
+         System.out.println("Invalid Weapon, please try again:");
+         weapon = input.readLine();
+         suggestedWeapon = weaponMap.get(weapon.toLowerCase());
+       }
+       return suggestedWeapon;
+     }
+     catch (IOException e){
+       System.out.println("Error on input" + e);
+     }
+    return null;
+  }
+
+  private CharacterCard checkCharacter(BufferedReader input){
+    try {
+      System.out.println("Who do you suggest is the murderer?");
+      String murderer = input.readLine();
+      CharacterCard suggestedmurderer = characterMap.get(murderer.toLowerCase());
+      while (suggestedmurderer == null) {
+        System.out.println("Invalid Character, please try again:");
+        murderer = input.readLine();
+        suggestedmurderer = characterMap.get(murderer.toLowerCase());
+      }
+      return suggestedmurderer;
+    }
+    catch (IOException e){
+      System.out.println("Error on input" + e);
+    }
+    return null;
+  }
+
+  private RoomCard checkRoom(BufferedReader input){
+    try {
+      System.out.println("What do you suggest is the murder room?");
+      String room = input.readLine();
+      RoomCard suggestedRoom = roomMap.get(room.toLowerCase());
+      while (suggestedRoom == null) {
+        System.out.println("Invalid Room, please try again:");
+        room = input.readLine();
+        suggestedRoom = roomMap.get(room.toLowerCase());
+      }
+      return suggestedRoom;
+    }
+    catch (IOException e){
+      System.out.println("Error on input" + e);
+    }
+    return null;
+  }
+
+
+  /**
+   * 
+   * @param weapon
+   * @param character
+   * @param room
+   * @return
+   */
+   private boolean checkSuggestion( WeaponCard weapon,CharacterCard character, RoomCard room){
+
+    return false;
   }
 
   // line 12 "model.ump"
