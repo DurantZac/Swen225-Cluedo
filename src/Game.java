@@ -19,6 +19,7 @@ public class Game
   private Board board;
   private List<Card> murderScenario = new ArrayList<>();
   private List<Player> players = new ArrayList<>();
+  private List<Room> rooms = new ArrayList<>();
   private int playerNum;
 
   private Map <String, WeaponCard> weaponMap = new HashMap<>();
@@ -194,6 +195,12 @@ public class Game
 
     weapons.stream().forEach(j -> weaponMap.put(j.toString().toLowerCase(),(WeaponCard)j)); // add all weapons to a map
 
+    Collections.shuffle(rooms);
+    for(int i = 0; i < weapons.size(); i++){
+      WeaponCard w = (WeaponCard)(weapons.get(i));
+      w.setLocation(rooms.get(i));
+    }
+
     Collections.shuffle(weapons);
     murderScenario.add(weapons.get(0));
     weapons.remove(weapons.get(0));
@@ -253,6 +260,7 @@ public class Game
     markRoom(cards);
 
     cards.stream().forEach(j -> roomMap.put(j.toString().toLowerCase(),j)); // add all room to a map
+    cards.stream().forEach(n -> rooms.add(n.getRoom()));
 
     Collections.shuffle(cards);
     murderScenario.add(cards.get(0));
@@ -509,6 +517,7 @@ public class Game
    * Runs the main game loop while the murder has not been guessed and there are still players in the game
    */
   private void playGame(){
+    board.printBoard();
     int currentPlayer=0;
     for (int i=0; i<players.size();i++) {
       if (players.get(i).getCharacter().getCharacter().equalsIgnoreCase("Miss Red")) { // Rule "Miss Scarlet always goes first"
@@ -680,8 +689,11 @@ public class Game
    * @return
    */
    private boolean checkSuggestion( WeaponCard weapon,CharacterCard character, RoomCard room){
-
     return false;
+  }
+
+  public List<WeaponCard> getWeapons(){
+     return new ArrayList<>(weaponMap.values());
   }
 
   // line 12 "model.ump"

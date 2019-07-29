@@ -2,6 +2,8 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
+import jdk.swing.interop.SwingInterOpUtils;
+
 import java.io.CharConversionException;
 import java.lang.reflect.Array;
 import java.util.*;
@@ -56,7 +58,6 @@ public class Board
         if(col != 'X'){t.addAdjacent(getBoardTile((char)(col+1) + String.valueOf(row)));}
       }
     }
-    printBoard();
   }
 
 
@@ -170,21 +171,36 @@ public class Board
       System.out.println("|");
     }
     System.out.println("   A B C D E F G H I J K L M N O P Q R S T U V W X");
+    System.out.println("Weapon locations: ");
+    for(WeaponCard w : game.getWeapons()){
+      System.out.println("The " + w.getWeapon() + " is in the " + w.getLocation());
+    }
+    System.out.println("");
   }
 
-  // line 24 "model.ump"
-   public boolean movePlayer(Player p, Tile goal, int moves) {
+  /**
+   * Checks if move is valid, if so move player, update tiles and return true
+   * If not return false
+   * @param p player
+   * @param goal node target
+   * @param moves number of moves to use
+   * @return success or fail
+   */
+  public boolean movePlayer(Player p, Tile goal, int moves) {
     if(goal.getIsAccessable() == false) return false;
+
+    // Find if path available
     Tile startTile = p.getPosition();
     boolean valid = false;
     if(p.getPosition().getIsPartOf() == null){
       valid = pathFinding(startTile,goal,moves,0,new ArrayList<Tile>());
     }
-    else{
+    else{ // If in room, try all exits
       for(Tile t : p.getPosition().getIsPartOf().getEntrances()){
         valid = valid || pathFinding(t,goal,moves,0,new ArrayList<Tile>());
       }
     }
+
     if(valid){
       // Move
       Tile oldPos = p.getPosition();
@@ -204,6 +220,15 @@ public class Board
     }
   }
 
+  /**
+   * Recursive Depth first search to find path from start to end using required number of moves
+   * @param node Current Node
+   * @param goal End Node
+   * @param moveGoal Moves to use
+   * @param moveCount Moves used so far
+   * @param visited List of nodes that have been visited
+   * @return True if path found, false otherwise
+   */
   public boolean pathFinding(Tile node, Tile goal, int moveGoal, int moveCount, List<Tile> visited){
     if(node == goal && moveCount == moveGoal) return true;
     if(node.getIsPartOf() == goal.getIsPartOf() && moveCount <= moveGoal) return true;
@@ -216,6 +241,27 @@ public class Board
     return false;
   }
 
+  /**
+   * Teleports the player to a room they have been suggested in
+   * @param p player object
+   * @param goal room to move to
+   */
+  public void teleportPlayer(Player p, Room goal){
+    Tile oldPos = p.getPosition();
+    if(oldPos.getIsPartOf() != null) oldPos.getIsPartOf().addEmptySpace(oldPos);
+    oldPos.removePlayer();
+    Tile t = goal.getEmptySpace();
+    p.setPosition(t);
+  }
+
+  /**
+   * Teleports weapon to given room after suggestion
+   * @param w
+   * @param goal
+   */
+  public void teleportWeapon(WeaponCard w, Room goal){
+    w.setLocation(goal);
+  }
 
 
   private class moveInvalidException extends Throwable {

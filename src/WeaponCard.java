@@ -14,6 +14,7 @@ public class WeaponCard implements Card
 
   //WeaponCard Attributes
   private String weapon;
+  private Room location;
 
   //------------------------
   // CONSTRUCTOR
@@ -34,6 +35,14 @@ public class WeaponCard implements Card
     weapon = aWeapon;
     wasSet = true;
     return wasSet;
+  }
+
+  public Room getLocation(){
+    return location;
+  }
+
+  public void setLocation(Room r){
+    location = r;
   }
 
   public String getWeapon()
