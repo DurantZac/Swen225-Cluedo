@@ -88,6 +88,9 @@ public class Player
     return s;
   }
 
+  public Set<Card> getHand(){
+    return hand;
+  }
 
 
   public String toString()

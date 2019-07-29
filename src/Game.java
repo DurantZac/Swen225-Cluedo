@@ -610,7 +610,7 @@ public class Game
     WeaponCard weapon = checkWeapon(input);
     CharacterCard character = checkCharacter(input);
 
-    boolean valid = checkSuggestion(weapon,character,room.getRoomCard());
+    boolean valid = checkSuggestion(player,weapon,character,room.getRoomCard());
     if (valid){
 
     }
@@ -672,15 +672,22 @@ public class Game
   }
 
 
-  /**
-   *
-   * @param weapon
-   * @param character
-   * @param room
-   * @return
-   */
-   private boolean checkSuggestion( WeaponCard weapon,CharacterCard character, RoomCard room){
 
+   private boolean checkSuggestion(Player player,WeaponCard weapon,CharacterCard character, RoomCard room){
+      for (Player p : players){
+        if (p != player){
+          Set<Card> hand = p.getHand();
+          Set <Card> suggestions = new HashSet<>();
+          if (hand.contains(weapon))suggestions.add(weapon);
+          if (hand.contains(character))suggestions.add(character);
+          if (hand.contains(room))suggestions.add(room);
+
+          //Clear the screen
+          System.out.println(p.getCharacter()+"'s turn to check the suggestion:");
+
+
+        }
+      }
     return false;
   }
 
