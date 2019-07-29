@@ -56,7 +56,6 @@ public class Game
 
     List<CharacterCard> unusedCharacters= new ArrayList<>();
 
-
     //Make all the characters
     unusedCharacters.add(new CharacterCard("Col. Mustard",board.getBoardTile("Ar")));
     unusedCharacters.add(new CharacterCard("Mrs White",board.getBoardTile("Ja")));
