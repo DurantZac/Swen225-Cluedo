@@ -98,7 +98,7 @@ public class Board
         if (Character.isLowerCase(letter1)) {
           int y = letter1 - 'a';
           int x = letter2 - 'A';
-          return boardTiles[x][y];
+          return boardTiles[y][x];
         }
         throw new moveInvalidException("Move invalid.");
       }
@@ -152,7 +152,7 @@ public class Board
   {
     return 600;
   }
-  /* Code from template association_SetUnidirectionalN */
+  /* Code from template association_SetUnidi1rectionalN */
 
 
   /**

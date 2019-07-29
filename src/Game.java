@@ -247,6 +247,8 @@ public class Game
     Room auditorium = new Room("Auditorium");
     auditorium.addEntrance(board.getBoardTile("Jh"));
     auditorium.addEntrance(board.getBoardTile("Oh"));
+    auditorium.addEntrance(board.getBoardTile("Pf"));
+    auditorium.addEntrance(board.getBoardTile("If"));
 
     cards.add(kitchen.getRoomCard());
     cards.add(dining.getRoomCard());
