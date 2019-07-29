@@ -265,18 +265,22 @@ public class Game
    */
   public void markRoom(List<RoomCard> roomCards){
     //Kitchen
+    Room k = roomCards.get(0).getRoom();
     for(char r = 'c'; r < 'g'; r++){
       for(char c = 'b'; c < 'f'; c++){
         Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
-        t.setIsPartOf(roomCards.get(0).getRoom());
+        t.setIsPartOf(k);
+        if(!k.getEntrances().contains(t)) k.addEmptySpace(t);
       }
     }
 
     //Dining
+    Room d = roomCards.get(1).getRoom();
     for(char r = 'l'; r < 'p'; r++){
       for(char c = 'b'; c < 'h'; c++){
         Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
-        t.setIsPartOf(roomCards.get(1).getRoom());
+        t.setIsPartOf(d);
+        if(!d.getEntrances().contains(t)) d.addEmptySpace(t);
       }
     }
     board.getBoardTile("Bk").setIsPartOf(roomCards.get(1).getRoom());
@@ -284,59 +288,73 @@ public class Game
     board.getBoardTile("Dk").setIsPartOf(roomCards.get(1).getRoom());
 
     //Lounge
+    Room l = roomCards.get(2).getRoom();
     for(char r = 'u'; r < 'y'; r++){
       for(char c = 'b'; c < 'g'; c++){
         Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
-        t.setIsPartOf(roomCards.get(2).getRoom());
+        t.setIsPartOf(l);
+        if(!l.getEntrances().contains(t)) l.addEmptySpace(t);
       }
     }
 
     //Hall
+    Room h = roomCards.get(3).getRoom();
     for(char r = 't'; r < 'y'; r++){
       for(char c = 'k'; c < 'o'; c++){
         Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
-        t.setIsPartOf(roomCards.get(3).getRoom());
+        t.setIsPartOf(h);
+        if(!h.getEntrances().contains(t)) h.addEmptySpace(t);
       }
     }
 
     //Study
+    Room s = roomCards.get(4).getRoom();
     for(char r = 'w'; r < 'y'; r++){
       for(char c = 's'; c < 'y'; c++){
         Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
-        t.setIsPartOf(roomCards.get(4).getRoom());
+        t.setIsPartOf(s);
+        if(!s.getEntrances().contains(t)) s.addEmptySpace(t);
       }
     }
 
     //BookRoom
+    Room b = roomCards.get(5).getRoom();
     for(char r = 'p'; r < 's'; r++){
       for(char c = 't'; c < 'x'; c++){
         Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
-        t.setIsPartOf(roomCards.get(5).getRoom());
+        t.setIsPartOf(b);
+        if(!b.getEntrances().contains(t)) b.addEmptySpace(t);
       }
     }
     board.getBoardTile("Sq").setIsPartOf(roomCards.get(5).getRoom());
 
     //EntertainmentRoom
+    Room e = roomCards.get(6).getRoom();
     for(char r = 'j'; r < 'm'; r++){
       for(char c = 't'; c < 'x'; c++){
         Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
-        t.setIsPartOf(roomCards.get(6).getRoom());
+        t.setIsPartOf(e);
+        if(!e.getEntrances().contains(t)) e.addEmptySpace(t);
       }
     }
 
     //Cons
+    Room con = roomCards.get(7).getRoom();
     for(char r = 'c'; r < 'f'; r++){
       for(char c = 't'; c < 'x'; c++){
         Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
-        t.setIsPartOf(roomCards.get(7).getRoom());
+        t.setIsPartOf(con);
+        if(!con.getEntrances().contains(t)) con.addEmptySpace(t);
       }
     }
 
     //Auditorium
+    Room a = roomCards.get(8).getRoom();
     for(char r = 'd'; r < 'h'; r++){
       for(char c = 'J'; c < 'P'; c++){
         Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
-        t.setIsPartOf(roomCards.get(8).getRoom());
+        t.setIsPartOf(a);
+        if(!a.getEntrances().contains(t)) a.addEmptySpace(t);
       }
     }
     board.getBoardTile("Lb").setIsPartOf(roomCards.get(8).getRoom());

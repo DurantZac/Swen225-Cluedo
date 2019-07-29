@@ -3,6 +3,7 @@
 
 
 import java.io.CharConversionException;
+import java.lang.reflect.Array;
 import java.util.*;
 
 // line 17 "model.ump"
@@ -175,21 +176,47 @@ public class Board
    public boolean movePlayer(Player p, Tile goal, int moves) {
     if(goal.getIsAccessable() == false) return false;
     Tile startTile = p.getPosition();
-    List<Tile> unvisited = new ArrayList<>(listBoardTiles);
-    return depthFirstSearch(startTile,goal,unvisited,moves);
+    boolean valid = false;
+    if(p.getPosition().getIsPartOf() == null){
+      valid = pathFinding(startTile,goal,moves,0,new ArrayList<Tile>());
+    }
+    else{
+      for(Tile t : p.getPosition().getIsPartOf().getEntrances()){
+        valid = valid || pathFinding(t,goal,moves,0,new ArrayList<Tile>());
+      }
+    }
+    if(valid){
+      // Move
+      Tile oldPos = p.getPosition();
+      if(oldPos.getIsPartOf() != null) oldPos.getIsPartOf().addEmptySpace(oldPos);
+      oldPos.removePlayer();
+      if(goal.getIsPartOf() != null){
+        Tile t = goal.getIsPartOf().getEmptySpace();
+        p.setPosition(t);
+      }
+      else{
+        p.setPosition(goal);
+      }
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
-  public boolean depthFirstSearch(Tile node, Tile goal,List<Tile> unvisited, int movesLeft){
-    if(movesLeft < 0) return false;
-    if(node.getIsPartOf() != null && node.getIsPartOf() != goal.getIsPartOf()) return false;
-    unvisited.remove(node);
-    if(node == goal) return true;
-    if(node.getIsPartOf() == goal.getIsPartOf()) return true;
+  public boolean pathFinding(Tile node, Tile goal, int moveGoal, int moveCount, List<Tile> visited){
+    if(node == goal && moveCount == moveGoal) return true;
+    if(node.getIsPartOf() == goal.getIsPartOf() && moveCount <= moveGoal) return true;
+    if(moveCount >= moveGoal) return false;
+      visited.add(node);
     for(Tile neigh : node.getAdjacent()){
-      if(depthFirstSearch(neigh,goal,unvisited,movesLeft-1)) return true;
+      if(!visited.contains(neigh) && neigh.getIsAccessable())
+        if(pathFinding(neigh,goal,moveGoal,moveCount+1,new ArrayList(visited))) return true;
     }
     return false;
   }
+
+
 
   private class moveInvalidException extends Throwable {
     public moveInvalidException(String s) {
