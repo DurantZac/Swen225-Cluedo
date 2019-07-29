@@ -655,7 +655,7 @@ public class Game
 
 
   /**
-   * 
+   *
    * @param weapon
    * @param character
    * @param room
