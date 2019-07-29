@@ -524,6 +524,13 @@ public class Game
         board.printBoard();
 
         System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
+
+        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
+        if (room!=null) { // only allow them to make suggestions in a room
+          System.out.println("You are currently in the "+room);
+        }
+
+
         int numMoves = rollDice();
         System.out.println("You have " + numMoves+" moves.");
         System.out.println("Where would you like to move to?");
@@ -542,7 +549,6 @@ public class Game
 
         board.printBoard();
 
-        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
         if (room!=null) { // only allow them to make suggestions in a room
           System.out.println("Would you like to make a suggestion? (Y/N)");
           String suggest = input.readLine();
@@ -634,7 +640,7 @@ public class Game
         System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
     }
     else{
-        System.out.printf("%s, your suggestion has not been refuted.", player.toString());
+        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
     }
 
   }
@@ -696,45 +702,55 @@ public class Game
 
 
 
-   private Card checkSuggestion(Player player,WeaponCard weapon,CharacterCard character, RoomCard room, BufferedReader input) {
-     System.out.printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-     for (Player p : players) {
-           if (p != player) {
-               Set<Card> hand = p.getHand();
-               List<Card> suggestions = new ArrayList<>();
-               if (hand.contains(weapon)) suggestions.add(weapon);
-               if (hand.contains(character)) suggestions.add(character);
-               if (hand.contains(room)) suggestions.add(room);
+   private Card checkSuggestion(Player player,WeaponCard weapon,CharacterCard character, RoomCard room, BufferedReader input){
+     try {
+       for (Player p : players) {
+         if (p != player) {
+           Set<Card> hand = p.getHand();
+           List<Card> suggestions = new ArrayList<>();
+           if (hand.contains(weapon)) suggestions.add(weapon);
+           if (hand.contains(character)) suggestions.add(character);
+           if (hand.contains(room)) suggestions.add(room);
 
-               System.out.println(p.getCharacter() + "'s turn to check the suggestion:");
-               System.out.println(p.returnHand());
-               System.out.printf("You have %d cards matching the suggestion\n",suggestions.size());
-               if (suggestions.size()==1){
-                   System.out.println("Since you only have one card, you must use the "+suggestions.get(0).toString()+ " to disprove the suggestion");
-                   return suggestions.get(0);
-               }
-               if (suggestions.size()>1){
-                   System.out.println("What card would you like to use to disprove the suggestion? ");
-                   for (int i = 0; i < suggestions.size(); i++){
-                       System.out.printf("[%d] %s \n", i, suggestions.get(i).toString());
-                   }
+           System.out.println(p.getCharacter() + "'s turn to check the suggestion:");
+           System.out.println("Press any letter to continue");
+           input.readLine();
+           System.out.println(p.returnHand());
+           System.out.printf("You have %d cards matching the suggestion\n", suggestions.size());
+           if (suggestions.size() == 1) {
+             System.out.println("Since you only have one card, you must use the " + suggestions.get(0).toString() + " to disprove the suggestion");
+             System.out.println("Press any letter to continue");
+             input.readLine();
 
-                   int dispute =-1;
-                   while (dispute==-1) {
-                       try {
-                           dispute = Integer.parseInt(input.readLine());
-                       } catch (IOException e) {
-                           System.out.println("Error on input" + e);
-                       } catch (NumberFormatException n) {
-                           System.out.println("Please enter a whole number only");
-                       }
-                   }
-                   return suggestions.get(dispute);
-               }
-             System.out.printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+             return suggestions.get(0);
            }
+           if (suggestions.size() > 1) {
+             System.out.println("What card would you like to use to disprove the suggestion? ");
+             for (int i = 0; i < suggestions.size(); i++) {
+               System.out.printf("[%d] %s \n", i, suggestions.get(i).toString());
+             }
+
+             int dispute = -1;
+             while (dispute == -1) {
+               try {
+                 dispute = Integer.parseInt(input.readLine());
+               } catch (IOException e) {
+                 System.out.println("Error on input" + e);
+               } catch (NumberFormatException n) {
+                 System.out.println("Please enter a whole number only");
+               }
+             }
+
+             return suggestions.get(dispute);
+           }
+         }
        }
        return null; // no one could disprove the suggestion, so return null
+     }
+     catch (IOException e ){
+       System.out.println(e);
+     }
+     return null;
    }
 
   public List<WeaponCard> getWeapons(){
