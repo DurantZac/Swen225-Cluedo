@@ -16,7 +16,7 @@ public class CharacterCard implements Card
   //CharacterCard Attributes
   private String character;
   private char characterSymbol;
-  private Tile startPos;
+  private Tile position;
 
   //------------------------
   // CONSTRUCTOR
@@ -25,7 +25,7 @@ public class CharacterCard implements Card
   public CharacterCard(String aCharacter,Tile t)
   {
     character = aCharacter;
-    startPos = t;
+    position = t;
 
     switch (character){
       case "Mrs White":
@@ -68,8 +68,10 @@ public class CharacterCard implements Card
 
   public char getCharacterSymbol(){return characterSymbol;}
 
-  public void delete()
-  {}
+  public void setPosition(Tile t){
+    position = t;
+    t.addCharacter(this);
+  }
 
 
   public String toString()
@@ -77,8 +79,8 @@ public class CharacterCard implements Card
     return getCharacter();
   }
 
-  public Tile getStartPos(){
-    return startPos;
+  public Tile getPosition(){
+    return position;
   }
 
 

@@ -172,11 +172,11 @@ public class Tile
     col = c;
   }
 
-  public void addPlayer(Player p){
-    symbol = p.getCharacter().getCharacterSymbol();
+  public void addCharacter(CharacterCard c){
+    symbol = c.getCharacterSymbol();
   }
 
-  public void removePlayer(){
+  public void removeCharacter(){
     symbol = '_';
   }
 

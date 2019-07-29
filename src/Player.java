@@ -17,7 +17,7 @@ public class Player
   //Player Attributes
   private CharacterCard character;
   private boolean isStillPlaying;
-  private Tile position;
+  //private Tile position;
   private Set <Card> hand = new HashSet<>();
 
   //------------------------
@@ -28,7 +28,6 @@ public class Player
   {
     character = aCharacter;
     isStillPlaying = true;
-    position = character.getStartPos();
   }
 
   //------------------------
@@ -62,13 +61,9 @@ public class Player
   }
 
   public Tile getPosition(){
-    return position;
+    return character.getPosition();
   }
 
-  public void setPosition(Tile p) {
-    position = p;
-    p.addPlayer(this);
-  }
 
   // line 63 "model.ump"
    public Card refute(RoomCard r, CharacterCard c, WeaponCard w){

@@ -160,13 +160,13 @@ public class Board
       // Move
       Tile oldPos = p.getPosition();
       if(oldPos.getIsPartOf() != null) oldPos.getIsPartOf().addEmptySpace(oldPos);
-      oldPos.removePlayer();
+      oldPos.removeCharacter();
       if(goal.getIsPartOf() != null){
         Tile t = goal.getIsPartOf().getEmptySpace();
-        p.setPosition(t);
+        p.getCharacter().setPosition(t);
       }
       else{
-        p.setPosition(goal);
+        p.getCharacter().setPosition(goal);
       }
       return true;
     }
@@ -198,15 +198,15 @@ public class Board
 
   /**
    * Teleports the player to a room they have been suggested in
-   * @param p player object
+   * @param c charactercard object
    * @param goal room to move to
    */
-  public void teleportPlayer(Player p, Room goal){
-    Tile oldPos = p.getPosition();
+  public void teleportCharacter(CharacterCard c, Room goal){
+    Tile oldPos = c.getPosition();
     if(oldPos.getIsPartOf() != null) oldPos.getIsPartOf().addEmptySpace(oldPos);
-    oldPos.removePlayer();
+    oldPos.removeCharacter();
     Tile t = goal.getEmptySpace();
-    p.setPosition(t);
+    c.setPosition(t);
   }
 
   /**

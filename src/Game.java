@@ -513,78 +513,78 @@ public class Game
    * Runs the main game loop while the murder has not been guessed and there are still players in the game
    */
   private void playGame(BufferedReader input){
-    int currentPlayer=0;
-    for (int i=0; i<players.size();i++) {
-      if (players.get(i).getCharacter().getCharacter().equalsIgnoreCase("Miss Red")) { // Rule "Miss Scarlet always goes first"
-        currentPlayer=i;
-        break;
-      }
-    }
-
-    try {
-      game:while (true) { // play the game
-        board.printBoard();
-
-        System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
-
-        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
-        if (room!=null) { // only allow them to make suggestions in a room
-          System.out.println("You are currently in the "+room);
-        }
-
-
-        int numMoves = rollDice();
-        System.out.println("You have " + numMoves+" moves.");
-        System.out.println("Where would you like to move to?");
-        String move = input.readLine();
-
-        Tile goal = board.getBoardTile(move);
-        //Assuming move player actually moves the player
-        boolean valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
-
-        while (!valid){
-          System.out.println("That move is not valid, please try a different move");
-          move = input.readLine();
-          goal = board.getBoardTile(move);
-          valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
-        }
-
-        board.printBoard();
-
-        if (room!=null) { // only allow them to make suggestions in a room
-          System.out.println("Would you like to make a suggestion? (Y/N)");
-          String suggest = input.readLine();
-          if (suggest.equalsIgnoreCase("yes")||suggest.equalsIgnoreCase("y")){
-            processSuggestion(players.get(currentPlayer), input);
-          }
-        }
-
-
-        System.out.println("Would you like to make an accusation? (Y/N)");
-        String accuse = input.readLine();
-        if (accuse.equalsIgnoreCase("yes")||accuse.equalsIgnoreCase("y")){
-            boolean accusation = checkAccusation(input);
-            if (accusation){
-                System.out.println("Congratulations, "+players.get(currentPlayer).getCharacter().toString()+" has solved the murder!");
-                System.out.println("The murder occurred as follows:");
-                System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the "+ murderScenario.get(2));
-
-                return;
-            }
-            else{
-                System.out.println("The accusation is incorrect, "+ players.get(currentPlayer).getCharacter().toString());
-                System.out.println("You can no longer win the game");
-                removePlayer(players.get(currentPlayer));
-            }
-        }
-
-        System.out.println();// blank line, maybe want to clear the screen later?
-        currentPlayer = getNextCharacter(currentPlayer);
-      }
-    }
-    catch (IOException e ){
-      System.out.println("Error on input, please try again"+e);
-    }
+//    int currentPlayer=0;
+//    for (int i=0; i<players.size();i++) {
+//      if (players.get(i).getCharacter().getCharacter().equalsIgnoreCase("Miss Red")) { // Rule "Miss Scarlet always goes first"
+//        currentPlayer=i;
+//        break;
+//      }
+//    }
+//
+//    try {
+//      game:while (true) { // play the game
+//        board.printBoard();
+//
+//        System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
+//
+//        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
+//        if (room!=null) { // only allow them to make suggestions in a room
+//          System.out.println("You are currently in the "+room);
+//        }
+//
+//
+//        int numMoves = rollDice();
+//        System.out.println("You have " + numMoves+" moves.");
+//        System.out.println("Where would you like to move to?");
+//        String move = input.readLine();
+//
+//        Tile goal = board.getBoardTile(move);
+//        //Assuming move player actually moves the player
+//        boolean valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
+//
+//        while (!valid){
+//          System.out.println("That move is not valid, please try a different move");
+//          move = input.readLine();
+//          goal = board.getBoardTile(move);
+//          valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
+//        }
+//
+//        board.printBoard();
+//
+//        if (room!=null) { // only allow them to make suggestions in a room
+//          System.out.println("Would you like to make a suggestion? (Y/N)");
+//          String suggest = input.readLine();
+//          if (suggest.equalsIgnoreCase("yes")||suggest.equalsIgnoreCase("y")){
+//            processSuggestion(players.get(currentPlayer), input);
+//          }
+//        }
+//
+//
+//        System.out.println("Would you like to make an accusation? (Y/N)");
+//        String accuse = input.readLine();
+//        if (accuse.equalsIgnoreCase("yes")||accuse.equalsIgnoreCase("y")){
+//            boolean accusation = checkAccusation(input);
+//            if (accusation){
+//                System.out.println("Congratulations, "+players.get(currentPlayer).getCharacter().toString()+" has solved the murder!");
+//                System.out.println("The murder occurred as follows:");
+//                System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the "+ murderScenario.get(2));
+//
+//                return;
+//            }
+//            else{
+//                System.out.println("The accusation is incorrect, "+ players.get(currentPlayer).getCharacter().toString());
+//                System.out.println("You can no longer win the game");
+//                removePlayer(players.get(currentPlayer));
+//            }
+//        }
+//
+//        System.out.println();// blank line, maybe want to clear the screen later?
+//        currentPlayer = getNextCharacter(currentPlayer);
+//      }
+//    }
+//    catch (IOException e ){
+//      System.out.println("Error on input, please try again"+e);
+//    }
   }
 
   /**
