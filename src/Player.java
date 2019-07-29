@@ -65,6 +65,11 @@ public class Player
     return position;
   }
 
+  public void setPosition(Tile p) {
+    position = p;
+    p.addPlayer(this);
+  }
+
   // line 63 "model.ump"
    public Card refute(RoomCard r, CharacterCard c, WeaponCard w){
     return null;

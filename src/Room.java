@@ -20,6 +20,7 @@ public class Room
   private List<Tile> entrances;
   private List<Tile> playerReserved;
   private List<Tile> weaponReserved;
+  private List<Tile> openSquares = new ArrayList<>();
 
   //------------------------
   // CONSTRUCTOR
@@ -350,6 +351,20 @@ public class Room
     weaponReserved.clear();
   }
 
+  public void addEmptySpace(Tile t){
+    openSquares.add(t);
+  }
+
+  public void removeEmptySpace(Tile t){
+    openSquares.remove(t);
+  }
+
+  public Tile getEmptySpace(){
+    Collections.shuffle(openSquares);
+    Tile t = openSquares.get(0);
+    removeEmptySpace(t);
+    return t;
+  }
   @Override
   public String toString() {
     return  name;

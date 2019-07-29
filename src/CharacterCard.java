@@ -15,6 +15,7 @@ public class CharacterCard implements Card
 
   //CharacterCard Attributes
   private String character;
+  private char characterSymbol;
   private Tile startPos;
 
   //------------------------
@@ -25,6 +26,27 @@ public class CharacterCard implements Card
   {
     character = aCharacter;
     startPos = t;
+
+    switch (character){
+      case "Mrs White":
+        characterSymbol = 'W';
+        break;
+      case "Rev. Green":
+        characterSymbol = 'G';
+        break;
+      case "Col. Mustard":
+        characterSymbol = 'M';
+        break;
+      case "Miss Red":
+        characterSymbol = 'R';
+        break;
+      case "Prof. Plum":
+        characterSymbol = 'P';
+        break;
+      case "Ms Turquoise":
+        characterSymbol = 'T';
+        break;
+    }
   }
 
   //------------------------
@@ -43,6 +65,8 @@ public class CharacterCard implements Card
   {
     return character;
   }
+
+  public char getCharacterSymbol(){return characterSymbol;}
 
   public void delete()
   {}

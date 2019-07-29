@@ -172,6 +172,14 @@ public class Tile
     col = c;
   }
 
+  public void addPlayer(Player p){
+    symbol = p.getCharacter().getCharacterSymbol();
+  }
+
+  public void removePlayer(){
+    symbol = '_';
+  }
+
   public String toStringFull()
   {
     return super.toString() + "["+
