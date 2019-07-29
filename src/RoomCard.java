@@ -42,15 +42,6 @@ public class RoomCard implements Card
     return room;
   }
 
-  public void delete()
-  {
-    Room existingRoom = room;
-    room = null;
-    if (existingRoom != null)
-    {
-      existingRoom.delete();
-    }
-  }
 
   @Override
   public String toString() {

@@ -19,6 +19,7 @@ public class Game
   private Board board;
   private List<Card> murderScenario = new ArrayList<>();
   private List<Player> players = new ArrayList<>();
+  private List<Room> rooms = new ArrayList<>();
   private int playerNum;
 
   private Map <String, WeaponCard> weaponMap = new HashMap<>();
@@ -53,7 +54,6 @@ public class Game
         System.out.println("Please enter a number between 3-6 only");
       }
     }
-
     List<CharacterCard> unusedCharacters= new ArrayList<>();
 
     //Make all the characters
@@ -103,15 +103,6 @@ public class Game
 
     //Deals hand
     dealCards(cardsToBeDealt);
-
-
-//    getMurderScenario().stream().forEach(j -> System.out.println(j.toString()));
-//    System.out.println();
-//    System.out.println();
-//
-//    for (Player p : players){
-//      System.out.println(p.returnHand());
-//    }
 
     //Game play begins
     playGame();
@@ -193,6 +184,12 @@ public class Game
 
     weapons.stream().forEach(j -> weaponMap.put(j.toString().toLowerCase(),(WeaponCard)j)); // add all weapons to a map
 
+    Collections.shuffle(rooms);
+    for(int i = 0; i < weapons.size(); i++){
+      WeaponCard w = (WeaponCard)(weapons.get(i));
+      w.setLocation(rooms.get(i));
+    }
+
     Collections.shuffle(weapons);
     murderScenario.add(weapons.get(0));
     weapons.remove(weapons.get(0));
@@ -252,6 +249,7 @@ public class Game
     markRoom(cards);
 
     cards.stream().forEach(j -> roomMap.put(j.toString().toLowerCase(),j)); // add all room to a map
+    cards.stream().forEach(n -> rooms.add(n.getRoom()));
 
     Collections.shuffle(cards);
     murderScenario.add(cards.get(0));
@@ -518,7 +516,8 @@ public class Game
 
     try {
       game:while (true) { // play the game
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+          board.printBoard();
+          BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
         int numMoves = rollDice();
@@ -542,16 +541,26 @@ public class Game
         System.out.println("Would you like to make a suggestion? (Y/N)");
         String suggest = input.readLine();
         if (suggest.equalsIgnoreCase("yes")||suggest.equalsIgnoreCase("y")){
-          processSuggestion(players.get(currentPlayer), input);
+            processSuggestion(players.get(currentPlayer), input);
         }
 
-
-
-
         System.out.println("Would you like to make an accusation?");
-        //get input, call check accusation
-        //Maybe remove player from game if wrong
+        String accuse = input.readLine();
+        if (accuse.equalsIgnoreCase("yes")||accuse.equalsIgnoreCase("y")){
+            boolean accusation = checkAccusation(input);
+            if (accusation){
+                System.out.println("Congratulations, "+players.get(currentPlayer)+" has solved the murder!");
+                System.out.println("The murder occurred as follows:");
+                System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the "+ murderScenario.get(2));
 
+                return;
+            }
+            else{
+                System.out.println("The accusation is incorrect, "+ players.get(currentPlayer));
+                System.out.println("You can no longer win the game");
+                removePlayer(players.get(currentPlayer));
+            }
+        }
 
         System.out.println();// blank line, maybe want to clear the screen later?
         currentPlayer = getNextCharacter(currentPlayer);
@@ -609,16 +618,23 @@ public class Game
     WeaponCard weapon = checkWeapon(input);
     CharacterCard character = checkCharacter(input);
 
-    boolean valid = checkSuggestion(player,weapon,character,room.getRoomCard());
-    if (valid){
+    //board.teleportPlayer(character,room);
+    board.teleportWeapon(weapon,room);
 
+    Card dispute = checkSuggestion(player,weapon,character,room.getRoomCard(),input);
+    if (dispute!=null){
+        System.out.printf("%s, your suggestion has been refuted with the following card: %s.", player.toString(), dispute.toString());
     }
+    else{
+        System.out.printf("%s, your suggestion has not been refuted.", player.toString());
+    }
+
   }
 
 
   private WeaponCard checkWeapon(BufferedReader input){
      try {
-       System.out.println("What do you suggest is the murder weapon?");
+       System.out.println("What do you think is the murder weapon?");
        String weapon = input.readLine();
        WeaponCard suggestedWeapon = weaponMap.get(weapon.toLowerCase());
        while (suggestedWeapon == null) {
@@ -636,7 +652,7 @@ public class Game
 
   private CharacterCard checkCharacter(BufferedReader input){
     try {
-      System.out.println("Who do you suggest is the murderer?");
+      System.out.println("Who do you think is the murderer?");
       String murderer = input.readLine();
       CharacterCard suggestedmurderer = characterMap.get(murderer.toLowerCase());
       while (suggestedmurderer == null) {
@@ -654,7 +670,7 @@ public class Game
 
   private RoomCard checkRoom(BufferedReader input){
     try {
-      System.out.println("What do you suggest is the murder room?");
+      System.out.println("What do you think is the murder room?");
       String room = input.readLine();
       RoomCard suggestedRoom = roomMap.get(room.toLowerCase());
       while (suggestedRoom == null) {
@@ -672,27 +688,57 @@ public class Game
 
 
 
-   private boolean checkSuggestion(Player player,WeaponCard weapon,CharacterCard character, RoomCard room){
-      for (Player p : players){
-        if (p != player){
-          Set<Card> hand = p.getHand();
-          Set <Card> suggestions = new HashSet<>();
-          if (hand.contains(weapon))suggestions.add(weapon);
-          if (hand.contains(character))suggestions.add(character);
-          if (hand.contains(room))suggestions.add(room);
+   private Card checkSuggestion(Player player,WeaponCard weapon,CharacterCard character, RoomCard room, BufferedReader input) {
+       for (Player p : players) {
+           if (p != player) {
+               Set<Card> hand = p.getHand();
+               List<Card> suggestions = new ArrayList<>();
+               if (hand.contains(weapon)) suggestions.add(weapon);
+               if (hand.contains(character)) suggestions.add(character);
+               if (hand.contains(room)) suggestions.add(room);
 
-          //Clear the screen
-          System.out.println(p.getCharacter()+"'s turn to check the suggestion:");
+               //Clear the screen
+               System.out.println(p.getCharacter() + "'s turn to check the suggestion:");
+               System.out.printf("You have %d cards matching the suggestion\n",suggestions.size());
+               if (suggestions.size()==1){
+                   System.out.println("Since you only have one card, you must use "+suggestions.get(0).toString()+ " to disprove the suggestion");
+                   return suggestions.get(0);
+               }
+               if (suggestions.size()>1){
+                   System.out.println("What card would you like to use to disprove the suggestion? ");
+                   for (int i = 0; i < suggestions.size(); i++){
+                       System.out.printf("[%d] %s", i, suggestions.get(i).toString());
+                   }
 
+                   int dispute =-1;
+                   while (dispute==-1) {
+                       try {
+                           dispute = Integer.parseInt(input.readLine());
+                       } catch (IOException e) {
+                           System.out.println("Error on input" + e);
+                       } catch (NumberFormatException n) {
+                           System.out.println("Please enter a whole number only");
+                       }
+                   }
+                   return suggestions.get(dispute);
+               }
 
-        }
-      }
-    return false;
+           }
+       }
+       return null; // no one could disprove the suggestion, so return null
+   }
+
+  public List<WeaponCard> getWeapons(){
+     return new ArrayList<>(weaponMap.values());
   }
 
   // line 12 "model.ump"
-   private boolean checkAccusation(){
-    return false;
+   private boolean checkAccusation(BufferedReader input){
+       CharacterCard character = checkCharacter(input);
+       WeaponCard weapon = checkWeapon(input);
+       RoomCard room = checkRoom(input);
+
+       return (character.equals(murderScenario.get(0)) && room.equals(murderScenario.get(1)) && weapon.equals(murderScenario.get(2)));
   }
 
   public static void main(String args[]){

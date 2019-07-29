@@ -18,8 +18,6 @@ public class Room
   private String name;
   private WeaponCard Contains;
   private List<Tile> entrances;
-  private List<Tile> playerReserved;
-  private List<Tile> weaponReserved;
   private List<Tile> openSquares = new ArrayList<>();
 
   //------------------------
@@ -34,16 +32,12 @@ public class Room
     }
     roomCard = aRoomCard;
     entrances = new ArrayList<Tile>();
-    playerReserved = new ArrayList<Tile>();
-    weaponReserved = new ArrayList<Tile>();
   }
 
   public Room(String n)
   {
     roomCard = new RoomCard(this);
     entrances = new ArrayList<Tile>();
-    playerReserved = new ArrayList<Tile>();
-    weaponReserved = new ArrayList<Tile>();
     name  = n;
   }
 
@@ -96,66 +90,7 @@ public class Room
     int index = entrances.indexOf(aEntrance);
     return index;
   }
-  /* Code from template association_GetMany */
-  public Tile getPlayerReserved(int index)
-  {
-    Tile aPlayerReserved = playerReserved.get(index);
-    return aPlayerReserved;
-  }
 
-  public List<Tile> getPlayerReserved()
-  {
-    List<Tile> newPlayerReserved = Collections.unmodifiableList(playerReserved);
-    return newPlayerReserved;
-  }
-
-  public int numberOfPlayerReserved()
-  {
-    int number = playerReserved.size();
-    return number;
-  }
-
-  public boolean hasPlayerReserved()
-  {
-    boolean has = playerReserved.size() > 0;
-    return has;
-  }
-
-  public int indexOfPlayerReserved(Tile aPlayerReserved)
-  {
-    int index = playerReserved.indexOf(aPlayerReserved);
-    return index;
-  }
-  /* Code from template association_GetMany */
-  public Tile getWeaponReserved(int index)
-  {
-    Tile aWeaponReserved = weaponReserved.get(index);
-    return aWeaponReserved;
-  }
-
-  public List<Tile> getWeaponReserved()
-  {
-    List<Tile> newWeaponReserved = Collections.unmodifiableList(weaponReserved);
-    return newWeaponReserved;
-  }
-
-  public int numberOfWeaponReserved()
-  {
-    int number = weaponReserved.size();
-    return number;
-  }
-
-  public boolean hasWeaponReserved()
-  {
-    boolean has = weaponReserved.size() > 0;
-    return has;
-  }
-
-  public int indexOfWeaponReserved(Tile aWeaponReserved)
-  {
-    int index = weaponReserved.indexOf(aWeaponReserved);
-    return index;
-  }
   /* Code from template association_SetUnidirectionalOptionalOne */
   public boolean setContains(WeaponCard aNewContains)
   {
@@ -228,128 +163,13 @@ public class Room
     return 0;
   }
   /* Code from template association_AddUnidirectionalMany */
-  public boolean addPlayerReserved(Tile aPlayerReserved)
-  {
-    boolean wasAdded = false;
-    if (playerReserved.contains(aPlayerReserved)) { return false; }
-    playerReserved.add(aPlayerReserved);
-    wasAdded = true;
-    return wasAdded;
-  }
 
-  public boolean removePlayerReserved(Tile aPlayerReserved)
-  {
-    boolean wasRemoved = false;
-    if (playerReserved.contains(aPlayerReserved))
-    {
-      playerReserved.remove(aPlayerReserved);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addPlayerReservedAt(Tile aPlayerReserved, int index)
-  {  
-    boolean wasAdded = false;
-    if(addPlayerReserved(aPlayerReserved))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfPlayerReserved()) { index = numberOfPlayerReserved() - 1; }
-      playerReserved.remove(aPlayerReserved);
-      playerReserved.add(index, aPlayerReserved);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMovePlayerReservedAt(Tile aPlayerReserved, int index)
-  {
-    boolean wasAdded = false;
-    if(playerReserved.contains(aPlayerReserved))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfPlayerReserved()) { index = numberOfPlayerReserved() - 1; }
-      playerReserved.remove(aPlayerReserved);
-      playerReserved.add(index, aPlayerReserved);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addPlayerReservedAt(aPlayerReserved, index);
-    }
-    return wasAdded;
-  }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfWeaponReserved()
   {
     return 0;
   }
   /* Code from template association_AddUnidirectionalMany */
-  public boolean addWeaponReserved(Tile aWeaponReserved)
-  {
-    boolean wasAdded = false;
-    if (weaponReserved.contains(aWeaponReserved)) { return false; }
-    weaponReserved.add(aWeaponReserved);
-    wasAdded = true;
-    return wasAdded;
-  }
-
-  public boolean removeWeaponReserved(Tile aWeaponReserved)
-  {
-    boolean wasRemoved = false;
-    if (weaponReserved.contains(aWeaponReserved))
-    {
-      weaponReserved.remove(aWeaponReserved);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addWeaponReservedAt(Tile aWeaponReserved, int index)
-  {  
-    boolean wasAdded = false;
-    if(addWeaponReserved(aWeaponReserved))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfWeaponReserved()) { index = numberOfWeaponReserved() - 1; }
-      weaponReserved.remove(aWeaponReserved);
-      weaponReserved.add(index, aWeaponReserved);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveWeaponReservedAt(Tile aWeaponReserved, int index)
-  {
-    boolean wasAdded = false;
-    if(weaponReserved.contains(aWeaponReserved))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfWeaponReserved()) { index = numberOfWeaponReserved() - 1; }
-      weaponReserved.remove(aWeaponReserved);
-      weaponReserved.add(index, aWeaponReserved);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addWeaponReservedAt(aWeaponReserved, index);
-    }
-    return wasAdded;
-  }
-
-  public void delete()
-  {
-    RoomCard existingRoomCard = roomCard;
-    roomCard = null;
-    if (existingRoomCard != null)
-    {
-      existingRoomCard.delete();
-    }
-    Contains = null;
-    entrances.clear();
-    playerReserved.clear();
-    weaponReserved.clear();
-  }
 
   public void addEmptySpace(Tile t){
     openSquares.add(t);
