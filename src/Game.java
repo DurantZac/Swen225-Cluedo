@@ -689,6 +689,7 @@ public class Game
    * @return
    */
    private boolean checkSuggestion( WeaponCard weapon,CharacterCard character, RoomCard room){
+     // Methods teleportPlayer(player p, room goal) and teleportWeapon(weaponcard w, room goal) will instantly move player and weapon to a given room. Free tiles are used for players and old tiles are freed
     return false;
   }
 
