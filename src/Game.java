@@ -36,52 +36,53 @@ public class Game
    */
   public Game() {
     board = createBoard();
+
+    BufferedReader input;
     while (true) { //Try to find out how many players there are
       try {
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        input = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("How many players are playing? (3-6) ");
         int numberOfPlayers = Integer.parseInt(input.readLine());
-        if(numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()){ throw new IncorrectNumberOfPlayersException(); }
-        playerNum=numberOfPlayers;
+        if (numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()) {
+          throw new IncorrectNumberOfPlayersException();
+        }
+        playerNum = numberOfPlayers;
         break;
       } catch (NumberFormatException n) {
         System.out.println("Please enter a number between 3-6 only");
-      }
-      catch (IOException e){
+      } catch (IOException e) {
         System.out.println("Error on input, please try again" + e);
-      }
-      catch (IncorrectNumberOfPlayersException i){
+      } catch (IncorrectNumberOfPlayersException i) {
         System.out.println("Please enter a number between 3-6 only");
       }
     }
-
-    List<CharacterCard> unusedCharacters= new ArrayList<>();
-
+    List<CharacterCard> unusedCharacters = new ArrayList<>();
 
     //Make all the characters
-    unusedCharacters.add(new CharacterCard("Col. Mustard",board.getBoardTile("Ar")));
-    unusedCharacters.add(new CharacterCard("Mrs White",board.getBoardTile("Ja")));
-    unusedCharacters.add(new CharacterCard("Rev. Green",board.getBoardTile("Oa")));
-    unusedCharacters.add(new CharacterCard("Prof. Plum",board.getBoardTile("Xt")));
-    unusedCharacters.add(new CharacterCard("Ms Turquoise",board.getBoardTile("Xg")));
+    unusedCharacters.add(new CharacterCard("Col. Mustard", board.getBoardTile("Ar")));
+    unusedCharacters.add(new CharacterCard("Mrs White", board.getBoardTile("Ja")));
+    unusedCharacters.add(new CharacterCard("Rev. Green", board.getBoardTile("Oa")));
+    unusedCharacters.add(new CharacterCard("Prof. Plum", board.getBoardTile("Xt")));
+    unusedCharacters.add(new CharacterCard("Ms Turquoise", board.getBoardTile("Xg")));
     unusedCharacters.add(new CharacterCard("Miss Red", board.getBoardTile("Hy")));
 
     List<Card> cardsToBeDealt = createCards(unusedCharacters);
 
-    unusedCharacters.stream().forEach(j -> characterMap.put(j.toString().toLowerCase(),j));
+    unusedCharacters.stream().forEach(j -> characterMap.put(j.toString().toLowerCase(), j));
 
-    for (int i = 0; i < playerNum; i++){
-      System.out.println("Player "+ (i+1) + ". Please select your character");
+    for (int i = 0; i < playerNum; i++) {
+      System.out.println("Player " + (i + 1) + ". Please select your character");
       System.out.println("The available players are:");
       unusedCharacters.stream().forEach(j -> System.out.println(j.toString()));
       System.out.println("\nWhat player would you like to be?");
 
-      validityCheck: while (true) { //Check who they want to be
+      validityCheck:
+      while (true) { //Check who they want to be
         try {
-          BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+          input = new BufferedReader(new InputStreamReader(System.in));
           String characterToPlay = input.readLine();
 
-          for (CharacterCard c: unusedCharacters) {
+          for (CharacterCard c : unusedCharacters) {
             if (c.getCharacter().equalsIgnoreCase(characterToPlay)) {
 
               Player p = new Player(c);
@@ -93,11 +94,9 @@ public class Game
             }
           }
           throw new InvalidCharacterException();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
           System.out.println("Error on input, please try again" + e);
-        }
-        catch (InvalidCharacterException c){
+        } catch (InvalidCharacterException c) {
           System.out.println("Please enter a valid character from the list");
         }
       }
@@ -106,21 +105,16 @@ public class Game
     //Deals hand
     dealCards(cardsToBeDealt);
 
-
-//    getMurderScenario().stream().forEach(j -> System.out.println(j.toString()));
-//    System.out.println();
-//    System.out.println();
-//
-//    for (Player p : players){
-//      System.out.println(p.returnHand());
-//    }
-
     //Game play begins
-    playGame();
+    playGame(input);
 
-
-    //close buffer
+    try {
+      input.close();
+    } catch (IOException e) {
+      System.out.println("Error closing input" + e);
+    }
   }
+
 
   /** Generate board from string
    * @return boadrd
@@ -518,8 +512,7 @@ public class Game
   /**
    * Runs the main game loop while the murder has not been guessed and there are still players in the game
    */
-  private void playGame(){
-    board.printBoard();
+  private void playGame(BufferedReader input){
     int currentPlayer=0;
     for (int i=0; i<players.size();i++) {
       if (players.get(i).getCharacter().getCharacter().equalsIgnoreCase("Miss Red")) { // Rule "Miss Scarlet always goes first"
@@ -530,9 +523,16 @@ public class Game
 
     try {
       game:while (true) { // play the game
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        board.printBoard();
 
         System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
+
+        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
+        if (room!=null) { // only allow them to make suggestions in a room
+          System.out.println("You are currently in the "+room);
+        }
+
+
         int numMoves = rollDice();
         System.out.println("You have " + numMoves+" moves.");
         System.out.println("Where would you like to move to?");
@@ -551,19 +551,32 @@ public class Game
 
         board.printBoard();
 
-        System.out.println("Would you like to make a suggestion? (Y/N)");
-        String suggest = input.readLine();
-        if (suggest.equalsIgnoreCase("yes")||suggest.equalsIgnoreCase("y")){
-          processSuggestion(players.get(currentPlayer), input);
+        if (room!=null) { // only allow them to make suggestions in a room
+          System.out.println("Would you like to make a suggestion? (Y/N)");
+          String suggest = input.readLine();
+          if (suggest.equalsIgnoreCase("yes")||suggest.equalsIgnoreCase("y")){
+            processSuggestion(players.get(currentPlayer), input);
+          }
         }
 
 
+        System.out.println("Would you like to make an accusation? (Y/N)");
+        String accuse = input.readLine();
+        if (accuse.equalsIgnoreCase("yes")||accuse.equalsIgnoreCase("y")){
+            boolean accusation = checkAccusation(input);
+            if (accusation){
+                System.out.println("Congratulations, "+players.get(currentPlayer).getCharacter().toString()+" has solved the murder!");
+                System.out.println("The murder occurred as follows:");
+                System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the "+ murderScenario.get(2));
 
-
-        System.out.println("Would you like to make an accusation?");
-        //get input, call check accusation
-        //Maybe remove player from game if wrong
-
+                return;
+            }
+            else{
+                System.out.println("The accusation is incorrect, "+ players.get(currentPlayer).getCharacter().toString());
+                System.out.println("You can no longer win the game");
+                removePlayer(players.get(currentPlayer));
+            }
+        }
 
         System.out.println();// blank line, maybe want to clear the screen later?
         currentPlayer = getNextCharacter(currentPlayer);
@@ -621,16 +634,23 @@ public class Game
     WeaponCard weapon = checkWeapon(input);
     CharacterCard character = checkCharacter(input);
 
-    boolean valid = checkSuggestion(weapon,character,room.getRoomCard());
-    if (valid){
+    //board.teleportPlayer(character,room);
+    board.teleportWeapon(weapon,room);
 
+    Card dispute = checkSuggestion(player,weapon,character,room.getRoomCard(),input);
+    if (dispute!=null){
+        System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
     }
+    else{
+        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
+    }
+
   }
 
 
   private WeaponCard checkWeapon(BufferedReader input){
      try {
-       System.out.println("What do you suggest is the murder weapon?");
+       System.out.println("What do you think is the murder weapon?");
        String weapon = input.readLine();
        WeaponCard suggestedWeapon = weaponMap.get(weapon.toLowerCase());
        while (suggestedWeapon == null) {
@@ -648,7 +668,7 @@ public class Game
 
   private CharacterCard checkCharacter(BufferedReader input){
     try {
-      System.out.println("Who do you suggest is the murderer?");
+      System.out.println("Who do you think is the murderer?");
       String murderer = input.readLine();
       CharacterCard suggestedmurderer = characterMap.get(murderer.toLowerCase());
       while (suggestedmurderer == null) {
@@ -666,7 +686,7 @@ public class Game
 
   private RoomCard checkRoom(BufferedReader input){
     try {
-      System.out.println("What do you suggest is the murder room?");
+      System.out.println("What do you think is the murder room?");
       String room = input.readLine();
       RoomCard suggestedRoom = roomMap.get(room.toLowerCase());
       while (suggestedRoom == null) {
@@ -683,25 +703,69 @@ public class Game
   }
 
 
-  /**
-   * 
-   * @param weapon
-   * @param character
-   * @param room
-   * @return
-   */
-   private boolean checkSuggestion( WeaponCard weapon,CharacterCard character, RoomCard room){
-     // Methods teleportPlayer(player p, room goal) and teleportWeapon(weaponcard w, room goal) will instantly move player and weapon to a given room. Free tiles are used for players and old tiles are freed
-    return false;
-  }
+
+   private Card checkSuggestion(Player player,WeaponCard weapon,CharacterCard character, RoomCard room, BufferedReader input){
+     try {
+       for (Player p : players) {
+         if (p != player) {
+           Set<Card> hand = p.getHand();
+           List<Card> suggestions = new ArrayList<>();
+           if (hand.contains(weapon)) suggestions.add(weapon);
+           if (hand.contains(character)) suggestions.add(character);
+           if (hand.contains(room)) suggestions.add(room);
+
+           System.out.println(p.getCharacter() + "'s turn to check the suggestion:");
+           System.out.println("Press any letter to continue");
+           input.readLine();
+           System.out.println(p.returnHand());
+           System.out.printf("You have %d cards matching the suggestion\n", suggestions.size());
+           if (suggestions.size() == 1) {
+             System.out.println("Since you only have one card, you must use the " + suggestions.get(0).toString() + " to disprove the suggestion");
+             System.out.println("Press any letter to continue");
+             input.readLine();
+
+             return suggestions.get(0);
+           }
+           if (suggestions.size() > 1) {
+             System.out.println("What card would you like to use to disprove the suggestion? ");
+             for (int i = 0; i < suggestions.size(); i++) {
+               System.out.printf("[%d] %s \n", i, suggestions.get(i).toString());
+             }
+
+             int dispute = -1;
+             while (dispute == -1) {
+               try {
+                 dispute = Integer.parseInt(input.readLine());
+               } catch (IOException e) {
+                 System.out.println("Error on input" + e);
+               } catch (NumberFormatException n) {
+                 System.out.println("Please enter a whole number only");
+               }
+             }
+
+             return suggestions.get(dispute);
+           }
+         }
+       }
+       return null; // no one could disprove the suggestion, so return null
+     }
+     catch (IOException e ){
+       System.out.println(e);
+     }
+     return null;
+   }
 
   public List<WeaponCard> getWeapons(){
      return new ArrayList<>(weaponMap.values());
   }
 
   // line 12 "model.ump"
-   private boolean checkAccusation(){
-    return false;
+   private boolean checkAccusation(BufferedReader input){
+       CharacterCard character = checkCharacter(input);
+       WeaponCard weapon = checkWeapon(input);
+       RoomCard room = checkRoom(input);
+
+       return (character.equals(murderScenario.get(0)) && room.equals(murderScenario.get(1)) && weapon.equals(murderScenario.get(2)));
   }
 
   public static void main(String args[]){

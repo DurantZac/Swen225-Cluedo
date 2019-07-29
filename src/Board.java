@@ -110,51 +110,6 @@ public class Board
       return null;
     }
   }
-
-  public List<Tile> getBoardTiles()
-  {
-    return null;
-  }
-
-  public int numberOfBoardTiles()
-  {
-    int number = boardTiles.length;
-    return 0;
-  }
-
-  public boolean hasBoardTiles()
-  {
-    boolean has = boardTiles.length > 0;
-    return false;
-  }
-
-  public int indexOfBoardTile(Tile aBoardTile)
-  {
-    return 0;
-  }
-  /* Code from template association_GetOne */
-  public Game getGame()
-  {
-    return game;
-  }
-  /* Code from template association_RequiredNumberOfMethod */
-  public static int requiredNumberOfBoardTiles()
-  {
-    return 600;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfBoardTiles()
-  {
-    return 600;
-  }
-  /* Code from template association_MaximumNumberOfMethod */
-  public static int maximumNumberOfBoardTiles()
-  {
-    return 600;
-  }
-  /* Code from template association_SetUnidi1rectionalN */
-
-
   /**
    * Prints the board based on the 2D array of tiles.
    */

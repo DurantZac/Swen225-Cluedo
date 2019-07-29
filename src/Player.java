@@ -80,14 +80,17 @@ public class Player
   }
 
   public String returnHand(){
-    String s="You have "+ hand.size()+" cards, they are:";
+    String s="You have "+ hand.size()+" cards, they are: ";
     for (Card c: hand){
       s+=c.toString();
-      s+=" ";
+      s+=", ";
     }
     return s;
   }
 
+  public Set<Card> getHand(){
+    return hand;
+  }
 
 
   public String toString()
