@@ -36,50 +36,53 @@ public class Game
    */
   public Game() {
     board = createBoard();
+
+    BufferedReader input;
     while (true) { //Try to find out how many players there are
       try {
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        input = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("How many players are playing? (3-6) ");
         int numberOfPlayers = Integer.parseInt(input.readLine());
-        if(numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()){ throw new IncorrectNumberOfPlayersException(); }
-        playerNum=numberOfPlayers;
+        if (numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()) {
+          throw new IncorrectNumberOfPlayersException();
+        }
+        playerNum = numberOfPlayers;
         break;
       } catch (NumberFormatException n) {
         System.out.println("Please enter a number between 3-6 only");
-      }
-      catch (IOException e){
+      } catch (IOException e) {
         System.out.println("Error on input, please try again" + e);
-      }
-      catch (IncorrectNumberOfPlayersException i){
+      } catch (IncorrectNumberOfPlayersException i) {
         System.out.println("Please enter a number between 3-6 only");
       }
     }
-    List<CharacterCard> unusedCharacters= new ArrayList<>();
+    List<CharacterCard> unusedCharacters = new ArrayList<>();
 
     //Make all the characters
-    unusedCharacters.add(new CharacterCard("Col. Mustard",board.getBoardTile("Ar")));
-    unusedCharacters.add(new CharacterCard("Mrs White",board.getBoardTile("Ja")));
-    unusedCharacters.add(new CharacterCard("Rev. Green",board.getBoardTile("Oa")));
-    unusedCharacters.add(new CharacterCard("Prof. Plum",board.getBoardTile("Xt")));
-    unusedCharacters.add(new CharacterCard("Ms Turquoise",board.getBoardTile("Xg")));
+    unusedCharacters.add(new CharacterCard("Col. Mustard", board.getBoardTile("Ar")));
+    unusedCharacters.add(new CharacterCard("Mrs White", board.getBoardTile("Ja")));
+    unusedCharacters.add(new CharacterCard("Rev. Green", board.getBoardTile("Oa")));
+    unusedCharacters.add(new CharacterCard("Prof. Plum", board.getBoardTile("Xt")));
+    unusedCharacters.add(new CharacterCard("Ms Turquoise", board.getBoardTile("Xg")));
     unusedCharacters.add(new CharacterCard("Miss Red", board.getBoardTile("Hy")));
 
     List<Card> cardsToBeDealt = createCards(unusedCharacters);
 
-    unusedCharacters.stream().forEach(j -> characterMap.put(j.toString().toLowerCase(),j));
+    unusedCharacters.stream().forEach(j -> characterMap.put(j.toString().toLowerCase(), j));
 
-    for (int i = 0; i < playerNum; i++){
-      System.out.println("Player "+ (i+1) + ". Please select your character");
+    for (int i = 0; i < playerNum; i++) {
+      System.out.println("Player " + (i + 1) + ". Please select your character");
       System.out.println("The available players are:");
       unusedCharacters.stream().forEach(j -> System.out.println(j.toString()));
       System.out.println("\nWhat player would you like to be?");
 
-      validityCheck: while (true) { //Check who they want to be
+      validityCheck:
+      while (true) { //Check who they want to be
         try {
-          BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+          input = new BufferedReader(new InputStreamReader(System.in));
           String characterToPlay = input.readLine();
 
-          for (CharacterCard c: unusedCharacters) {
+          for (CharacterCard c : unusedCharacters) {
             if (c.getCharacter().equalsIgnoreCase(characterToPlay)) {
 
               Player p = new Player(c);
@@ -91,11 +94,9 @@ public class Game
             }
           }
           throw new InvalidCharacterException();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
           System.out.println("Error on input, please try again" + e);
-        }
-        catch (InvalidCharacterException c){
+        } catch (InvalidCharacterException c) {
           System.out.println("Please enter a valid character from the list");
         }
       }
@@ -105,11 +106,15 @@ public class Game
     dealCards(cardsToBeDealt);
 
     //Game play begins
-    playGame();
+    playGame(input);
 
-
-    //close buffer
+    try {
+      input.close();
+    } catch (IOException e) {
+      System.out.println("Error closing input" + e);
+    }
   }
+
 
   /** Generate board from string
    * @return boadrd
@@ -505,7 +510,7 @@ public class Game
   /**
    * Runs the main game loop while the murder has not been guessed and there are still players in the game
    */
-  private void playGame(){
+  private void playGame(BufferedReader input){
     int currentPlayer=0;
     for (int i=0; i<players.size();i++) {
       if (players.get(i).getCharacter().getCharacter().equalsIgnoreCase("Miss Red")) { // Rule "Miss Scarlet always goes first"
@@ -516,8 +521,7 @@ public class Game
 
     try {
       game:while (true) { // play the game
-          board.printBoard();
-          BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        board.printBoard();
 
         System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
         int numMoves = rollDice();
@@ -693,7 +697,8 @@ public class Game
 
 
    private Card checkSuggestion(Player player,WeaponCard weapon,CharacterCard character, RoomCard room, BufferedReader input) {
-       for (Player p : players) {
+     System.out.printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+     for (Player p : players) {
            if (p != player) {
                Set<Card> hand = p.getHand();
                List<Card> suggestions = new ArrayList<>();
