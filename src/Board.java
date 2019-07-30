@@ -70,6 +70,7 @@ public class Board
   public Tile getBoardTile(String tile)
   {
     try {
+      if(tile == null) throw new moveInvalidException("Null move");
       if (tile.length() != 2) { // needs to be exactly 2 letters long
         throw new moveInvalidException ("Move invalid.");
       }
@@ -184,7 +185,7 @@ public class Board
     if(node == goal && moveCount == moveGoal) return true;
     if(node.getIsPartOf() != null && node.getIsPartOf() == goal.getIsPartOf() && moveCount <= moveGoal) return true;
     if(moveCount >= moveGoal) return false;
-      visited.add(node);
+    visited.add(node);
     for(Tile neigh : node.getAdjacent()){
       if(!visited.contains(neigh) && neigh.getIsAccessable())
         if(pathFinding(neigh,goal,moveGoal,moveCount+1,new ArrayList(visited))) return true;

@@ -26,6 +26,9 @@ public class Game
   private Map <String, CharacterCard> characterMap = new HashMap<>();
   private Map <String, RoomCard> roomMap = new HashMap<>();
 
+  public static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+                                            "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+
 
   //------------------------
   // CONSTRUCTOR
@@ -522,6 +525,7 @@ public class Game
     try {
       game:while (true) { // play the game
         boolean validInput = false;
+        System.out.println(CLEAR_SCREEN);
         board.printBoard();
 
         System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
@@ -545,8 +549,8 @@ public class Game
           move = input.readLine();
           goal = board.getBoardTile(move);
         }
+
         //Assuming move player actually moves the player
-        boolean valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
          validInput = board.movePlayer(players.get(currentPlayer),goal,numMoves);
 
         while (!validInput){
@@ -557,7 +561,7 @@ public class Game
         }
 
         board.printBoard();
-
+        room = players.get(currentPlayer).getPosition().getIsPartOf();
         if (room!=null) { // only allow them to make suggestions in a room
           validInput=false;
           while(!validInput){
@@ -687,7 +691,7 @@ public class Game
     }
     WeaponCard weapon = checkWeapon(input);
     CharacterCard character = checkCharacter(input);
-
+    System.out.println(CLEAR_SCREEN);
     board.teleportCharacter(character,room);
     board.teleportWeapon(weapon,room);
 
@@ -798,13 +802,15 @@ public class Game
            System.out.println(p.getCharacter() + "'s turn to check the suggestion:");
            System.out.println("Press any letter to continue");
            input.readLine();
+           System.out.println(CLEAR_SCREEN);
            System.out.println(p.returnHand());
            System.out.printf("You have %d cards matching the suggestion\n", suggestions.size());
+           if(suggestions.size() == 0) System.out.println(CLEAR_SCREEN);
            if (suggestions.size() == 1) {
              System.out.println("Since you only have one card, you must use the " + suggestions.get(0).toString() + " to disprove the suggestion");
              System.out.println("Press any letter to continue");
              input.readLine();
-
+             System.out.println(CLEAR_SCREEN);
              return suggestions.get(0);
            }
            if (suggestions.size() > 1) {
@@ -823,7 +829,6 @@ public class Game
                  System.out.println("Please enter a whole number only");
                }
              }
-
              return suggestions.get(dispute);
            }
          }
