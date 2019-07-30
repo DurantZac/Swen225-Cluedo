@@ -552,46 +552,57 @@ public class Game
         String move = input.readLine();
 
         Tile goal = board.getBoardTile(move);
-        //Assuming move player actually moves the player
-        boolean valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
+         validInput = board.movePlayer(players.get(currentPlayer),goal,numMoves);
 
-        while (!valid){
+        while (!validInput){
           System.out.println("That move is not valid, please try a different move");
           move = input.readLine();
           goal = board.getBoardTile(move);
-          valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
+          validInput = board.movePlayer(players.get(currentPlayer),goal,numMoves);
         }
 
         board.printBoard();
 
         if (room!=null) { // only allow them to make suggestions in a room
-          System.out.println("Would you like to make a suggestion? (Y/N)");
-          String suggest = input.readLine();
-
-
-          if (suggest.equalsIgnoreCase("yes")||suggest.equalsIgnoreCase("y")){
-            processSuggestion(players.get(currentPlayer), input);
+          validInput=false;
+          while(!validInput){
+            System.out.println("Would you like to make a suggestion? (Y/N)");
+            String suggest = input.readLine();
+            if (suggest.equalsIgnoreCase("yes")||suggest.equalsIgnoreCase("y")) {
+              processSuggestion(players.get(currentPlayer), input);
+              validInput=true;
+            }
+            else if(suggest.equalsIgnoreCase("no")||suggest.equalsIgnoreCase("n")) {
+              validInput=true;
+            }
           }
         }
 
 
-        System.out.println("Would you like to make an accusation? (Y/N)");
-        String accuse = input.readLine();
-        if (accuse.equalsIgnoreCase("yes")||accuse.equalsIgnoreCase("y")){
+        validInput=false;
+        while(!validInput){
+          System.out.println("Would you like to make an accusation? (Y/N)");
+          String accuse = input.readLine();
+          if (accuse.equalsIgnoreCase("yes")||accuse.equalsIgnoreCase("y")){
             boolean accusation = checkAccusation(input);
             if (accusation){
-                System.out.println("Congratulations, "+players.get(currentPlayer).getCharacter().toString()+" has solved the murder!");
-                System.out.println("The murder occurred as follows:");
-                System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the "+ murderScenario.get(2));
-
-                return;
+              System.out.println("Congratulations, "+players.get(currentPlayer).getCharacter().toString()+" has solved the murder!");
+              System.out.println("The murder occurred as follows:");
+              System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the "+ murderScenario.get(2));
+              return;
             }
             else{
-                System.out.println("The accusation is incorrect, "+ players.get(currentPlayer).getCharacter().toString());
-                System.out.println("You can no longer win the game");
-                removePlayer(players.get(currentPlayer));
+              System.out.println("The accusation is incorrect, "+ players.get(currentPlayer).getCharacter().toString());
+              System.out.println("You can no longer win the game");
+              removePlayer(players.get(currentPlayer));
             }
+            validInput=true;
+          }
+          else if(accuse.equalsIgnoreCase("no")||accuse.equalsIgnoreCase("n")) {
+            validInput=true;
+          }
         }
+
 
         System.out.println();// blank line, maybe want to clear the screen later?
         currentPlayer = getNextCharacter(currentPlayer);
