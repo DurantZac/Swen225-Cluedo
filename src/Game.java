@@ -591,10 +591,20 @@ public class Game
    * @return the next player
    */
   private int getNextCharacter(int current){
-    if (current<players.size()-1)
-      return current+1;
-    else
-     return 0;
+    if (current<players.size()-1){
+      if (!players.get(current+1).getIsStillPlaying())
+        return getNextCharacter(current+1);
+      else{
+        return current+1;
+      }
+    }
+    else {
+      if (!players.get(0).getIsStillPlaying())
+        return getNextCharacter(0);
+      else{
+        return 0;
+      }
+    }
   }
 
   /**

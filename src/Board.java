@@ -2,10 +2,6 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
-import jdk.swing.interop.SwingInterOpUtils;
-
-import java.io.CharConversionException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 // line 17 "model.ump"
