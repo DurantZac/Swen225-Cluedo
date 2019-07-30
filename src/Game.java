@@ -898,7 +898,7 @@ public class Game {
 
         return (character.equals(murderScenario.get(0)) && room.equals(murderScenario.get(1)) && weapon.equals(murderScenario.get(2)));
     }
-    
+
     /**
      * Exception used to check the correct number of players are playing.
      */

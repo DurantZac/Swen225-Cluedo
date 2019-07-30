@@ -1,10 +1,3 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
-
-
-
-// line 84 "model.ump"
-// line 130 "model.ump"
 public class WeaponCard implements Card
 {
 
@@ -20,6 +13,10 @@ public class WeaponCard implements Card
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Constructor, makes a weapon card with a given string
+   * @param aWeapon
+   */
   public WeaponCard(String aWeapon)
   {
     weapon = aWeapon;
@@ -29,33 +26,35 @@ public class WeaponCard implements Card
   // INTERFACE
   //------------------------
 
-  public boolean setWeapon(String aWeapon)
-  {
-    boolean wasSet = false;
-    weapon = aWeapon;
-    wasSet = true;
-    return wasSet;
-  }
-
+  /**
+   * @return the location the weapon is in
+   */
   public Room getLocation(){
     return location;
   }
 
+  /**
+   * Sets the location of the weapon to the room r
+   * @param r
+   */
   public void setLocation(Room r){
     location = r;
   }
 
+  /**
+   * @return the weapon as a string
+   */
   public String getWeapon()
   {
     return weapon;
   }
 
-  public void delete()
-  {}
-
-
+  /**
+   * Simple to string returning the name of the weapon
+   * @return
+   */
   public String toString()
   {
-    return getWeapon();
+    return weapon;
   }
 }

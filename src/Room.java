@@ -1,11 +1,5 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
-
-
 import java.util.*;
 
-// line 89 "model.ump"
-// line 135 "model.ump"
 public class Room
 {
 
@@ -24,16 +18,10 @@ public class Room
   // CONSTRUCTOR
   //------------------------
 
-  public Room(RoomCard aRoomCard)
-  {
-    if (aRoomCard == null || aRoomCard.getRoom() != null)
-    {
-      throw new RuntimeException("Unable to create Room due to aRoomCard. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    roomCard = aRoomCard;
-    entrances = new ArrayList<Tile>();
-  }
-
+  /**
+   * Constructor, makes a new room card, and sets the name
+   * @param n the name of the room
+   */
   public Room(String n)
   {
     roomCard = new RoomCard(this);
@@ -44,67 +32,37 @@ public class Room
   //------------------------
   // INTERFACE
   //------------------------
-  /* Code from template association_GetOne */
+  /***
+   * @return the associated room card
+   */
   public RoomCard getRoomCard()
   {
     return roomCard;
   }
-  /* Code from template association_GetOne */
-  public WeaponCard getContains()
-  {
-    return Contains;
-  }
 
-  public boolean hasContains()
-  {
-    boolean has = Contains != null;
-    return has;
-  }
-  /* Code from template association_GetMany */
-  public Tile getEntrance(int index)
-  {
-    Tile aEntrance = entrances.get(index);
-    return aEntrance;
-  }
-
+  /**
+   * @return a list of all the Entrances
+   */
   public List<Tile> getEntrances()
   {
     List<Tile> newEntrances = Collections.unmodifiableList(entrances);
     return newEntrances;
   }
 
+  /**
+   * @return the number of entrances a room has
+   */
   public int numberOfEntrances()
   {
     int number = entrances.size();
     return number;
   }
 
-  public boolean hasEntrances()
-  {
-    boolean has = entrances.size() > 0;
-    return has;
-  }
-
-  public int indexOfEntrance(Tile aEntrance)
-  {
-    int index = entrances.indexOf(aEntrance);
-    return index;
-  }
-
-  /* Code from template association_SetUnidirectionalOptionalOne */
-  public boolean setContains(WeaponCard aNewContains)
-  {
-    boolean wasSet = false;
-    Contains = aNewContains;
-    wasSet = true;
-    return wasSet;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfEntrances()
-  {
-    return 0;
-  }
-  /* Code from template association_AddUnidirectionalMany */
+  /**
+   * Adds a given tile as an entrance
+   * @param aEntrance the Tile to mark as an entrance
+   * @return if adding was successful
+   */
   public boolean addEntrance(Tile aEntrance)
   {
     boolean wasAdded = false;
@@ -115,76 +73,35 @@ public class Room
     return wasAdded;
   }
 
-  public boolean removeEntrance(Tile aEntrance)
-  {
-    boolean wasRemoved = false;
-    if (entrances.contains(aEntrance))
-    {
-      entrances.remove(aEntrance);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addEntranceAt(Tile aEntrance, int index)
-  {  
-    boolean wasAdded = false;
-    if(addEntrance(aEntrance))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfEntrances()) { index = numberOfEntrances() - 1; }
-      entrances.remove(aEntrance);
-      entrances.add(index, aEntrance);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveEntranceAt(Tile aEntrance, int index)
-  {
-    boolean wasAdded = false;
-    if(entrances.contains(aEntrance))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfEntrances()) { index = numberOfEntrances() - 1; }
-      entrances.remove(aEntrance);
-      entrances.add(index, aEntrance);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addEntranceAt(aEntrance, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfPlayerReserved()
-  {
-    return 0;
-  }
-  /* Code from template association_AddUnidirectionalMany */
-
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfWeaponReserved()
-  {
-    return 0;
-  }
-  /* Code from template association_AddUnidirectionalMany */
-
+  /**
+   * Adds an empty space to a room
+   * @param t the empty tile to add
+   */
   public void addEmptySpace(Tile t){
     openSquares.add(t);
   }
-
+  /**
+   * Removes an empty space from a room
+   * @param t the empty tile to remove
+   */
   public void removeEmptySpace(Tile t){
     openSquares.remove(t);
   }
 
+  /**
+   * Gets any random empty space in the room and removes this room from the list
+   */
   public Tile getEmptySpace(){
     Collections.shuffle(openSquares);
     Tile t = openSquares.get(0);
     removeEmptySpace(t);
     return t;
   }
+
+  /**
+   * Simple toString
+   * @return the name of the room
+   */
   @Override
   public String toString() {
     return  name;

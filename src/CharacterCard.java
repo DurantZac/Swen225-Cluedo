@@ -1,11 +1,3 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
-
-
-import java.util.Objects;
-
-// line 72 "model.ump"
-// line 125 "model.ump"
 public class CharacterCard implements Card
 {
 
@@ -13,7 +5,6 @@ public class CharacterCard implements Card
   // MEMBER VARIABLES
   //------------------------
 
-  //CharacterCard Attributes
   private String character;
   private char characterSymbol;
   private Tile position;
@@ -22,11 +13,19 @@ public class CharacterCard implements Card
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * The constructor, takes a string of a character and converts it to a symbol
+   * also stores the position on the board
+   *
+   * @param aCharacter the character that this card represents
+   * @param t the position of the character on this card
+   */
   public CharacterCard(String aCharacter,Tile t)
   {
     character = aCharacter;
     position = t;
 
+    // Finds the character and sets the symbol
     switch (character){
       case "Mrs White":
         characterSymbol = 'W';
@@ -53,32 +52,41 @@ public class CharacterCard implements Card
   // INTERFACE
   //------------------------
 
-  public boolean setCharacter(String aCharacter)
-  {
-    boolean wasSet = false;
-    character = aCharacter;
-    wasSet = true;
-    return wasSet;
-  }
-
+  /**
+   * @return the character this card represents
+   */
   public String getCharacter()
   {
     return character;
   }
 
+  /**
+   * @return the symbol used to represent the character
+   */
   public char getCharacterSymbol(){return characterSymbol;}
 
+  /**
+   * Sets the position of this character to tile t and also adds this character to that tile (2 way adding)
+   * @param t
+   */
   public void setPosition(Tile t){
     position = t;
     t.addCharacter(this);
   }
 
 
+  /**
+   * Simple toString
+   * @return the string of the character
+   */
   public String toString()
   {
     return getCharacter();
   }
 
+  /**
+   * @return the current position of this character
+   */
   public Tile getPosition(){
     return position;
   }
