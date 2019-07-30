@@ -73,31 +73,29 @@ public class Game
     for (int i = 0; i < playerNum; i++) {
       System.out.println("Player " + (i + 1) + ". Please select your character");
       System.out.println("The available players are:");
-      unusedCharacters.stream().forEach(j -> System.out.println(j.toString()));
-      System.out.println("\nWhat player would you like to be?");
+
+      for(int characterCounter = 1;  characterCounter <= unusedCharacters.size(); characterCounter++){
+        System.out.println("["+characterCounter+"] " + unusedCharacters.get(characterCounter-1).toString());
+      }
+
+      System.out.println("\nWhat player would you like to be? Please enter the number: ");
 
       validityCheck:
       while (true) { //Check who they want to be
         try {
           input = new BufferedReader(new InputStreamReader(System.in));
-          String characterToPlay = input.readLine();
-
-          for (CharacterCard c : unusedCharacters) {
-            if (c.getCharacter().equalsIgnoreCase(characterToPlay)) {
-
-              Player p = new Player(c);
-              players.add(p);
-              unusedCharacters.remove(c);
-
-              System.out.println("You have selected the character: " + c + "\n");
-              break validityCheck;
-            }
-          }
-          throw new InvalidCharacterException();
+          int characterToPlay = Integer.parseInt(input.readLine());
+          Player p = new Player(unusedCharacters.get(characterToPlay-1));
+          players.add(p);
+          unusedCharacters.remove(characterToPlay-1);
+          System.out.println("You have selected the character: " + p.getCharacter() + "\n");
+          break validityCheck;
         } catch (IOException e) {
           System.out.println("Error on input, please try again" + e);
-        } catch (InvalidCharacterException c) {
-          System.out.println("Please enter a valid character from the list");
+        } catch (NumberFormatException n){
+          System.out.println("Please enter the number of your character");
+        } catch(IndexOutOfBoundsException e){
+          System.out.println("Please enter an available number between 1 and 6");
         }
       }
     }
@@ -533,18 +531,7 @@ public class Game
           System.out.println("You are currently in the "+room);
         }
 
-        while(!validInput){
-          System.out.println("Would you like to see your hand? (Y/N)" );
-          String hand = input.readLine();
-          if (hand.equalsIgnoreCase("yes")||hand.equalsIgnoreCase("y")) {
-            System.out.println(players.get(currentPlayer).returnHand());
-            validInput=true;
-          }
-          else if(hand.equalsIgnoreCase("no")||hand.equalsIgnoreCase("n")) {
-            validInput=true;
-          }
-        }
-
+        seeHand(input, players.get(currentPlayer));
 
         int numMoves = rollDice();
         System.out.println("You have " + numMoves+" moves.");
@@ -569,7 +556,8 @@ public class Game
             System.out.println("Would you like to make a suggestion? (Y/N)");
             String suggest = input.readLine();
             if (suggest.equalsIgnoreCase("yes")||suggest.equalsIgnoreCase("y")) {
-              processSuggestion(players.get(currentPlayer), input);
+                seeHand(input, players.get(currentPlayer));
+                processSuggestion(players.get(currentPlayer), input);
               validInput=true;
             }
             else if(suggest.equalsIgnoreCase("no")||suggest.equalsIgnoreCase("n")) {
@@ -595,6 +583,9 @@ public class Game
               System.out.println("The accusation is incorrect, "+ players.get(currentPlayer).getCharacter().toString());
               System.out.println("You can no longer win the game");
               removePlayer(players.get(currentPlayer));
+                System.out.println("The accusation is incorrect, "+ players.get(currentPlayer).getCharacter().toString());
+                System.out.println("You can no longer win the game");
+                players.get(currentPlayer).setIsStillPlaying(false);
             }
             validInput=true;
           }
@@ -635,6 +626,25 @@ public class Game
     }
   }
 
+  private void seeHand(BufferedReader input, Player p){
+      try {
+          boolean validInput = false;
+          while (!validInput) {
+              System.out.println("Would you like to see your hand? (Y/N)");
+              String hand = input.readLine();
+              if (hand.equalsIgnoreCase("yes") || hand.equalsIgnoreCase("y")) {
+                  System.out.println(p.returnHand());
+                  validInput = true;
+              } else if (hand.equalsIgnoreCase("no") || hand.equalsIgnoreCase("n")) {
+                  validInput = true;
+              }
+          }
+      }catch (IOException e){
+          System.out.println("Error printing hand" + e);
+      }
+  }
+
+
   /**
    * Deals all of the cards excluding the murder scenario to the players.
    * @param cardsToBeDealt the remaining cards
@@ -670,7 +680,7 @@ public class Game
     WeaponCard weapon = checkWeapon(input);
     CharacterCard character = checkCharacter(input);
 
-    //board.teleportPlayer(character,room);
+    board.teleportCharacter(character,room);
     board.teleportWeapon(weapon,room);
 
     Card dispute = checkSuggestion(player,weapon,character,room.getRoomCard(),input);
@@ -687,7 +697,34 @@ public class Game
   private WeaponCard checkWeapon(BufferedReader input){
      try {
        System.out.println("What do you think is the murder weapon?");
-       String weapon = input.readLine();
+         for(int weaponCount = 1;  weaponCount <= getWeapons().size(); weaponCount++){
+             System.out.println("["+weaponCount+"] " + getWeapons().get(weaponCount-1).toString());
+         }
+
+//         while (true) { //Check who they want to be
+//             try {
+//                 int weapon = Integer.parseInt(input.readLine());
+//                 WeaponCard suggestedWeapon = getWeapons().get(weapon);
+//
+//
+//                 unusedCharacters.remove(characterToPlay-1);
+//                 System.out.println("You have selected the character: " + p.getCharacter() + "\n");
+//                 break validityCheck;
+//             } catch (IOException e) {
+//                 System.out.println("Error on input, please try again" + e);
+//             } catch (NumberFormatException n){
+//                 System.out.println("Please enter the number of your character");
+//             } catch(IndexOutOfBoundsException e){
+//                 System.out.println("Please enter an available number between 1 and 6");
+//             }
+//         }
+
+
+
+
+         
+
+         String weapon = input.readLine();
        WeaponCard suggestedWeapon = weaponMap.get(weapon.toLowerCase());
        while (suggestedWeapon == null) {
          System.out.println("Invalid Weapon, please try again:");
@@ -811,8 +848,6 @@ public class Game
   private class IncorrectNumberOfPlayersException extends Throwable {
   }
 
-  private class InvalidCharacterException extends Throwable {
-  }
 }
 
 
