@@ -59,7 +59,7 @@ public class Game
         System.out.println("Please enter a number between 3-6 only");
       }
     }
-    List<CharacterCard> unusedCharacters = new ArrayList<>();  
+    List<CharacterCard> unusedCharacters = new ArrayList<>();
 
     //Make all the characters
     unusedCharacters.add(new CharacterCard("Col. Mustard", board.getBoardTile("Ar")));
