@@ -99,6 +99,8 @@ public class Game {
         //Deals hand
         dealCards(cardsToBeDealt);
 
+        murderScenario.stream().forEach(s -> System.out.println(s.toString()));
+
         //Game play begins
         playGame(input);
 
@@ -409,7 +411,7 @@ public class Game {
         }
 
     try {
-      game:while (true) { // play the game
+      game:while (players.stream().filter(p -> p.getIsStillPlaying() ==  true).count() > 0) { // play the game
         boolean validInput = false;
         System.out.println(CLEAR_SCREEN);
         board.printBoard();
@@ -449,14 +451,15 @@ public class Game {
 
         room = players.get(currentPlayer).getPosition().getIsPartOf();
         if (room != null) { // only allow them to make suggestions in a room
-           processAccusation(input, players.get(currentPlayer));
+           processSuggestion(input, players.get(currentPlayer));
         }
 
-        processAccusation(input, players.get(currentPlayer));
+        if(processAccusation(input, players.get(currentPlayer))) return;
 
         System.out.println();// blank line, maybe want to clear the screen later?
         currentPlayer = getNextCharacter(currentPlayer);
       }
+    System.out.println("GAME OVER ALL PLAYERS ELIMINATED");
     }
     catch (IOException e ){
       System.out.println("Error on input, please try again"+e);
@@ -470,6 +473,7 @@ public class Game {
      * @return the next player
      */
     private int getNextCharacter(int current) {
+        if(players.stream().filter(p -> p.getIsStillPlaying() ==  true).count() == 0) return 0;
         if (current < players.size() - 1) {
             if (!players.get(current + 1).getIsStillPlaying())
                 return getNextCharacter(current + 1);
@@ -531,7 +535,7 @@ public class Game {
    * @param player the current input
    * @param input input stream
    */
-  private void processSuggestion(Player player, BufferedReader input){
+  private void processSuggestion(BufferedReader input,Player player){
       try {
           Room room = player.getPosition().getIsPartOf();
           boolean validInput = false;
@@ -657,8 +661,8 @@ public class Game {
            }
            if (suggestions.size() > 1) {
              System.out.println("What card would you like to use to disprove the suggestion? ");
-             for (int i = 0; i < suggestions.size(); i++) {
-               System.out.printf("[%d] %s \n", i, suggestions.get(i).toString());
+             for (int i = 1; i <= suggestions.size(); i++) {
+               System.out.printf("[%d] %s \n", i, suggestions.get(i-1).toString());
              }
 
              int dispute = -1;
@@ -672,7 +676,7 @@ public class Game {
                }
              }
              System.out.println(CLEAR_SCREEN);
-             return suggestions.get(dispute);
+             return suggestions.get(dispute-1);
            }
          }
        }
@@ -697,7 +701,7 @@ public class Game {
         return (character.equals(murderScenario.get(0)) && room.equals(murderScenario.get(1)) && weapon.equals(murderScenario.get(2)));
     }
 
-    private void processAccusation (BufferedReader input, Player player){
+    private boolean processAccusation (BufferedReader input, Player player){
         try {
             boolean validInput = false;
             while (!validInput) {
@@ -709,7 +713,7 @@ public class Game {
                         System.out.println("Congratulations, " + player.getCharacter().toString() + " has solved the murder!");
                         System.out.println("The murder occurred as follows:");
                         System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
-                        return;
+                        return true;
                     } else {
                         System.out.println("The accusation is incorrect, " + player.getCharacter().toString());
                         System.out.println("You can no longer win the game");
@@ -726,6 +730,7 @@ public class Game {
         }catch (IOException e){
             System.out.println("Error processing Accusation"+e);
         }
+        return false;
     }
 
 
