@@ -6,6 +6,7 @@ import java.util.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 // line 2 "model.ump"
 // line 96 "model.ump"
 public class Game {
@@ -20,7 +21,7 @@ public class Game {
     private List<Player> players = new ArrayList<>();
     private List<CharacterCard> characters = new ArrayList<>();
     private List<Room> rooms = new ArrayList<>();
-    private List <WeaponCard> weapons = new ArrayList<>();
+    private List<WeaponCard> weapons = new ArrayList<>();
     private int playerNum;
 
     public static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
@@ -36,25 +37,25 @@ public class Game {
     public Game() {
         board = createBoard();
 
-    BufferedReader input;
-    while (true) { //Try to find out how many players there are
-      try {
-        input = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("How many players are playing? (3-6) ");
-        int numberOfPlayers = Integer.parseInt(input.readLine());
-        if (numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()) {
-          throw new IncorrectNumberOfPlayersException();
+        BufferedReader input;
+        while (true) { //Try to find out how many players there are
+            try {
+                input = new BufferedReader(new InputStreamReader(System.in));
+                System.out.println("How many players are playing? (3-6) ");
+                int numberOfPlayers = Integer.parseInt(input.readLine());
+                if (numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()) {
+                    throw new IncorrectNumberOfPlayersException();
+                }
+                playerNum = numberOfPlayers;
+                break;
+            } catch (NumberFormatException n) {
+                System.out.println("Please enter a number between 3-6 only");
+            } catch (IOException e) {
+                System.out.println("Error on input, please try again" + e);
+            } catch (IncorrectNumberOfPlayersException i) {
+                System.out.println("Please enter a number between 3-6 only");
+            }
         }
-        playerNum = numberOfPlayers;
-        break;
-      } catch (NumberFormatException n) {
-        System.out.println("Please enter a number between 3-6 only");
-      } catch (IOException e) {
-        System.out.println("Error on input, please try again" + e);
-      } catch (IncorrectNumberOfPlayersException i) {
-        System.out.println("Please enter a number between 3-6 only");
-      }
-    }
         //Make all the characters
         characters.add(new CharacterCard("Col. Mustard", board.getBoardTile("Ar")));
         characters.add(new CharacterCard("Mrs White", board.getBoardTile("Ja")));
@@ -408,32 +409,36 @@ public class Game {
             }
         }
 
-      game:while (true) { // play the game
-        boolean validInput = false;
-        System.out.println(CLEAR_SCREEN);
-        board.printBoard();
+        game:
+        while (players.stream().filter(p -> p.getIsStillPlaying() == true).count() > 0) { // play the game
+            boolean validInput = false;
+            System.out.println(CLEAR_SCREEN);
+            board.printBoard();
 
-        System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
+            System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
 
-        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
-        if (room!=null) { // only allow them to make suggestions in a room
-          System.out.println("You are currently in the "+room);
+            Room room = players.get(currentPlayer).getPosition().getIsPartOf();
+            if (room != null) { // only allow them to make suggestions in a room
+                System.out.println("You are currently in the " + room);
+            }
+
+            seeHand(input, players.get(currentPlayer));
+
+            processMove(input, players.get(currentPlayer));
+
+            processSuggestion(input, players.get(currentPlayer));
+
+
+            if (processAccusation(input, players.get(currentPlayer))) return;
+
+            System.out.println();// blank line, maybe want to clear the screen later?
+            currentPlayer = getNextCharacter(currentPlayer);
         }
+        System.out.println("GAME OVER ALL PLAYERS ELIMINATED");
+        System.out.println("The murder occurred as follows:");
+        System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
 
-        seeHand(input, players.get(currentPlayer));
-
-        processMove(input, players.get(currentPlayer));
-
-        processSuggestion(input,players.get(currentPlayer));
-
-
-
-        processAccusation(input, players.get(currentPlayer));
-
-        System.out.println();// blank line, maybe want to clear the screen later?
-        currentPlayer = getNextCharacter(currentPlayer);
-      }
-  }
+    }
 
     /**
      * Gets the next character
@@ -442,6 +447,7 @@ public class Game {
      * @return the next player
      */
     private int getNextCharacter(int current) {
+        if (players.stream().filter(p -> p.getIsStillPlaying() == true).count() == 0) return 0;
         if (current < players.size() - 1) {
             if (!players.get(current + 1).getIsStillPlaying())
                 return getNextCharacter(current + 1);
@@ -498,44 +504,45 @@ public class Game {
 
     }
 
-  /**
-   * Checks the current player is able to make a suggestion, and gets the room, character and weapon they are suggesting
-   * @param player the current input
-   * @param input input stream
-   */
-  private void processSuggestion(BufferedReader input,Player player){
-      try {
-          Room room = player.getPosition().getIsPartOf();
-          if (room == null) { // only allow them to make suggestions in a room
-              return;
-          }
-          boolean validInput = false;
-          while (!validInput) {
-              System.out.println("Would you like to make a suggestion? (Y/N)");
-              String suggest = input.readLine();
-              if (suggest.equalsIgnoreCase("yes") || suggest.equalsIgnoreCase("y")) {
-                  seeHand(input, player);
-                  WeaponCard weapon = checkWeapon(input);
-                  CharacterCard character = checkCharacter(input);
-                  System.out.println(CLEAR_SCREEN);
-                  board.teleportCharacter(character, room);
-                  board.teleportWeapon(weapon, room);
+    /**
+     * Checks the current player is able to make a suggestion, and gets the room, character and weapon they are suggesting
+     *
+     * @param player the current input
+     * @param input  input stream
+     */
+    private void processSuggestion(BufferedReader input, Player player) {
+        try {
+            Room room = player.getPosition().getIsPartOf();
+            if (room == null) { // only allow them to make suggestions in a room
+                return;
+            }
+            boolean validInput = false;
+            while (!validInput) {
+                System.out.println("Would you like to make a suggestion? (Y/N)");
+                String suggest = input.readLine();
+                if (suggest.equalsIgnoreCase("yes") || suggest.equalsIgnoreCase("y")) {
+                    seeHand(input, player);
+                    WeaponCard weapon = checkWeapon(input);
+                    CharacterCard character = checkCharacter(input);
+                    System.out.println(CLEAR_SCREEN);
+                    board.teleportCharacter(character, room);
+                    board.teleportWeapon(weapon, room);
 
-                  Card dispute = checkSuggestion(player, weapon, character, room.getRoomCard(), input);
-                  if (dispute != null) {
-                      System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
-                  } else {
-                      System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
-                  }
-                  validInput = true;
-              } else if (suggest.equalsIgnoreCase("no") || suggest.equalsIgnoreCase("n")) {
-                  return;
-              }
-          }
-      }catch(IOException e){
-          System.out.println("Error Processing Suggestion"+ e);
-      }
-  }
+                    Card dispute = checkSuggestion(player, weapon, character, room.getRoomCard(), input);
+                    if (dispute != null) {
+                        System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
+                    } else {
+                        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
+                    }
+                    validInput = true;
+                } else if (suggest.equalsIgnoreCase("no") || suggest.equalsIgnoreCase("n")) {
+                    return;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error Processing Suggestion" + e);
+        }
+    }
 
 
     private WeaponCard checkWeapon(BufferedReader input) {
@@ -592,7 +599,7 @@ public class Game {
         while (true) {
             try {
                 int room = Integer.parseInt(input.readLine());
-                RoomCard suggestedRoom  = rooms.get(room - 1).getRoomCard();
+                RoomCard suggestedRoom = rooms.get(room - 1).getRoomCard();
                 System.out.println("You have selected the weapon: " + suggestedRoom + "\n");
                 return suggestedRoom;
             } catch (IOException e) {
@@ -606,57 +613,57 @@ public class Game {
     }
 
 
-   private Card checkSuggestion(Player player,WeaponCard weapon,CharacterCard character, RoomCard room, BufferedReader input){
-     try {
-       for (Player p : players) {
-         if (p != player) {
-           Set<Card> hand = p.getHand();
-           List<Card> suggestions = new ArrayList<>();
-           if (hand.contains(weapon)) suggestions.add(weapon);
-           if (hand.contains(character)) suggestions.add(character);
-           if (hand.contains(room)) suggestions.add(room);
+    private Card checkSuggestion(Player player, WeaponCard weapon, CharacterCard character, RoomCard room, BufferedReader input) {
+        try {
+            for (Player p : players) {
+                if (p != player) {
+                    Set<Card> hand = p.getHand();
+                    List<Card> suggestions = new ArrayList<>();
+                    if (hand.contains(weapon)) suggestions.add(weapon);
+                    if (hand.contains(character)) suggestions.add(character);
+                    if (hand.contains(room)) suggestions.add(room);
 
-           System.out.println(p.getCharacter() + "'s turn to check the suggestion:");
-           System.out.println("Press any letter to continue");
-           input.readLine();
-           System.out.println(CLEAR_SCREEN);
-           System.out.println(p.returnHand());
-           System.out.printf("You have %d cards matching the suggestion\n", suggestions.size());
-           if(suggestions.size() == 0) System.out.println(CLEAR_SCREEN);
-           if (suggestions.size() == 1) {
-             System.out.println("Since you only have one card, you must use the " + suggestions.get(0).toString() + " to disprove the suggestion");
-             System.out.println("Press any letter to continue");
-             input.readLine();
-             System.out.println(CLEAR_SCREEN);
-             return suggestions.get(0);
-           }
-           if (suggestions.size() > 1) {
-             System.out.println("What card would you like to use to disprove the suggestion? ");
-             for (int i = 0; i < suggestions.size(); i++) {
-               System.out.printf("[%d] %s \n", i, suggestions.get(i).toString());
-             }
+                    System.out.println(p.getCharacter() + "'s turn to check the suggestion:");
+                    System.out.println("Press any letter to continue");
+                    input.readLine();
+                    System.out.println(CLEAR_SCREEN);
+                    System.out.println(p.returnHand());
+                    System.out.printf("You have %d cards matching the suggestion\n", suggestions.size());
+                    if (suggestions.size() == 0) System.out.println(CLEAR_SCREEN);
+                    if (suggestions.size() == 1) {
+                        System.out.println("Since you only have one card, you must use the " + suggestions.get(0).toString() + " to disprove the suggestion");
+                        System.out.println("Press any letter to continue");
+                        input.readLine();
+                        System.out.println(CLEAR_SCREEN);
+                        return suggestions.get(0);
+                    }
+                    if (suggestions.size() > 1) {
+                        System.out.println("What card would you like to use to disprove the suggestion? ");
+                        for (int i = 1; i <= suggestions.size(); i++) {
+                            System.out.printf("[%d] %s \n", i, suggestions.get(i - 1).toString());
+                        }
 
-             int dispute = -1;
-             while (dispute == -1) {
-               try {
-                 dispute = Integer.parseInt(input.readLine());
-               } catch (IOException e) {
-                 System.out.println("Error on input" + e);
-               } catch (NumberFormatException n) {
-                 System.out.println("Please enter a whole number only");
-               }
-             }
-             return suggestions.get(dispute);
-           }
-         }
-       }
-       return null; // no one could disprove the suggestion, so return null
-     }
-     catch (IOException e ){
-       System.out.println(e);
-     }
-     return null;
-   }
+                        int dispute = -1;
+                        while (dispute == -1) {
+                            try {
+                                dispute = Integer.parseInt(input.readLine());
+                            } catch (IOException e) {
+                                System.out.println("Error on input" + e);
+                            } catch (NumberFormatException n) {
+                                System.out.println("Please enter a whole number only");
+                            }
+                        }
+                        System.out.println(CLEAR_SCREEN);
+                        return suggestions.get(dispute - 1);
+                    }
+                }
+            }
+            return null; // no one could disprove the suggestion, so return null
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 
     public List<WeaponCard> getWeapons() {
         return new ArrayList<>(this.weapons);
@@ -671,7 +678,7 @@ public class Game {
         return (character.equals(murderScenario.get(0)) && room.equals(murderScenario.get(1)) && weapon.equals(murderScenario.get(2)));
     }
 
-    private void processAccusation (BufferedReader input, Player player){
+    private boolean processAccusation(BufferedReader input, Player player) {
         try {
             boolean validInput = false;
             while (!validInput) {
@@ -683,52 +690,56 @@ public class Game {
                         System.out.println("Congratulations, " + player.getCharacter().toString() + " has solved the murder!");
                         System.out.println("The murder occurred as follows:");
                         System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
-                        return;
+                        return true;
                     } else {
                         System.out.println("The accusation is incorrect, " + player.getCharacter().toString());
                         System.out.println("You can no longer win the game");
                         player.setIsStillPlaying(false);
+                        System.out.println("Press any letter to continue");
+                        input.readLine();
+                        System.out.println(CLEAR_SCREEN);
                     }
                     validInput = true;
                 } else if (accuse.equalsIgnoreCase("no") || accuse.equalsIgnoreCase("n")) {
                     validInput = true;
                 }
             }
-        }catch (IOException e){
-            System.out.println("Error processing Accusation"+e);
+        } catch (IOException e) {
+            System.out.println("Error processing Accusation" + e);
         }
+        return false;
     }
 
-    private void processMove(BufferedReader input, Player player){
-      try {
-          int numMoves = rollDice();
-          System.out.println("You have " + numMoves + " moves.");
-          System.out.println("Where would you like to move to?");
-          String move = input.readLine();
+    private void processMove(BufferedReader input, Player player) {
+        try {
+            int numMoves = rollDice();
+            System.out.println("You have " + numMoves + " moves.");
+            System.out.println("Where would you like to move to?");
+            String move = input.readLine();
 
-          Tile goal = board.getBoardTile(move);
-          while (goal == null) {
-              System.out.println("Invalid tile, please choose again");
-              System.out.println("Where would you like to move to?");
-              move = input.readLine();
-              goal = board.getBoardTile(move);
-          }
+            Tile goal = board.getBoardTile(move);
+            while (goal == null) {
+                System.out.println("Invalid tile, please choose again");
+                System.out.println("Where would you like to move to?");
+                move = input.readLine();
+                goal = board.getBoardTile(move);
+            }
 
-          //Assuming move player actually moves the player
-          boolean validInput = board.movePlayer(player, goal, numMoves);
+            //Assuming move player actually moves the player
+            boolean validInput = board.movePlayer(player, goal, numMoves);
 
-          while (!validInput) {
-              System.out.println("That move is not valid, please try a different move");
-              move = input.readLine();
-              goal = board.getBoardTile(move);
-              validInput = board.movePlayer(player, goal, numMoves);
-          }
+            while (!validInput) {
+                System.out.println("That move is not valid, please try a different move");
+                move = input.readLine();
+                goal = board.getBoardTile(move);
+                validInput = board.movePlayer(player, goal, numMoves);
+            }
 
-          board.printBoard();
+            board.printBoard();
 
-      }catch (IOException e){
-          System.out.println("Error moving player"+ e);
-      }
+        } catch (IOException e) {
+            System.out.println("Error moving player" + e);
+        }
 
     }
 
@@ -736,8 +747,8 @@ public class Game {
         new Game();
     }
 
-  private class IncorrectNumberOfPlayersException extends Throwable {
-  }
+    private class IncorrectNumberOfPlayersException extends Throwable {
+    }
 
 }
 
