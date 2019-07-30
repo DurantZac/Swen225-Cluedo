@@ -454,28 +454,8 @@ public class Game {
                         }
                     }
                 }
-                
-                validInput = false;
-                while (!validInput) {
-                    System.out.println("Would you like to make an accusation? (Y/N)");
-                    String accuse = input.readLine();
-                    if (accuse.equalsIgnoreCase("yes") || accuse.equalsIgnoreCase("y")) {
-                        boolean accusation = checkAccusation(input);
-                        if (accusation) {
-                            System.out.println("Congratulations, " + players.get(currentPlayer).getCharacter().toString() + " has solved the murder!");
-                            System.out.println("The murder occurred as follows:");
-                            System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
-                            return;
-                        } else {
-                            System.out.println("The accusation is incorrect, " + players.get(currentPlayer).getCharacter().toString());
-                            System.out.println("You can no longer win the game");
-                            players.get(currentPlayer).setIsStillPlaying(false);
-                        }
-                        validInput = true;
-                    } else if (accuse.equalsIgnoreCase("no") || accuse.equalsIgnoreCase("n")) {
-                        validInput = true;
-                    }
-                }
+
+                processAccusation(input, players.get(currentPlayer));
 
                 System.out.println();// blank line, maybe want to clear the screen later?
                 currentPlayer = getNextCharacter(currentPlayer);
@@ -706,6 +686,35 @@ public class Game {
 
         return (character.equals(murderScenario.get(0)) && room.equals(murderScenario.get(1)) && weapon.equals(murderScenario.get(2)));
     }
+
+    private void processAccusation (BufferedReader input, Player player){
+        try {
+            boolean validInput = false;
+            while (!validInput) {
+                System.out.println("Would you like to make an accusation? (Y/N)");
+                String accuse = input.readLine();
+                if (accuse.equalsIgnoreCase("yes") || accuse.equalsIgnoreCase("y")) {
+                    boolean accusation = checkAccusation(input);
+                    if (accusation) {
+                        System.out.println("Congratulations, " + player.getCharacter().toString() + " has solved the murder!");
+                        System.out.println("The murder occurred as follows:");
+                        System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
+                        return;
+                    } else {
+                        System.out.println("The accusation is incorrect, " + player.getCharacter().toString());
+                        System.out.println("You can no longer win the game");
+                        player.setIsStillPlaying(false);
+                    }
+                    validInput = true;
+                } else if (accuse.equalsIgnoreCase("no") || accuse.equalsIgnoreCase("n")) {
+                    validInput = true;
+                }
+            }
+        }catch (IOException e){
+            System.out.println("Error processing Accusation"+e);
+        }
+    }
+
 
     public static void main(String args[]) {
         new Game();
