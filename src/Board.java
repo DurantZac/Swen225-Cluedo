@@ -182,7 +182,7 @@ public class Board
    */
   public boolean pathFinding(Tile node, Tile goal, int moveGoal, int moveCount, List<Tile> visited){
     if(node == goal && moveCount == moveGoal) return true;
-    if(node.getIsPartOf() == goal.getIsPartOf() && moveCount <= moveGoal) return true;
+    if(node.getIsPartOf() != null && node.getIsPartOf() == goal.getIsPartOf() && moveCount <= moveGoal) return true;
     if(moveCount >= moveGoal) return false;
       visited.add(node);
     for(Tile neigh : node.getAdjacent()){

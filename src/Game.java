@@ -537,6 +537,12 @@ public class Game
         String move = input.readLine();
 
         Tile goal = board.getBoardTile(move);
+        while(goal == null){
+          System.out.println("Invalid tile, please choose again");
+          System.out.println("Where would you like to move to?");
+          move = input.readLine();
+          goal = board.getBoardTile(move);
+        }
         //Assuming move player actually moves the player
         boolean valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
 
@@ -547,6 +553,7 @@ public class Game
           valid = board.movePlayer(players.get(currentPlayer),goal,numMoves);
         }
 
+        room = players.get(currentPlayer).getPosition().getIsPartOf();
         board.printBoard();
 
         if (room!=null) { // only allow them to make suggestions in a room
