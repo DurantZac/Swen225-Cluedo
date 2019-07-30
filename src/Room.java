@@ -65,7 +65,7 @@ public class Room
    */
   public boolean addEntrance(Tile aEntrance)
   {
-    boolean wasAdded = false;
+    boolean wasAdded;
     if (entrances.contains(aEntrance)) { return false; }
     entrances.add(aEntrance);
     wasAdded = true;

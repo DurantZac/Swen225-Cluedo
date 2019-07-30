@@ -1,12 +1,7 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
-
 
 import java.util.HashSet;
 import java.util.Set;
 
-// line 58 "model.ump"
-// line 115 "model.ump"
 public class Player
 {
 
@@ -14,16 +9,18 @@ public class Player
   // MEMBER VARIABLES
   //------------------------
 
-  //Player Attributes
   private CharacterCard character;
   private boolean isStillPlaying;
-  //private Tile position;
   private Set <Card> hand = new HashSet<>();
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
+  /**
+   * Creates a player, assigning a character to them.
+   * @param aCharacter
+   */
   public Player(CharacterCard aCharacter)
   {
     character = aCharacter;
@@ -34,60 +31,81 @@ public class Player
   // INTERFACE
   //------------------------
 
-  public boolean setCharacter(CharacterCard aCharacter)
-  {
-    boolean wasSet = false;
-    character = aCharacter;
-    wasSet = true;
-    return wasSet;
-  }
 
+  /**
+   * Changes the IsStillPlaying field,
+   * this is used when accusations are wrong to remove a player from the game loop
+   * @param aIsStillPlaying
+   * @return if setting was successful
+   */
   public boolean setIsStillPlaying(boolean aIsStillPlaying)
   {
-    boolean wasSet = false;
+    boolean wasSet;
     isStillPlaying = aIsStillPlaying;
     wasSet = true;
     return wasSet;
   }
 
+  /**
+   * @return the card the player is playing as
+   */
   public CharacterCard getCharacter()
   {
     return character;
   }
 
+  /**
+   * Checks if the player is still part of the game loop
+   * @return
+   */
   public boolean getIsStillPlaying()
   {
     return isStillPlaying;
   }
 
+  /**
+   * @return the current position of the player
+   */
   public Tile getPosition(){
     return character.getPosition();
   }
 
 
-  // line 63 "model.ump"
-   public Card refute(RoomCard r, CharacterCard c, WeaponCard w){
-    return null;
-  }
-
+  /**
+   * @param c card to add to the hand when cards are dealt
+   */
   public void addCardToHand(Card c){
     hand.add(c);
   }
 
+  /**
+   * Formatted string, showing what cards a player has in their hand
+   * @return the finished string
+   */
   public String returnHand(){
     String s="You have "+ hand.size()+" cards, they are: ";
+    boolean first=true;
+
     for (Card c: hand){
+      if (!first)
+        s+=", ";
       s+=c.toString();
-      s+=", ";
+      first=false;
     }
     return s;
   }
 
+  /**
+   * @return the hand as a set which can be iterated through
+   */
   public Set<Card> getHand(){
     return hand;
   }
 
-
+  /**
+   * ToString used for debugging purposes
+   * @return all characteristics of the player
+   */
   public String toString()
   {
     return super.toString() + "["+
