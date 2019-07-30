@@ -21,13 +21,8 @@ public class Game {
     private List<Player> players = new ArrayList<>();
     private List<CharacterCard> characters = new ArrayList<>();
     private List<Room> rooms = new ArrayList<>();
+    private List <WeaponCard> weapons = new ArrayList<>();
     private int playerNum;
-
-
-    private Map<String, WeaponCard> weaponMap = new HashMap<>();
-    private Map<String, CharacterCard> characterMap = new HashMap<>();
-    private Map<String, RoomCard> roomMap = new HashMap<>();
-
 
     //------------------------
     // CONSTRUCTOR
@@ -69,8 +64,6 @@ public class Game {
 
         List<CharacterCard> unusedCharacters = new ArrayList<>(characters);
         List<Card> cardsToBeDealt = createCards(characters);
-
-        unusedCharacters.stream().forEach(j -> characterMap.put(j.toString().toLowerCase(), j));
 
         for (int i = 0; i < playerNum; i++) {
             System.out.println("Player " + (i + 1) + ". Please select your character");
@@ -160,7 +153,6 @@ public class Game {
                 }
             }
         }
-
         return new Board(this, tiles);
     }
 
@@ -190,7 +182,7 @@ public class Game {
         weapons.add(new WeaponCard("Spanner"));
         weapons.add(new WeaponCard("Lead Pipe"));
 
-        weapons.stream().forEach(j -> weaponMap.put(j.toString().toLowerCase(), (WeaponCard) j)); // add all weapons to a map
+        weapons.stream().forEach(j -> this.weapons.add((WeaponCard) j)); // add all weapons to a map
 
         Collections.shuffle(rooms);
         for (int i = 0; i < weapons.size(); i++) {
@@ -259,7 +251,6 @@ public class Game {
         cards.add(auditorium.getRoomCard());
         markRoom(cards);
 
-        cards.stream().forEach(j -> roomMap.put(j.toString().toLowerCase(), j)); // add all room to a map
         cards.stream().forEach(n -> rooms.add(n.getRoom()));
 
         Collections.shuffle(cards);
@@ -375,87 +366,6 @@ public class Game {
     //------------------------
     // INTERFACE
     //------------------------
-    /* Code from template association_GetOne */
-    public Board getBoard() {
-        return board;
-    }
-
-    /* Code from template association_GetMany */
-    public Card getMurderScenario(int index) {
-        Card aMurderScenario = murderScenario.get(index);
-        return aMurderScenario;
-    }
-
-    public List<Card> getMurderScenario() {
-        List<Card> newMurderScenario = Collections.unmodifiableList(murderScenario);
-        return newMurderScenario;
-    }
-
-    public int indexOfMurderScenario(Card aMurderScenario) {
-        int index = murderScenario.indexOf(aMurderScenario);
-        return index;
-    }
-
-    public Player getPlayer(int index) {
-        Player aStore = players.get(index);
-        return aStore;
-    }
-
-    public List<Player> getPlayers() {
-        List<Player> newStores = Collections.unmodifiableList(players);
-        return newStores;
-    }
-
-    public int numberOfPlayers() {
-        int number = players.size();
-        return number;
-    }
-
-    public boolean hasPlayers() {
-        boolean has = players.size() > 0;
-        return has;
-    }
-
-    public int indexOfPlayer(Player aStore) {
-        int index = players.indexOf(aStore);
-        return index;
-    }
-
-    /* Code from template association_RequiredNumberOfMethod */
-    public static int requiredNumberOfMurderScenario() {
-        return 3;
-    }
-
-    /* Code from template association_MinimumNumberOfMethod */
-    public static int minimumNumberOfMurderScenario() {
-        return 3;
-    }
-
-    /* Code from template association_MaximumNumberOfMethod */
-    public static int maximumNumberOfMurderScenario() {
-        return 3;
-    }
-
-    /* Code from template association_SetUnidirectionalN */
-    public boolean setMurderScenario(Card... newMurderScenario) {
-        boolean wasSet = false;
-        ArrayList<Card> verifiedMurderScenario = new ArrayList<Card>();
-        for (Card aMurderScenario : newMurderScenario) {
-            if (verifiedMurderScenario.contains(aMurderScenario)) {
-                continue;
-            }
-            verifiedMurderScenario.add(aMurderScenario);
-        }
-
-        if (verifiedMurderScenario.size() != newMurderScenario.length || verifiedMurderScenario.size() != requiredNumberOfMurderScenario()) {
-            return wasSet;
-        }
-
-        murderScenario.clear();
-        murderScenario.addAll(verifiedMurderScenario);
-        wasSet = true;
-        return wasSet;
-    }
 
     /* Code from template association_MinimumNumberOfMethod */
     public static int minimumNumberOfPlayers() {
@@ -465,21 +375,6 @@ public class Game {
     /* Code from template association_MaximumNumberOfMethod */
     public static int maximumNumberOfPlayers() {
         return 6;
-    }
-
-    public boolean removePlayer(Player aPlayer) {
-        boolean wasRemoved = false;
-        if (!players.contains(aPlayer)) {
-            return wasRemoved;
-        }
-
-        if (numberOfPlayers() <= minimumNumberOfPlayers()) {
-            return wasRemoved;
-        }
-
-        players.remove(aPlayer);
-        wasRemoved = true;
-        return wasRemoved;
     }
 
     /**
@@ -559,8 +454,7 @@ public class Game {
                         }
                     }
                 }
-
-
+                
                 validInput = false;
                 while (!validInput) {
                     System.out.println("Would you like to make an accusation? (Y/N)");
@@ -575,9 +469,6 @@ public class Game {
                         } else {
                             System.out.println("The accusation is incorrect, " + players.get(currentPlayer).getCharacter().toString());
                             System.out.println("You can no longer win the game");
-                            removePlayer(players.get(currentPlayer));
-                            System.out.println("The accusation is incorrect, " + players.get(currentPlayer).getCharacter().toString());
-                            System.out.println("You can no longer win the game");
                             players.get(currentPlayer).setIsStillPlaying(false);
                         }
                         validInput = true;
@@ -585,7 +476,6 @@ public class Game {
                         validInput = true;
                     }
                 }
-
 
                 System.out.println();// blank line, maybe want to clear the screen later?
                 currentPlayer = getNextCharacter(currentPlayer);
@@ -805,7 +695,7 @@ public class Game {
     }
 
     public List<WeaponCard> getWeapons() {
-        return new ArrayList<>(weaponMap.values());
+        return new ArrayList<>(this.weapons);
     }
 
     // line 12 "model.ump"
