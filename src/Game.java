@@ -408,7 +408,6 @@ public class Game {
             }
         }
 
-    try {
       game:while (true) { // play the game
         boolean validInput = false;
         System.out.println(CLEAR_SCREEN);
@@ -423,44 +422,17 @@ public class Game {
 
         seeHand(input, players.get(currentPlayer));
 
-        int numMoves = rollDice();
-        System.out.println("You have " + numMoves+" moves.");
-        System.out.println("Where would you like to move to?");
-        String move = input.readLine();
+        processMove(input, players.get(currentPlayer));
 
-        Tile goal = board.getBoardTile(move);
-        while(goal == null){
-          System.out.println("Invalid tile, please choose again");
-          System.out.println("Where would you like to move to?");
-          move = input.readLine();
-          goal = board.getBoardTile(move);
-        }
+        processSuggestion(input,players.get(currentPlayer));
 
-        //Assuming move player actually moves the player
-         validInput = board.movePlayer(players.get(currentPlayer),goal,numMoves);
 
-        while (!validInput){
-          System.out.println("That move is not valid, please try a different move");
-          move = input.readLine();
-          goal = board.getBoardTile(move);
-          validInput = board.movePlayer(players.get(currentPlayer),goal,numMoves);
-        }
-        board.printBoard();
-
-        room = players.get(currentPlayer).getPosition().getIsPartOf();
-        if (room != null) { // only allow them to make suggestions in a room
-           processAccusation(input, players.get(currentPlayer));
-        }
 
         processAccusation(input, players.get(currentPlayer));
 
         System.out.println();// blank line, maybe want to clear the screen later?
         currentPlayer = getNextCharacter(currentPlayer);
       }
-    }
-    catch (IOException e ){
-      System.out.println("Error on input, please try again"+e);
-    }
   }
 
     /**
@@ -531,9 +503,12 @@ public class Game {
    * @param player the current input
    * @param input input stream
    */
-  private void processSuggestion(Player player, BufferedReader input){
+  private void processSuggestion(BufferedReader input,Player player){
       try {
           Room room = player.getPosition().getIsPartOf();
+          if (room == null) { // only allow them to make suggestions in a room
+              return;
+          }
           boolean validInput = false;
           while (!validInput) {
               System.out.println("Would you like to make a suggestion? (Y/N)");
@@ -724,6 +699,38 @@ public class Game {
         }
     }
 
+    private void processMove(BufferedReader input, Player player){
+      try {
+          int numMoves = rollDice();
+          System.out.println("You have " + numMoves + " moves.");
+          System.out.println("Where would you like to move to?");
+          String move = input.readLine();
+
+          Tile goal = board.getBoardTile(move);
+          while (goal == null) {
+              System.out.println("Invalid tile, please choose again");
+              System.out.println("Where would you like to move to?");
+              move = input.readLine();
+              goal = board.getBoardTile(move);
+          }
+
+          //Assuming move player actually moves the player
+          boolean validInput = board.movePlayer(player, goal, numMoves);
+
+          while (!validInput) {
+              System.out.println("That move is not valid, please try a different move");
+              move = input.readLine();
+              goal = board.getBoardTile(move);
+              validInput = board.movePlayer(player, goal, numMoves);
+          }
+
+          board.printBoard();
+
+      }catch (IOException e){
+          System.out.println("Error moving player"+ e);
+      }
+
+    }
 
     public static void main(String args[]) {
         new Game();
