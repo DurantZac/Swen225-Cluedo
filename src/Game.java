@@ -445,27 +445,14 @@ public class Game {
           goal = board.getBoardTile(move);
           validInput = board.movePlayer(players.get(currentPlayer),goal,numMoves);
         }
+        board.printBoard();
 
-                board.printBoard();
+        room = players.get(currentPlayer).getPosition().getIsPartOf();
+        if (room != null) { // only allow them to make suggestions in a room
+           processAccusation(input, players.get(currentPlayer));
+        }
 
-                room = players.get(currentPlayer).getPosition().getIsPartOf();
-                if (room != null) { // only allow them to make suggestions in a room
-                    validInput = false;
-                    while (!validInput) {
-                        System.out.println("Would you like to make a suggestion? (Y/N)");
-                        String suggest = input.readLine();
-                        if (suggest.equalsIgnoreCase("yes") || suggest.equalsIgnoreCase("y")) {
-                            seeHand(input, players.get(currentPlayer));
-                            processSuggestion(players.get(currentPlayer), input);
-                            validInput = true;
-                        } else if (suggest.equalsIgnoreCase("no") || suggest.equalsIgnoreCase("n")) {
-                            validInput = true;
-                        }
-                    }
-                }
-
-                processAccusation(input, players.get(currentPlayer));
-
+        processAccusation(input, players.get(currentPlayer));
 
         System.out.println();// blank line, maybe want to clear the screen later?
         currentPlayer = getNextCharacter(currentPlayer);
@@ -545,25 +532,34 @@ public class Game {
    * @param input input stream
    */
   private void processSuggestion(Player player, BufferedReader input){
-    Room room = player.getPosition().getIsPartOf();
-    if (room==null) {
-      System.out.println("You are not in a room, you cannot make a suggestion.");
-      return;
-    }
-    WeaponCard weapon = checkWeapon(input);
-    CharacterCard character = checkCharacter(input);
-    System.out.println(CLEAR_SCREEN);
-    board.teleportCharacter(character,room);
-    board.teleportWeapon(weapon,room);
+      try {
+          Room room = player.getPosition().getIsPartOf();
+          boolean validInput = false;
+          while (!validInput) {
+              System.out.println("Would you like to make a suggestion? (Y/N)");
+              String suggest = input.readLine();
+              if (suggest.equalsIgnoreCase("yes") || suggest.equalsIgnoreCase("y")) {
+                  seeHand(input, player);
+                  WeaponCard weapon = checkWeapon(input);
+                  CharacterCard character = checkCharacter(input);
+                  System.out.println(CLEAR_SCREEN);
+                  board.teleportCharacter(character, room);
+                  board.teleportWeapon(weapon, room);
 
-    Card dispute = checkSuggestion(player,weapon,character,room.getRoomCard(),input);
-    if (dispute!=null){
-        System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
-    }
-    else{
-        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
-    }
-
+                  Card dispute = checkSuggestion(player, weapon, character, room.getRoomCard(), input);
+                  if (dispute != null) {
+                      System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
+                  } else {
+                      System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
+                  }
+                  validInput = true;
+              } else if (suggest.equalsIgnoreCase("no") || suggest.equalsIgnoreCase("n")) {
+                  return;
+              }
+          }
+      }catch(IOException e){
+          System.out.println("Error Processing Suggestion"+ e);
+      }
   }
 
 
