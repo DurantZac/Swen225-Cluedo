@@ -675,6 +675,7 @@ public class Game {
                  System.out.println("Please enter a whole number only");
                }
              }
+             System.out.println(CLEAR_SCREEN);
              return suggestions.get(dispute);
            }
          }
@@ -717,6 +718,9 @@ public class Game {
                         System.out.println("The accusation is incorrect, " + player.getCharacter().toString());
                         System.out.println("You can no longer win the game");
                         player.setIsStillPlaying(false);
+                        System.out.println("Press any letter to continue");
+                        input.readLine();
+                        System.out.println(CLEAR_SCREEN);
                     }
                     validInput = true;
                 } else if (accuse.equalsIgnoreCase("no") || accuse.equalsIgnoreCase("n")) {
