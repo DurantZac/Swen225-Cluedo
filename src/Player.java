@@ -36,14 +36,10 @@ public class Player
    * Changes the IsStillPlaying field,
    * this is used when accusations are wrong to remove a player from the game loop
    * @param aIsStillPlaying
-   * @return if setting was successful
    */
-  public boolean setIsStillPlaying(boolean aIsStillPlaying)
+  public void setIsStillPlaying(boolean aIsStillPlaying)
   {
-    boolean wasSet;
     isStillPlaying = aIsStillPlaying;
-    wasSet = true;
-    return wasSet;
   }
 
   /**

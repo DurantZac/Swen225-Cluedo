@@ -15,7 +15,6 @@ public class Board
 
   //Board Associations
   private Tile[][] boardTiles = new Tile[25][24];
-  private List<Tile> listBoardTiles;
   private Game game;
 
 
@@ -31,13 +30,10 @@ public class Board
    */
   public Board(Game aGame, List<Tile>allBoardTiles)
   {
-    listBoardTiles = allBoardTiles;
     int i = 0;
     for(int row = 0; row < 25; row++){
       for(int col = 0; col < 24; col++){
         boardTiles[row][col] = allBoardTiles.get(i); // converts list of tiles to 2D array
-        allBoardTiles.get(i).setCol(col);
-        allBoardTiles.get(i).setRow(row);
         i++;
       }
     }
@@ -45,6 +41,7 @@ public class Board
     game = aGame;
 
 
+    // Add adjacent tiles
     for(char row = 'a'; row < 'z'; row++){
       for(char col = 'A'; col < 'Y'; col++){
         Tile t  = getBoardTile(col + String.valueOf(row));
@@ -139,7 +136,7 @@ public class Board
    * @return success or fail
    */
   public boolean movePlayer(Player p, Tile goal, int moves) {
-    if(goal.getIsAccessable() == false) return false;
+    if(goal.getIsAccessible() == false) return false;
 
     // Find if path available
     Tile startTile = p.getPosition();
@@ -187,7 +184,7 @@ public class Board
     if(moveCount >= moveGoal) return false;
     visited.add(node);
     for(Tile neigh : node.getAdjacent()){
-      if(!visited.contains(neigh) && neigh.getIsAccessable())
+      if(!visited.contains(neigh) && neigh.getIsAccessible())
         if(pathFinding(neigh,goal,moveGoal,moveCount+1,new ArrayList(visited))) return true;
     }
     return false;

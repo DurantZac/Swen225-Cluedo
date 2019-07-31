@@ -10,7 +10,6 @@ public class Room
   //Room Associations
   private RoomCard roomCard;
   private String name;
-  private WeaponCard Contains;
   private List<Tile> entrances;
   private List<Tile> openSquares = new ArrayList<>();
 
@@ -50,27 +49,14 @@ public class Room
   }
 
   /**
-   * @return the number of entrances a room has
-   */
-  public int numberOfEntrances()
-  {
-    int number = entrances.size();
-    return number;
-  }
-
-  /**
    * Adds a given tile as an entrance
    * @param aEntrance the Tile to mark as an entrance
-   * @return if adding was successful
    */
-  public boolean addEntrance(Tile aEntrance)
+  public void addEntrance(Tile aEntrance)
   {
-    boolean wasAdded;
-    if (entrances.contains(aEntrance)) { return false; }
+    if (entrances.contains(aEntrance)) { return; }
     entrances.add(aEntrance);
-    wasAdded = true;
     aEntrance.setIsPartOf(this);
-    return wasAdded;
   }
 
   /**
@@ -80,6 +66,7 @@ public class Room
   public void addEmptySpace(Tile t){
     openSquares.add(t);
   }
+
   /**
    * Removes an empty space from a room
    * @param t the empty tile to remove

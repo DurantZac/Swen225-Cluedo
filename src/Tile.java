@@ -15,178 +15,124 @@ public class Tile
   //------------------------
 
   //Tile Attributes
-  private boolean isAccessable;
+  private boolean isAccessible;
+  private char symbol;
 
   //Tile Associations
-  private CharacterCard isOccupiedBy;
   private Room isPartOf;
-  private WeaponCard occupiedBy;
-  private char symbol;
   private List<Tile> adjacent = new ArrayList<>();
-  private int row;
-  private int col;
 
   //Colours
+
   public static final String ANSI_RESET = "\u001B[0m";
-  public static final String ANSI_BLACK = "\u001B[30m";
   public static final String ANSI_RED = "\u001B[31m";
   public static final String ANSI_GREEN = "\u001B[32m";
   public static final String ANSI_YELLOW = "\u001B[33m";
   public static final String ANSI_BLUE = "\u001B[34m";
   public static final String ANSI_PURPLE = "\u001B[35m";
   public static final String ANSI_CYAN = "\u001B[36m";
-  public static final String ANSI_WHITE = "\u001B[37m";
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
 
+  /**
+   * Constructor to create tile from string representation on board
+   * @param symbol
+   */
   public Tile(char symbol)
   {
     this.symbol=symbol;
 
     switch (this.symbol){
       case '_':
-        isAccessable = true;
+        isAccessible = true;
         break;
       case '>':
-        isAccessable=true;
+        isAccessible =true;
         break;
       case '<':
-        isAccessable=true;
+        isAccessible =true;
         break;
       case '^':
-        isAccessable=true;
+        isAccessible =true;
         break;
       case 'v':
-        isAccessable=true;
+        isAccessible =true;
         break;
       default: // must be a wall or a person
-        isAccessable=false;
+        isAccessible =false;
     }
 
   }
 
-  //------------------------
-  // INTERFACE
-  //------------------------
 
-  public boolean setIsAccessable(boolean aIsAccessable)
+  /**
+   * Set value of isAccessible to allow or disallow movement on tile
+   * @param aIsAccessable
+   */
+  public void setIsAccessible(boolean aIsAccessable)
   {
-    boolean wasSet = false;
-    isAccessable = aIsAccessable;
-    wasSet = true;
-    return wasSet;
+    isAccessible = aIsAccessable;
   }
 
-  public boolean getIsAccessable()
+  /**
+   * Get value of isAccessible
+   * @return value
+   */
+  public boolean getIsAccessible()
   {
-    return isAccessable;
-  }
-  /* Code from template association_GetOne */
-  public CharacterCard getIsOccupiedBy()
-  {
-    return isOccupiedBy;
+    return isAccessible;
   }
 
-  public boolean hasIsOccupiedBy()
-  {
-    boolean has = isOccupiedBy != null;
-    return has;
-  }
-  /* Code from template association_GetOne */
+  /**
+   * Return room to which this tile belongs
+   * @return Room
+   */
   public Room getIsPartOf()
   {
     return isPartOf;
   }
 
-  public boolean hasIsPartOf()
+  /**
+   * Set this tile as part of a room
+   * @param aNewIsPartOf
+   */
+  public void setIsPartOf(Room aNewIsPartOf)
   {
-    boolean has = isPartOf != null;
-    return has;
-  }
-  /* Code from template association_GetOne */
-  public WeaponCard getOccupiedBy()
-  {
-    return occupiedBy;
-  }
-
-  public boolean hasOccupiedBy()
-  {
-    boolean has = occupiedBy != null;
-    return has;
-  }
-  /* Code from template association_SetUnidirectionalOptionalOne */
-  public boolean setIsOccupiedBy(CharacterCard aNewIsOccupiedBy)
-  {
-    boolean wasSet = false;
-    isOccupiedBy = aNewIsOccupiedBy;
-    wasSet = true;
-    return wasSet;
-  }
-  /* Code from template association_SetUnidirectionalOptionalOne */
-  public boolean setIsPartOf(Room aNewIsPartOf)
-  {
-    boolean wasSet = false;
     isPartOf = aNewIsPartOf;
-    wasSet = true;
-    return wasSet;
-  }
-  /* Code from template association_SetUnidirectionalOptionalOne */
-  public boolean setOccupiedBy(WeaponCard aNewOccupiedBy)
-  {
-    boolean wasSet = false;
-    occupiedBy = aNewOccupiedBy;
-    wasSet = true;
-    return wasSet;
   }
 
-  public void delete()
-  {
-    isOccupiedBy = null;
-    isPartOf = null;
-    occupiedBy = null;
-  }
-
+  /**
+   * Return list of adjacent tiles
+   * @return
+   */
   public List<Tile> getAdjacent(){
     return adjacent;
   }
 
+  /**
+   * Add adjacent tile
+   * @param t Tile to add
+   */
   public void addAdjacent(Tile t){
     adjacent.add(t);
   }
 
-  public int getRow(){
-    return row;
-  }
-
-  public int getCol(){
-    return col;
-  }
-
-  public void setRow(int r){
-    row = r;
-  }
-
-  public void setCol(int c){
-    col = c;
-  }
-
+  /**
+   * Add Character to this tile.
+   * Changes tile's visual representation and marks as inaccessible
+   * @param c
+   */
   public void addCharacter(CharacterCard c){
     symbol = c.getCharacterSymbol();
+    setIsAccessible(false);
   }
 
+  /**
+   * Remove character from this tile
+   * Changes tile's visual representation and marks as accessible
+   */
   public void removeCharacter(){
     symbol = '_';
-  }
-
-  public String toStringFull()
-  {
-    return super.toString() + "["+
-            "isAccessable" + ":" + getIsAccessable()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "isOccupiedBy = "+(getIsOccupiedBy()!=null?Integer.toHexString(System.identityHashCode(getIsOccupiedBy())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "isPartOf = "+(getIsPartOf()!=null?Integer.toHexString(System.identityHashCode(getIsPartOf())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "occupiedBy = "+(getOccupiedBy()!=null?Integer.toHexString(System.identityHashCode(getOccupiedBy())):"null");
+    setIsAccessible(true);
   }
 
   /**
