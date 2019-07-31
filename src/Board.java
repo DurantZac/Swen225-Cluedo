@@ -13,6 +13,14 @@ public class Board
   // MEMBER VARIABLES
   //------------------------
 
+  public static final String TITLE = "\n" +
+          "   ____ _                _       \n" +
+          "  / ___| |_   _  ___  __| | ___  \n" +
+          " | |   | | | | |/ _ \\/ _` |/ _ \\ \n" +
+          " | |___| | |_| |  __/ (_| | (_) |\n" +
+          "  \\____|_|\\__,_|\\___|\\__,_|\\___/ \n" +
+          "                                 \n";
+
   //Board Associations
   private Tile[][] boardTiles = new Tile[25][24];
   private Game game;
@@ -30,6 +38,7 @@ public class Board
    */
   public Board(Game aGame, List<Tile>allBoardTiles)
   {
+    System.out.println(TITLE);
     int i = 0;
     for(int row = 0; row < 25; row++){
       for(int col = 0; col < 24; col++){
@@ -108,23 +117,7 @@ public class Board
    * Prints the board based on the 2D array of tiles.
    */
   public void printBoard(){
-    String s = "";
-    char c = 'a';
-    for(int row = 0; row < 25; row++){
-      for(int col = 0; col < 24; col++){
-        String str = "";
-        if(col == 0) System.out.print(c++ + " ");
-        str += boardTiles[row][col];
-        System.out.print(str);
-      }
-      System.out.println("|");
-    }
-    System.out.println("   A B C D E F G H I J K L M N O P Q R S T U V W X");
-    System.out.println("Weapon locations: ");
-    for(WeaponCard w : game.getWeapons()){
-      System.out.println("The " + w.getWeapon() + " is in the " + w.getLocation());
-    }
-    System.out.println("");
+    System.out.println(toString());
   }
 
   /**
@@ -210,6 +203,27 @@ public class Board
    */
   public void teleportWeapon(WeaponCard w, Room goal){
     w.setLocation(goal);
+  }
+
+  public String toString(){
+    String s = TITLE;
+    char c = 'a';
+    for(int row = 0; row < 25; row++){
+      for(int col = 0; col < 24; col++){
+        String str = "";
+        if(col == 0) s+=(c++ + " ");
+        str += boardTiles[row][col];
+        s+=(str);
+      }
+      s+=("|\n");
+    }
+    s+= ("   A B C D E F G H I J K L M N O P Q R S T U V W X\n");
+    s+=("Weapon locations: \n");
+    for(WeaponCard w : game.getWeapons()){
+      s+=("The " + w.getWeapon() + " is in the " + w.getLocation()+"\n");
+    }
+    s+= "\n";
+    return s;
   }
 
 

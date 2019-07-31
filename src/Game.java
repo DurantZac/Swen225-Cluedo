@@ -22,6 +22,7 @@ public class Game {
     public static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
             "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 
+
     //------------------------
     // CONSTRUCTOR
     //------------------------
@@ -32,7 +33,7 @@ public class Game {
     public Game() {
         board = createBoard();
 
-        BufferedReader input;
+        BufferedReader input ;
         while (true) { //Find out how many players there are
             try {
                 input = new BufferedReader(new InputStreamReader(System.in));
@@ -897,6 +898,14 @@ public class Game {
         RoomCard room = checkRoom(input);
 
         return (character.equals(murderScenario.get(0)) && room.equals(murderScenario.get(1)) && weapon.equals(murderScenario.get(2)));
+    }
+
+    /**
+     * Return board object for testing
+     * @return
+     */
+    public Board getBoard(){
+        return board;
     }
 
     /**
