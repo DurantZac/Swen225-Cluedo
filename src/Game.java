@@ -428,7 +428,7 @@ public class Game {
             }
         }
 
-        while (players.stream().filter(p -> p.getIsStillPlaying() == true).count() > 0) { // Still players left to play
+        while (players.stream().filter(p -> p.getIsStillPlaying() == true).count() > 1) { // Still players left to play
             //Clear the screen and print the current board.
             System.out.println(CLEAR_SCREEN);
             board.printBoard();
@@ -459,8 +459,8 @@ public class Game {
             currentPlayer = getNextCharacter(currentPlayer);
         }
 
-        //In this case no one won (else it would have returned above) so it must be game over.
-        System.out.println("GAME OVER ALL PLAYERS ELIMINATED");
+        //In this case there is only one player remaining (else it would have returned above) so it must be game over, last player wins.
+        System.out.printf("%s, you are the last player standing, you win! \n", players.get(currentPlayer).getCharacter());
         System.out.println("The murder occurred as follows:");
         System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
     }
