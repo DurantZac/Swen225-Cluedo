@@ -17,9 +17,8 @@ public class Game {
     private List<CharacterCard> characters = new ArrayList<>();
     private List<Room> rooms = new ArrayList<>();
     private List<WeaponCard> weapons = new ArrayList<>();
-    private int playerNum;
 
-    public static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+    private static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
             "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 
 
@@ -30,10 +29,11 @@ public class Game {
     /**
      * Create new game by initialising board, assigning each player a character, and starting the game.
      */
-    public Game() {
+    Game() {
         board = createBoard();
 
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        int playerNum;
         while (true) { //Find out how many players there are
             try {
                 System.out.println("How many players are playing? (3-6) ");
@@ -467,7 +467,7 @@ public class Game {
      * Moves the current player to a new valid location
      *@param input buffered reader getting input from the players
      *@param player the current player to be moved
-     * @return if they moved - hence if they can suggest while in a room 
+     * @return if they moved - hence if they can suggest while in a room
      */
     private boolean processMove(BufferedReader input, Player player) {
         try {
