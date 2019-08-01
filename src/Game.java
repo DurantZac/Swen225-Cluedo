@@ -11,12 +11,12 @@ public class Game {
     //------------------------
 
     //Game Associations
-    private Board board;
-    private List<Card> murderScenario = new ArrayList<>();
-    private List<Player> players = new ArrayList<>();
-    private List<CharacterCard> characters = new ArrayList<>();
-    private List<Room> rooms = new ArrayList<>();
-    private List<WeaponCard> weapons = new ArrayList<>();
+    protected Board board;
+    protected List<Card> murderScenario = new ArrayList<>();
+    protected List<Player> players = new ArrayList<>();
+    protected List<CharacterCard> characters = new ArrayList<>();
+    protected List<Room> rooms = new ArrayList<>();
+    protected List<WeaponCard> weapons = new ArrayList<>();
 
     private static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
             "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
@@ -415,7 +415,7 @@ public class Game {
      *
      * @param input buffered reader getting input from the players
      */
-    private void playGame(BufferedReader input) {
+    protected void playGame(BufferedReader input) {
         int currentPlayer = 0; // Default player to start
 
         // Rule "Miss Scarlet always goes first", so check if Miss Red is playing
@@ -519,7 +519,7 @@ public class Game {
      * @param current the character currently playing
      * @return the next player
      */
-    private int getNextCharacter(int current) {
+    protected int getNextCharacter(int current) {
         // No more players
         if (players.stream().filter(p -> p.getIsStillPlaying() == true).count() == 0) return 0;
 
@@ -547,7 +547,7 @@ public class Game {
      * @param input buffered reader getting input from the players
      * @param p the current player
      */
-    private void seeHand(BufferedReader input, Player p) {
+    protected void seeHand(BufferedReader input, Player p) {
         try {
             boolean validInput = false;
             while (!validInput) { // Makes sure input is clear yes or no answer
@@ -599,7 +599,7 @@ public class Game {
      *@param input  input stream
      * @param player the current input
      */
-    private void processSuggestion(BufferedReader input, Player player) {
+    protected void processSuggestion(BufferedReader input, Player player) {
         try {
             Room room = player.getPosition().getIsPartOf();
             if (room == null) { // only allow them to make suggestions in a room
@@ -667,7 +667,7 @@ public class Game {
      * @param input the buffered reader to process input from the user
      * @return the card that is used to refute the suggestion (null if no refuting occurred)
      */
-    private Card checkSuggestion(Player player, WeaponCard weapon, CharacterCard character, RoomCard room, BufferedReader input) {
+    protected Card checkSuggestion(Player player, WeaponCard weapon, CharacterCard character, RoomCard room, BufferedReader input) {
         try {
             for (Player p : players) {
                 if (p != player) { // skip the player who made the suggestion
@@ -846,7 +846,7 @@ public class Game {
      * @param player the current player
      * @return if the accusation was true or false
      */
-    private boolean processAccusation(BufferedReader input, Player player) {
+    protected boolean processAccusation(BufferedReader input, Player player) {
         try {
             System.out.println("Would you like to make an accusation? (Y/N)");
 
