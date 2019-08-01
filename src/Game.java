@@ -33,10 +33,9 @@ public class Game {
     public Game() {
         board = createBoard();
 
-        BufferedReader input ;
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         while (true) { //Find out how many players there are
             try {
-                input = new BufferedReader(new InputStreamReader(System.in));
                 System.out.println("How many players are playing? (3-6) ");
                 int numberOfPlayers = Integer.parseInt(input.readLine());
                 if (numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()) {
@@ -79,7 +78,6 @@ public class Game {
             validityCheck:
             while (true) { //Keep asking who they want to be until there is a valid input
                 try {
-                    input = new BufferedReader(new InputStreamReader(System.in));
                     int characterToPlay = Integer.parseInt(input.readLine());
                     Player p = new Player(unusedCharacters.get(characterToPlay - 1));
                     players.add(p);
@@ -123,7 +121,7 @@ public class Game {
                 "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|#|_|_|_|_|#|" + "\n" +
                 "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|v|_|_|_|_|#|" + "\n" +
                 "|#|_|_|_|_|#|_|_|<|_|_|_|_|_|_|>|_|_|_|#|#|#|#|X|" + "\n" +
-                "|X|#|#|#|v|#|_|_|#|_|_|_|_|_|_|#|_|_|_|_|_|_|_|T|" + "\n" +
+                "|X|#|#|#|v|#|_|_|#|_|_|_|_|_|_|#|_|_|_|_|_|_|_|_|" + "\n" +
                 "|_|_|_|_|_|_|_|_|#|v|#|#|#|#|v|#|_|_|_|_|_|_|_|X|" + "\n" +
                 "|X|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|#|#|#|#|" + "\n" +
                 "|#|#|#|#|#|_|_|_|_|_|_|_|_|_|_|_|_|_|<|_|_|_|_|E|" + "\n" +
@@ -134,12 +132,12 @@ public class Game {
                 "|#|_|_|_|_|_|_|#|_|_|X|X|X|X|X|_|_|_|#|#|^|#|#|X|" + "\n" +
                 "|#|#|#|#|#|#|v|#|_|_|X|X|X|X|X|_|_|#|#|_|_|_|_|B|" + "\n" +
                 "|X|_|_|_|_|_|_|_|_|_|X|X|X|X|X|_|_|<|_|_|_|_|_|#|" + "\n" +
-                "|M|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|_|_|_|_|#|" + "\n" +
+                "|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|_|_|_|_|#|" + "\n" +
                 "|X|_|_|_|_|_|_|_|_|#|#|^|^|#|#|_|_|_|#|#|#|#|#|X|" + "\n" +
                 "|#|#|#|#|#|#|^|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|P|" + "\n" +
                 "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|X|" + "\n" +
                 "|L|_|_|_|_|_|#|_|_|#|_|_|_|_|>|_|_|^|S|#|#|#|#|#|" + "\n" +
-                "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|" + "\n" +
+                "|#|_|_|_|_|_|#|M|T|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|" + "\n" +
                 "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|" + "\n" +
                 "|#|#|#|#|#|#|#|R|X|#|#|H|#|#|#|X|_|#|#|#|#|#|#|#|" + "\n";
 
@@ -408,6 +406,7 @@ public class Game {
         roll2 += 1;
 
         return roll1 + roll2;
+        //return 3;
     }
 
     /**
@@ -444,7 +443,7 @@ public class Game {
             //Check to see if they wish to see their hand
             seeHand(input, players.get(currentPlayer));
 
-            //Move the player
+            //Move the player or exit loop
             processMove(input, players.get(currentPlayer));
 
             //Check to see if they want to make a suggestion
@@ -479,7 +478,6 @@ public class Game {
             //finds out where to move to
             System.out.println("Where would you like to move to?");
             String move = input.readLine();
-
             Tile goal = board.getBoardTile(move);
             while (goal == null) { // ensures the tile is valid (as in 2 letters, one upper one lower)
                 System.out.println("Invalid tile, please choose again");
@@ -504,7 +502,7 @@ public class Game {
         } catch (IOException e) {
             System.out.println("Error moving player" + e);
         }
-
+        return;
     }
 
 
@@ -625,10 +623,10 @@ public class Game {
                     System.out.println(CLEAR_SCREEN);
                     board.teleportCharacter(character, room);
                     board.teleportWeapon(weapon, room);
-                    board.printBoard();
 
                     //Check if the suggestion is disputed by any character
                     Card dispute = checkSuggestion(player, weapon, character, room.getRoomCard(), input);
+                    board.printBoard();
                     if (dispute != null) { //A dispute has occured
                         System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
                     } else { // No dispute

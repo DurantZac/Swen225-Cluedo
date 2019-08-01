@@ -44,6 +44,8 @@ public class Board
       for(int col = 0; col < 24; col++){
         boardTiles[row][col] = allBoardTiles.get(i); // converts list of tiles to 2D array
         i++;
+        boardTiles[row][col].setRow(row);
+        boardTiles[row][col].setCol(col);
       }
     }
 
@@ -129,15 +131,16 @@ public class Board
    * @return success or fail
    */
   public boolean movePlayer(Player p, Tile goal, int moves) {
+    Tile startTile = p.getPosition();
     if(goal.getIsAccessible() == false) return false;
 
     // Find if path available
-    Tile startTile = p.getPosition();
     boolean valid = false;
-    if(p.getPosition().getIsPartOf() == null){
+    if(startTile.getIsPartOf() == null){
       valid = pathFinding(startTile,goal,moves,0,new ArrayList<Tile>());
     }
     else{ // If in room, try all exits
+      if(startTile.getIsPartOf() == goal.getIsPartOf()) return false;
       for(Tile t : p.getPosition().getIsPartOf().getEntrances()){
         valid = valid || pathFinding(t,goal,moves,0,new ArrayList<Tile>());
       }
@@ -177,8 +180,9 @@ public class Board
     if(moveCount >= moveGoal) return false;
     visited.add(node);
     for(Tile neigh : node.getAdjacent()){
-      if(!visited.contains(neigh) && neigh.getIsAccessible())
-        if(pathFinding(neigh,goal,moveGoal,moveCount+1,new ArrayList(visited))) return true;
+      if(!visited.contains(neigh) && neigh.getIsAccessibleFull(node)) {
+        if (pathFinding(neigh, goal, moveGoal, moveCount + 1, new ArrayList(visited))) return true;
+      }
     }
     return false;
   }
@@ -225,7 +229,6 @@ public class Board
     s+= "\n";
     return s;
   }
-
 
   private class moveInvalidException extends Throwable {
     public moveInvalidException(String s) {
