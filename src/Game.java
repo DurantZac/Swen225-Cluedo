@@ -11,13 +11,13 @@ public class Game {
     //------------------------
 
     //Game Associations
-    private Board board;
-    private List<Card> murderScenario = new ArrayList<>();
-    private List<Player> players = new ArrayList<>();
-    private List<CharacterCard> characters = new ArrayList<>();
-    private List<Room> rooms = new ArrayList<>();
-    private List<WeaponCard> weapons = new ArrayList<>();
-    private int playerNum;
+    protected Board board;
+    protected List<Card> murderScenario = new ArrayList<>();
+    protected List<Player> players = new ArrayList<>();
+    protected List<CharacterCard> characters = new ArrayList<>();
+    protected List<Room> rooms = new ArrayList<>();
+    protected List<WeaponCard> weapons = new ArrayList<>();
+    protected int playerNum;
 
     public static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
             "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
@@ -121,7 +121,7 @@ public class Game {
                 "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|#|_|_|_|_|#|" + "\n" +
                 "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|v|_|_|_|_|#|" + "\n" +
                 "|#|_|_|_|_|#|_|_|<|_|_|_|_|_|_|>|_|_|_|#|#|#|#|X|" + "\n" +
-                "|X|#|#|#|v|#|_|_|#|_|_|_|_|_|_|#|_|_|_|_|_|_|_|_|" + "\n" +
+                "|X|#|#|#|v|#|_|_|#|_|_|_|_|_|_|#|_|_|_|_|_|_|_|T|" + "\n" +
                 "|_|_|_|_|_|_|_|_|#|v|#|#|#|#|v|#|_|_|_|_|_|_|_|X|" + "\n" +
                 "|X|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|#|#|#|#|" + "\n" +
                 "|#|#|#|#|#|_|_|_|_|_|_|_|_|_|_|_|_|_|<|_|_|_|_|E|" + "\n" +
@@ -132,12 +132,12 @@ public class Game {
                 "|#|_|_|_|_|_|_|#|_|_|X|X|X|X|X|_|_|_|#|#|^|#|#|X|" + "\n" +
                 "|#|#|#|#|#|#|v|#|_|_|X|X|X|X|X|_|_|#|#|_|_|_|_|B|" + "\n" +
                 "|X|_|_|_|_|_|_|_|_|_|X|X|X|X|X|_|_|<|_|_|_|_|_|#|" + "\n" +
-                "|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|_|_|_|_|#|" + "\n" +
+                "|M|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|_|_|_|_|#|" + "\n" +
                 "|X|_|_|_|_|_|_|_|_|#|#|^|^|#|#|_|_|_|#|#|#|#|#|X|" + "\n" +
                 "|#|#|#|#|#|#|^|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|P|" + "\n" +
                 "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|X|" + "\n" +
                 "|L|_|_|_|_|_|#|_|_|#|_|_|_|_|>|_|_|^|S|#|#|#|#|#|" + "\n" +
-                "|#|_|_|_|_|_|#|M|T|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|" + "\n" +
+                "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|" + "\n" +
                 "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|" + "\n" +
                 "|#|#|#|#|#|#|#|R|X|#|#|H|#|#|#|X|_|#|#|#|#|#|#|#|" + "\n";
 
@@ -406,7 +406,6 @@ public class Game {
         roll2 += 1;
 
         return roll1 + roll2;
-        //return 3;
     }
 
     /**
@@ -416,7 +415,7 @@ public class Game {
      *
      * @param input buffered reader getting input from the players
      */
-    private void playGame(BufferedReader input) {
+    protected void playGame(BufferedReader input) {
         int currentPlayer = 0; // Default player to start
 
         // Rule "Miss Scarlet always goes first", so check if Miss Red is playing
@@ -469,7 +468,7 @@ public class Game {
      *@param input buffered reader getting input from the players
      *@param player the current player to be moved
      */
-    private void processMove(BufferedReader input, Player player) {
+    protected void processMove(BufferedReader input, Player player) {
         try {
             //Find out how many moves the player has
             int numMoves = rollDice();
@@ -516,7 +515,7 @@ public class Game {
      * @param current the character currently playing
      * @return the next player
      */
-    private int getNextCharacter(int current) {
+    protected int getNextCharacter(int current) {
         // No more players
         if (players.stream().filter(p -> p.getIsStillPlaying() == true).count() == 0) return 0;
 
@@ -544,7 +543,7 @@ public class Game {
      * @param input buffered reader getting input from the players
      * @param p the current player
      */
-    private void seeHand(BufferedReader input, Player p) {
+    protected void seeHand(BufferedReader input, Player p) {
         try {
             boolean validInput = false;
             while (!validInput) { // Makes sure input is clear yes or no answer
@@ -596,7 +595,7 @@ public class Game {
      *@param input  input stream
      * @param player the current input
      */
-    private void processSuggestion(BufferedReader input, Player player) {
+    protected void processSuggestion(BufferedReader input, Player player) {
         try {
             Room room = player.getPosition().getIsPartOf();
             if (room == null) { // only allow them to make suggestions in a room
@@ -664,7 +663,7 @@ public class Game {
      * @param input the buffered reader to process input from the user
      * @return the card that is used to refute the suggestion (null if no refuting occurred)
      */
-    private Card checkSuggestion(Player player, WeaponCard weapon, CharacterCard character, RoomCard room, BufferedReader input) {
+    protected Card checkSuggestion(Player player, WeaponCard weapon, CharacterCard character, RoomCard room, BufferedReader input) {
         try {
             for (Player p : players) {
                 if (p != player) { // skip the player who made the suggestion
@@ -843,7 +842,7 @@ public class Game {
      * @param player the current player
      * @return if the accusation was true or false
      */
-    private boolean processAccusation(BufferedReader input, Player player) {
+    protected boolean processAccusation(BufferedReader input, Player player) {
         try {
             System.out.println("Would you like to make an accusation? (Y/N)");
 

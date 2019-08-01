@@ -1,9 +1,64 @@
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 
 import static org.junit.Assert.*;
 
-public class Test {
+public class Test extends Game{
+
+    private int rollDice(){
+        return 1;
+    }
+    
+
+    @Override
+    public void playGame(BufferedReader input){
+        int currentPlayer = 0; // Default player to start
+
+        // Rule "Miss Scarlet always goes first", so check if Miss Red is playing
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getCharacter().getCharacter().equalsIgnoreCase("Miss Red")) {
+                currentPlayer = i;
+                break;
+            }
+        }
+
+//        while (players.stream().filter(p -> p.getIsStillPlaying() == true).count() > 1) { // Still players left to play
+//            //Clear the screen and print the current board.
+//            System.out.println(CLEAR_SCREEN);
+//            board.printBoard();
+//
+//            System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
+//
+//            //If they are in a room, tell them
+//            Room room = players.get(currentPlayer).getPosition().getIsPartOf();
+//            if (room != null) {
+//                System.out.println("You are currently in the " + room);
+//            }
+//
+//            //Check to see if they wish to see their hand
+//            seeHand(input, players.get(currentPlayer));
+//
+//            //Move the player or exit loop
+//            processMove(input, players.get(currentPlayer));
+//
+//            //Check to see if they want to make a suggestion
+//            processSuggestion(input, players.get(currentPlayer));
+//
+//            //Check to see if they want to make an accusation
+//            //If it returns true it means they correctly guessed, hence they won.
+//            if (processAccusation(input, players.get(currentPlayer))) return;
+//
+//            //Pick the next character to play
+//            System.out.println();
+//            currentPlayer = getNextCharacter(currentPlayer);
+//        }
+
+        //In this case there is only one player remaining (else it would have returned above) so it must be game over, last player wins.
+        System.out.printf("%s, you are the last player standing, you win! \n", players.get(currentPlayer).getCharacter());
+        System.out.println("The murder occurred as follows:");
+        System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
+    }
 
     @org.junit.Test
     public void test_1() {
