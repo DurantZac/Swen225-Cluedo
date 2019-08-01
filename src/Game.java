@@ -477,8 +477,10 @@ public class Game {
             System.out.println("You have " + numMoves + " moves.");
 
             //finds out where to move to
-            System.out.println("Where would you like to move to?");
+            System.out.println("Where would you like to move to? If you cannot move or do not wish to, type SKIP");
             String move = input.readLine();
+            if (move.equalsIgnoreCase("skip"))
+                return;
 
             Tile goal = board.getBoardTile(move);
             while (goal == null) { // ensures the tile is valid (as in 2 letters, one upper one lower)
