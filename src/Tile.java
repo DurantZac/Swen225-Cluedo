@@ -17,6 +17,8 @@ public class Tile
   //Tile Attributes
   private boolean isAccessible;
   private char symbol;
+  private int row;
+  private int col;
 
   //Tile Associations
   private Room isPartOf;
@@ -80,6 +82,26 @@ public class Tile
   public boolean getIsAccessible()
   {
     return isAccessible;
+  }
+
+  /**
+   * Checks if this tile is a doorway and checks direction of entry
+   * @param t Tile direction
+   * @return
+   */
+  public boolean getIsAccessibleFull(Tile t){
+    switch(this.symbol){
+      case '^':
+        return t.row == this.row-1 && getIsAccessible();
+      case '>':
+        return t.col == this.col +1 && getIsAccessible();
+      case '<':
+        return t.col == this.col -1 && getIsAccessible();
+      case 'v':
+        return t.row == this.row +1 && getIsAccessible();
+      default:
+        return getIsAccessible();
+    }
   }
 
   /**
@@ -158,6 +180,38 @@ public class Tile
     s+=symbol;
 
     return s;
+  }
+
+  /**
+   * Get the row of this tile
+   * @return row
+   */
+  public int getRow(){
+    return row;
+  }
+
+  /**
+   * Get the column of this Tile
+   * @return col
+   */
+  public int getCol(){
+    return col;
+  }
+
+  /**
+   * Set row to parameter r
+   * @param r
+   */
+  public void setRow(int r){
+   row = r;
+  }
+
+  /**
+   * Set col to parameter r
+   * @param c
+   */
+  public void setCol(int c){
+    col = c;
   }
 
 }

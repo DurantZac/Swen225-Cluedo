@@ -33,10 +33,9 @@ public class Game {
     public Game() {
         board = createBoard();
 
-        BufferedReader input ;
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         while (true) { //Find out how many players there are
             try {
-                input = new BufferedReader(new InputStreamReader(System.in));
                 System.out.println("How many players are playing? (3-6) ");
                 int numberOfPlayers = Integer.parseInt(input.readLine());
                 if (numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()) {
@@ -79,7 +78,6 @@ public class Game {
             validityCheck:
             while (true) { //Keep asking who they want to be until there is a valid input
                 try {
-                    input = new BufferedReader(new InputStreamReader(System.in));
                     int characterToPlay = Integer.parseInt(input.readLine());
                     Player p = new Player(unusedCharacters.get(characterToPlay - 1));
                     players.add(p);
@@ -445,10 +443,10 @@ public class Game {
             seeHand(input, players.get(currentPlayer));
 
             //Move the player
-            processMove(input, players.get(currentPlayer));
+            boolean ableToSuggest = processMove(input, players.get(currentPlayer));
 
             //Check to see if they want to make a suggestion
-            processSuggestion(input, players.get(currentPlayer));
+            if (ableToSuggest) processSuggestion(input, players.get(currentPlayer));
 
             //Check to see if they want to make an accusation
             //If it returns true it means they correctly guessed, hence they won.
@@ -469,8 +467,9 @@ public class Game {
      * Moves the current player to a new valid location
      *@param input buffered reader getting input from the players
      *@param player the current player to be moved
+     * @return if they moved - hence if they can suggest while in a room 
      */
-    private void processMove(BufferedReader input, Player player) {
+    private boolean processMove(BufferedReader input, Player player) {
         try {
             //Find out how many moves the player has
             int numMoves = rollDice();
@@ -480,7 +479,7 @@ public class Game {
             System.out.println("Where would you like to move to? If you cannot move or do not wish to, type SKIP");
             String move = input.readLine();
             if (move.equalsIgnoreCase("skip"))
-                return;
+                return false;
 
             Tile goal = board.getBoardTile(move);
             while (goal == null) { // ensures the tile is valid (as in 2 letters, one upper one lower)
@@ -506,7 +505,7 @@ public class Game {
         } catch (IOException e) {
             System.out.println("Error moving player" + e);
         }
-
+        return true;
     }
 
 
@@ -627,10 +626,10 @@ public class Game {
                     System.out.println(CLEAR_SCREEN);
                     board.teleportCharacter(character, room);
                     board.teleportWeapon(weapon, room);
-                    board.printBoard();
 
                     //Check if the suggestion is disputed by any character
                     Card dispute = checkSuggestion(player, weapon, character, room.getRoomCard(), input);
+                    board.printBoard();
                     if (dispute != null) { //A dispute has occured
                         System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
                     } else { // No dispute
