@@ -9,7 +9,7 @@ public class Test extends Game{
     private int rollDice(){
         return 1;
     }
-    
+
 
     @Override
     public void playGame(BufferedReader input){

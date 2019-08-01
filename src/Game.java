@@ -442,11 +442,11 @@ public class Game {
             //Check to see if they wish to see their hand
             seeHand(input, players.get(currentPlayer));
 
-            //Move the player or exit loop
-            processMove(input, players.get(currentPlayer));
+            //Move the player
+            boolean ableToSuggest = processMove(input, players.get(currentPlayer));
 
             //Check to see if they want to make a suggestion
-            processSuggestion(input, players.get(currentPlayer));
+            if (ableToSuggest) processSuggestion(input, players.get(currentPlayer));
 
             //Check to see if they want to make an accusation
             //If it returns true it means they correctly guessed, hence they won.
@@ -467,16 +467,20 @@ public class Game {
      * Moves the current player to a new valid location
      *@param input buffered reader getting input from the players
      *@param player the current player to be moved
+     * @return if they moved - hence if they can suggest while in a room
      */
-    protected void processMove(BufferedReader input, Player player) {
+    private boolean processMove(BufferedReader input, Player player) {
         try {
             //Find out how many moves the player has
             int numMoves = rollDice();
             System.out.println("You have " + numMoves + " moves.");
 
             //finds out where to move to
-            System.out.println("Where would you like to move to?");
+            System.out.println("Where would you like to move to? If you cannot move or do not wish to, type SKIP");
             String move = input.readLine();
+            if (move.equalsIgnoreCase("skip"))
+                return false;
+
             Tile goal = board.getBoardTile(move);
             while (goal == null) { // ensures the tile is valid (as in 2 letters, one upper one lower)
                 System.out.println("Invalid tile, please choose again");
@@ -501,7 +505,7 @@ public class Game {
         } catch (IOException e) {
             System.out.println("Error moving player" + e);
         }
-        return;
+        return true;
     }
 
 

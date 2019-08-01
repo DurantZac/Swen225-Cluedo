@@ -209,6 +209,10 @@ public class Board
     w.setLocation(goal);
   }
 
+  /**
+   * ToString printing out the board and weapon locations
+   * @return the final string
+   */
   public String toString(){
     String s = TITLE;
     char c = 'a';
