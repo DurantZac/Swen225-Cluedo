@@ -26,20 +26,20 @@ public class Tile
 
   //Colours
 
-  public static final String ANSI_RESET = "\u001B[0m";
-  public static final String ANSI_RED = "\u001B[31m";
-  public static final String ANSI_GREEN = "\u001B[32m";
-  public static final String ANSI_YELLOW = "\u001B[33m";
-  public static final String ANSI_BLUE = "\u001B[34m";
-  public static final String ANSI_PURPLE = "\u001B[35m";
-  public static final String ANSI_CYAN = "\u001B[36m";
+  private static final String ANSI_RESET = "\u001B[0m";
+  private static final String ANSI_RED = "\u001B[31m";
+  private static final String ANSI_GREEN = "\u001B[32m";
+  private static final String ANSI_YELLOW = "\u001B[33m";
+  private static final String ANSI_BLUE = "\u001B[34m";
+  private static final String ANSI_PURPLE = "\u001B[35m";
+  private static final String ANSI_CYAN = "\u001B[36m";
 
 
   /**
    * Constructor to create tile from string representation on board
-   * @param symbol
+   * @param symbol symbol of tile
    */
-  public Tile(char symbol)
+  Tile(char symbol)
   {
     this.symbol=symbol;
 
@@ -68,18 +68,18 @@ public class Tile
 
   /**
    * Set value of isAccessible to allow or disallow movement on tile
-   * @param aIsAccessable
+   * @param aIsAccessible boolean to set isAccessible to
    */
-  public void setIsAccessible(boolean aIsAccessable)
+  private void setIsAccessible(boolean aIsAccessible)
   {
-    isAccessible = aIsAccessable;
+    isAccessible = aIsAccessible;
   }
 
   /**
    * Get value of isAccessible
    * @return value
    */
-  public boolean getIsAccessible()
+  boolean getIsAccessible()
   {
     return isAccessible;
   }
@@ -87,9 +87,9 @@ public class Tile
   /**
    * Checks if this tile is a doorway and checks direction of entry
    * @param t Tile direction
-   * @return
+   * @return if tile is accessible
    */
-  public boolean getIsAccessibleFull(Tile t){
+  boolean getIsAccessibleFull(Tile t){
     switch(this.symbol){
       case '^':
         return t.row == this.row-1 && getIsAccessible();
@@ -108,25 +108,25 @@ public class Tile
    * Return room to which this tile belongs
    * @return Room
    */
-  public Room getIsPartOf()
+  Room getIsPartOf()
   {
     return isPartOf;
   }
 
   /**
    * Set this tile as part of a room
-   * @param aNewIsPartOf
+   * @param aNewIsPartOf room to set this tile as a part of
    */
-  public void setIsPartOf(Room aNewIsPartOf)
+   void setIsPartOf(Room aNewIsPartOf)
   {
     isPartOf = aNewIsPartOf;
   }
 
   /**
    * Return list of adjacent tiles
-   * @return
+   * @return the adjacent tiles
    */
-  public List<Tile> getAdjacent(){
+   List<Tile> getAdjacent(){
     return adjacent;
   }
 
@@ -134,16 +134,16 @@ public class Tile
    * Add adjacent tile
    * @param t Tile to add
    */
-  public void addAdjacent(Tile t){
+   void addAdjacent(Tile t){
     adjacent.add(t);
   }
 
   /**
    * Add Character to this tile.
    * Changes tile's visual representation and marks as inaccessible
-   * @param c
+   * @param c the character that this tile contains
    */
-  public void addCharacter(CharacterCard c){
+   void addCharacter(CharacterCard c){
     symbol = c.getCharacterSymbol();
     setIsAccessible(false);
   }
@@ -152,7 +152,7 @@ public class Tile
    * Remove character from this tile
    * Changes tile's visual representation and marks as accessible
    */
-  public void removeCharacter(){
+   void removeCharacter(){
     symbol = '_';
     setIsAccessible(true);
   }
@@ -200,17 +200,17 @@ public class Tile
 
   /**
    * Set row to parameter r
-   * @param r
+   * @param r the row to set this as
    */
-  public void setRow(int r){
+   void setRow(int r){
    row = r;
   }
 
   /**
    * Set col to parameter r
-   * @param c
+   * @param c the col to set this as
    */
-  public void setCol(int c){
+   void setCol(int c){
     col = c;
   }
 

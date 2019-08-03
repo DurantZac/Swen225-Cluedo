@@ -27,7 +27,7 @@ public class Game {
     private List<WeaponCard> weapons = new ArrayList<>();
     private int playerNum;
 
-    public static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+    private static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
             "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 
 
@@ -41,6 +41,7 @@ public class Game {
         board = createBoard();
 
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        int playerNum;
         while (true) { //Find out how many players there are
             try {
                 System.out.println("How many players are playing? (3-6) ");
