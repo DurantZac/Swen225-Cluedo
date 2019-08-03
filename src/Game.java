@@ -22,7 +22,17 @@ public class Game {
         return players;
     }
     private List<Player> players = new ArrayList<>();
+
+    public List<CharacterCard> getCharacters() {
+        return characters;
+    }
+
     private List<CharacterCard> characters = new ArrayList<>();
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
     private List<Room> rooms = new ArrayList<>();
     private List<WeaponCard> weapons = new ArrayList<>();
     private int playerNum;
@@ -38,7 +48,7 @@ public class Game {
      * Create new game by initialising board, assigning each player a character, and starting the game.
      */
     public Game() {
-        board = createBoard();
+        createBoard();
 
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         int playerNum;
@@ -121,7 +131,7 @@ public class Game {
      *
      * @return a new board matching the string
      */
-    public Board createBoard() {
+    public void createBoard() {
 
         String gameBoard = "|X|X|X|X|X|X|X|X|X|W|#|#|#|#|G|X|X|X|X|X|X|X|X|X|" + "\n" +
                 "|#|#|#|#|#|#|X|_|_|_|#|_|_|#|_|_|_|X|#|#|#|#|#|#|" + "\n" +
@@ -161,7 +171,7 @@ public class Game {
                 }
             }
         }
-        return new Board(this, tiles);
+        board = new Board(this, tiles);
     }
 
     /**
@@ -197,10 +207,11 @@ public class Game {
         weapons.stream().forEach(j -> this.weapons.add((WeaponCard) j));
 
         // Randomly assign each weapon to a room
-        Collections.shuffle(rooms);
+        List<Room> roomsShuffled = new ArrayList<>(rooms);
+        Collections.shuffle(roomsShuffled);
         for (int i = 0; i < weapons.size(); i++) {
             WeaponCard w = (WeaponCard) (weapons.get(i));
-            w.setLocation(rooms.get(i));
+            w.setLocation(roomsShuffled.get(i));
         }
 
         //Add a random weapon to the murder scenario and remove this from the list
@@ -609,7 +620,7 @@ public class Game {
      *@param input  input stream
      * @param player the current input
      */
-    private void processSuggestion(BufferedReader input, Player player) {
+    public void processSuggestion(BufferedReader input, Player player) {
         try {
             Room room = player.getPosition().getIsPartOf();
             if (room == null) { // only allow them to make suggestions in a room
@@ -627,7 +638,7 @@ public class Game {
                     validInput = true;
 
                     //Ask if they wish to see their hand
-                    seeHand(input, player);
+                    if(!seeHand(input, player)) return;
 
                     //Get the weapon and character they wish to suggest
                     WeaponCard weapon = checkWeapon(input);
@@ -703,7 +714,7 @@ public class Game {
                     System.out.println("Press any letter to continue"); // for privacy reasons
                     input.readLine();
 
-                    if (suggestions.size() == 0) System.out.println(CLEAR_SCREEN); // next player
+                    if (suggestions.size() == 0) System.out.println("You cannot refute the suggestion\n" +CLEAR_SCREEN); // next player
                     if (suggestions.size() == 1) { // must return this card
                         System.out.println("Since you only have one card, you must use the " + suggestions.get(0).toString() + " to disprove the suggestion");
                         System.out.println("Press any letter to continue");
@@ -792,7 +803,7 @@ public class Game {
                 //Get the input and return the corresponding character card
                 int murderer = Integer.parseInt(input.readLine());
                 CharacterCard suggestedmurderer = characters.get(murderer - 1);
-                System.out.println("You have selected the weapon: " + suggestedmurderer + "\n");
+                System.out.println("You have selected the character: " + suggestedmurderer + "\n");
                 return suggestedmurderer;
             } catch (IOException e) {
                 System.out.println("Error on input, please try again" + e);
@@ -856,7 +867,7 @@ public class Game {
      * @param player the current player
      * @return if the accusation was true or false
      */
-    private boolean processAccusation(BufferedReader input, Player player) {
+    public boolean processAccusation(BufferedReader input, Player player) {
         try {
             System.out.println("Would you like to make an accusation? (Y/N)");
 

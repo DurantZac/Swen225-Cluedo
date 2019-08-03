@@ -8,6 +8,7 @@ public class CharacterCard implements Card
   private String character;
   private char characterSymbol;
   private Tile position;
+  private int index;
 
   //------------------------
   // CONSTRUCTOR
@@ -29,21 +30,27 @@ public class CharacterCard implements Card
     switch (character){
       case "Mrs White":
         characterSymbol = 'W';
+        index = 2;
         break;
       case "Rev. Green":
         characterSymbol = 'G';
+        index = 3;
         break;
       case "Col. Mustard":
         characterSymbol = 'M';
+        index = 1;
         break;
       case "Miss Red":
         characterSymbol = 'R';
+        index = 6;
         break;
       case "Prof. Plum":
         characterSymbol = 'P';
+        index = 4;
         break;
       case "Ms Turquoise":
         characterSymbol = 'T';
+        index = 5;
         break;
     }
   }
@@ -90,6 +97,11 @@ public class CharacterCard implements Card
   public Tile getPosition(){
     return position;
   }
+
+  public int getIndex(){
+    return index;
+  }
+
 
 
 }

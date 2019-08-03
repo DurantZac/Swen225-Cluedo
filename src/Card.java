@@ -3,5 +3,5 @@
 public interface Card
 {
     String toString ();
-
+    int getIndex();
 }

@@ -23,9 +23,9 @@ public class Room
    */
   public Room(String n)
   {
+    name  = n;
     roomCard = new RoomCard(this);
     entrances = new ArrayList<Tile>();
-    name  = n;
   }
 
   //------------------------

@@ -8,6 +8,7 @@ public class WeaponCard implements Card
   //WeaponCard Attributes
   private String weapon;
   private Room location;
+  private int index;
 
   //------------------------
   // CONSTRUCTOR
@@ -20,6 +21,26 @@ public class WeaponCard implements Card
   public WeaponCard(String aWeapon)
   {
     weapon = aWeapon;
+    switch(aWeapon){
+      case "Dagger":
+        index = 1;
+        break;
+      case "Rope":
+        index = 2;
+        break;
+      case "CandleStick":
+        index = 3;
+        break;
+      case "Revolver":
+        index = 4;
+        break;
+      case "Spanner":
+        index = 5;
+        break;
+      case "Lead Pipe":
+        index = 6;
+        break;
+    }
   }
 
   //------------------------
@@ -56,5 +77,9 @@ public class WeaponCard implements Card
   public String toString()
   {
     return weapon;
+  }
+
+  public int getIndex(){
+    return index;
   }
 }

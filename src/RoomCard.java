@@ -1,6 +1,7 @@
 public class RoomCard implements Card
 {
   private Room room;
+  private int index;
 
   //------------------------
   // CONSTRUCTOR
@@ -17,6 +18,35 @@ public class RoomCard implements Card
       throw new RuntimeException("Unable to create RoomCard due to aRoom. ");
     }
     room = aRoom;
+    switch(aRoom.toString()){
+      case "Entertainment Room":
+        index = 7;
+        break;
+      case "Study":
+        index = 5;
+        break;
+      case "Lounge":
+        index = 3;
+        break;
+      case "Kitchen":
+        index = 1;
+        break;
+      case "Conservatory":
+        index = 8;
+        break;
+      case "Dining Room":
+        index = 2;
+        break;
+      case "Hall":
+        index = 4;
+        break;
+      case "Auditorium":
+        index = 9;
+        break;
+      case "Book Room":
+        index = 6;
+        break;
+    }
   }
 
   //------------------------
@@ -39,4 +69,8 @@ public class RoomCard implements Card
   @Override
   public String toString() {
     return room.toString();}
+
+  public int getIndex(){
+    return index;
+  }
 }

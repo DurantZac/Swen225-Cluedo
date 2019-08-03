@@ -131,6 +131,7 @@ public class Board
    * @return success or fail
    */
   public boolean movePlayer(Player p, Tile goal, int moves) {
+    if(goal == null) return false;
     Tile startTile = p.getPosition();
     if(goal.getIsAccessible() == false) return false;
 
