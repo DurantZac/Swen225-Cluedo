@@ -13,7 +13,7 @@ public class Board
   // MEMBER VARIABLES
   //------------------------
 
-  public static final String TITLE = "\n" +
+  private static final String TITLE = "\n" +
           "   ____ _                _       \n" +
           "  / ___| |_   _  ___  __| | ___  \n" +
           " | |   | | | | |/ _ \\/ _` |/ _ \\ \n" +
@@ -33,8 +33,8 @@ public class Board
   /**
    * Constructor of Board,
    * Makes a new game
-   * @param aGame
-   * @param allBoardTiles
+   * @param aGame Game object
+   * @param allBoardTiles List of tiles from game
    */
   public Board(Game aGame, List<Tile>allBoardTiles)
   {
@@ -133,17 +133,17 @@ public class Board
   public boolean movePlayer(Player p, Tile goal, int moves) {
     if(goal == null) return false;
     Tile startTile = p.getPosition();
-    if(goal.getIsAccessible() == false) return false;
+    if(!goal.getIsAccessible()) return false;
 
     // Find if path available
     boolean valid = false;
     if(startTile.getIsPartOf() == null){
-      valid = pathFinding(startTile,goal,moves,0,new ArrayList<Tile>());
+      valid = pathFinding(startTile,goal,moves,0,new ArrayList<>());
     }
     else{ // If in room, try all exits
       if(startTile.getIsPartOf() == goal.getIsPartOf()) return false;
       for(Tile t : p.getPosition().getIsPartOf().getEntrances()){
-        valid = valid || pathFinding(t,goal,moves,0,new ArrayList<Tile>());
+        valid = valid || pathFinding(t,goal,moves,0,new ArrayList<>());
       }
     }
 
@@ -175,14 +175,14 @@ public class Board
    * @param visited List of nodes that have been visited
    * @return True if path found, false otherwise
    */
-  public boolean pathFinding(Tile node, Tile goal, int moveGoal, int moveCount, List<Tile> visited){
+  private boolean pathFinding(Tile node, Tile goal, int moveGoal, int moveCount, List<Tile> visited){
     if(node == goal && moveCount == moveGoal) return true;
     if(node.getIsPartOf() != null && node.getIsPartOf() == goal.getIsPartOf() && moveCount <= moveGoal) return true;
     if(moveCount >= moveGoal) return false;
     visited.add(node);
     for(Tile neigh : node.getAdjacent()){
       if(!visited.contains(neigh) && neigh.getIsAccessibleFull(node)) {
-        if (pathFinding(neigh, goal, moveGoal, moveCount + 1, new ArrayList(visited))) return true;
+        if (pathFinding(neigh, goal, moveGoal, moveCount + 1, new ArrayList<>(visited))) return true;
       }
     }
     return false;
@@ -203,8 +203,8 @@ public class Board
 
   /**
    * Teleports weapon to given room after suggestion
-   * @param w
-   * @param goal
+   * @param w Weapon object
+   * @param goal Room goal
    */
   public void teleportWeapon(WeaponCard w, Room goal){
     w.setLocation(goal);

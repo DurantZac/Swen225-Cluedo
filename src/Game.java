@@ -35,7 +35,6 @@ public class Game {
 
     private List<Room> rooms = new ArrayList<>();
     private List<WeaponCard> weapons = new ArrayList<>();
-    private int playerNum;
 
     private static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
             "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";

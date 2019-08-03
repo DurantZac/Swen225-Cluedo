@@ -182,21 +182,6 @@ public class Tile
     return s;
   }
 
-  /**
-   * Get the row of this tile
-   * @return row
-   */
-  public int getRow(){
-    return row;
-  }
-
-  /**
-   * Get the column of this Tile
-   * @return col
-   */
-  public int getCol(){
-    return col;
-  }
 
   /**
    * Set row to parameter r
