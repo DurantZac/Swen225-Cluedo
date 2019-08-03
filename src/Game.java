@@ -1,4 +1,5 @@
 
+import java.io.InputStream;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,13 +12,20 @@ public class Game {
     //------------------------
 
     //Game Associations
-    protected Board board;
-    protected List<Card> murderScenario = new ArrayList<>();
-    protected List<Player> players = new ArrayList<>();
-    protected List<CharacterCard> characters = new ArrayList<>();
-    protected List<Room> rooms = new ArrayList<>();
-    protected List<WeaponCard> weapons = new ArrayList<>();
-    protected int playerNum;
+    private Board board;
+
+    public List<Card> getMurderScenario() {
+        return murderScenario;
+    }
+    private List<Card> murderScenario = new ArrayList<>();
+    public List<Player> getPlayers() {
+        return players;
+    }
+    private List<Player> players = new ArrayList<>();
+    private List<CharacterCard> characters = new ArrayList<>();
+    private List<Room> rooms = new ArrayList<>();
+    private List<WeaponCard> weapons = new ArrayList<>();
+    private int playerNum;
 
     public static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
             "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
@@ -26,7 +34,6 @@ public class Game {
     //------------------------
     // CONSTRUCTOR
     //------------------------
-
     /**
      * Create new game by initialising board, assigning each player a character, and starting the game.
      */
@@ -415,7 +422,7 @@ public class Game {
      *
      * @param input buffered reader getting input from the players
      */
-    protected void playGame(BufferedReader input) {
+    private void playGame(BufferedReader input) {
         int currentPlayer = 0; // Default player to start
 
         // Rule "Miss Scarlet always goes first", so check if Miss Red is playing
@@ -440,7 +447,7 @@ public class Game {
             }
 
             //Check to see if they wish to see their hand
-            seeHand(input, players.get(currentPlayer));
+            if(!seeHand(input, players.get(currentPlayer))) return;
 
             //Move the player
             boolean ableToSuggest = processMove(input, players.get(currentPlayer));
@@ -519,7 +526,7 @@ public class Game {
      * @param current the character currently playing
      * @return the next player
      */
-    protected int getNextCharacter(int current) {
+    private int getNextCharacter(int current) {
         // No more players
         if (players.stream().filter(p -> p.getIsStillPlaying() == true).count() == 0) return 0;
 
@@ -547,12 +554,13 @@ public class Game {
      * @param input buffered reader getting input from the players
      * @param p the current player
      */
-    protected void seeHand(BufferedReader input, Player p) {
+    private boolean seeHand(BufferedReader input, Player p) {
         try {
             boolean validInput = false;
             while (!validInput) { // Makes sure input is clear yes or no answer
                 System.out.println("Would you like to see your hand? (Y/N)");
                 String hand = input.readLine();
+                if(hand.equalsIgnoreCase("EXIT")) return false;
                 if (hand.equalsIgnoreCase("yes") || hand.equalsIgnoreCase("y")) {
                     System.out.println(p.returnHand());
                     validInput = true;
@@ -566,6 +574,7 @@ public class Game {
         } catch (IOException e) {
             System.out.println("Error printing hand" + e);
         }
+        return true;
     }
 
 
@@ -599,7 +608,7 @@ public class Game {
      *@param input  input stream
      * @param player the current input
      */
-    protected void processSuggestion(BufferedReader input, Player player) {
+    private void processSuggestion(BufferedReader input, Player player) {
         try {
             Room room = player.getPosition().getIsPartOf();
             if (room == null) { // only allow them to make suggestions in a room
@@ -667,7 +676,7 @@ public class Game {
      * @param input the buffered reader to process input from the user
      * @return the card that is used to refute the suggestion (null if no refuting occurred)
      */
-    protected Card checkSuggestion(Player player, WeaponCard weapon, CharacterCard character, RoomCard room, BufferedReader input) {
+    private Card checkSuggestion(Player player, WeaponCard weapon, CharacterCard character, RoomCard room, BufferedReader input) {
         try {
             for (Player p : players) {
                 if (p != player) { // skip the player who made the suggestion
@@ -846,7 +855,7 @@ public class Game {
      * @param player the current player
      * @return if the accusation was true or false
      */
-    protected boolean processAccusation(BufferedReader input, Player player) {
+    private boolean processAccusation(BufferedReader input, Player player) {
         try {
             System.out.println("Would you like to make an accusation? (Y/N)");
 
