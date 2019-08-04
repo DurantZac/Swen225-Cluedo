@@ -216,6 +216,8 @@ public class Board
    */
   public String toString(){
     String s = TITLE;
+    s+= "M - Col Mustard. W - Mrs White. G - Rev. Green. T - Ms Turquoise. P - Prof. Plum. R - Miss Red.\nL - Library. D - Dining Room. K - Kitchen. A - Auditorium. C - Conservatory. E - Entertainment Room. B - Book Room. S - Study. H - Hall\n" +
+            "# - Wall. X - Out of bounds. _ - Open tile. ^>v< - Doorway (Direction).\n";
     char c = 'a';
     for(int row = 0; row < 25; row++){
       for(int col = 0; col < 24; col++){
