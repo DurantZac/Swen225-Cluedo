@@ -63,7 +63,7 @@ public class Tile
         isAccessible =false;
     }
 
-    if (System.console() != null && System.getenv().get("TERM") != null) {
+    if ( System.console() != null && System.getenv().get("TERM") != null){
       ANSI_RESET = "\u001B[0m";
       ANSI_RED = "\u001B[31m";
       ANSI_GREEN = "\u001B[32m";
