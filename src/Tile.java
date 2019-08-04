@@ -26,21 +26,21 @@ public class Tile
 
   //Colours
 
-  private static final String ANSI_RESET = "\u001B[0m";
-  private static final String ANSI_RED = "\u001B[31m";
-  private static final String ANSI_GREEN = "\u001B[32m";
-  private static final String ANSI_YELLOW = "\u001B[33m";
-  private static final String ANSI_BLUE = "\u001B[34m";
-  private static final String ANSI_PURPLE = "\u001B[35m";
-  private static final String ANSI_CYAN = "\u001B[36m";
+  private static String ANSI_RESET = "";
+  private static String ANSI_RED = "";
+  private static String ANSI_GREEN = "";
+  private static String ANSI_YELLOW ="";
+  private static String ANSI_BLUE= "";
+  private static String ANSI_PURPLE= "";
+  private static String ANSI_CYAN = "";
+
 
 
   /**
    * Constructor to create tile from string representation on board
    * @param symbol symbol of tile
    */
-  Tile(char symbol)
-  {
+  Tile(char symbol){
     this.symbol=symbol;
 
     switch (this.symbol){
@@ -61,6 +61,16 @@ public class Tile
         break;
       default: // must be a wall or a person
         isAccessible =false;
+    }
+
+    if (System.console() != null && System.getenv().get("TERM") != null) {
+      ANSI_RESET = "\u001B[0m";
+      ANSI_RED = "\u001B[31m";
+      ANSI_GREEN = "\u001B[32m";
+      ANSI_YELLOW = "\u001B[33m";
+      ANSI_BLUE = "\u001B[34m";
+      ANSI_PURPLE = "\u001B[35m";
+      ANSI_CYAN = "\u001B[36m";
     }
 
   }
