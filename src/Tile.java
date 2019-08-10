@@ -91,7 +91,17 @@ public class Tile
       case 'X':
         isAccessible = false;
         defaultImage = getClass().getResource("The_Void.jpg");
-      default: // must be a wall or a person
+        break;
+      case 'M':
+      case 'W':
+      case 'G':
+      case 'T':
+      case 'P':
+      case 'R':
+        isAccessible = false;
+        defaultImage = getClass().getResource("Cor.jpg");
+        break;
+      default: // must be a wall
         isAccessible =false;
         defaultImage = getClass().getResource("WT.jpg");
     }
