@@ -57,10 +57,10 @@ public class Game extends GUI {
 //            try {
 //                System.out.println("How many players are playing? (3-6) ");
 //                int numberOfPlayers = Integer.parseInt(input.readLine());
-////                if (numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()) {
-////                    throw new IncorrectNumberOfPlayersException();
-////                }
-////                playerNum = numberOfPlayers;
+//                if (numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()) {
+//                    throw new IncorrectNumberOfPlayersException();
+//                }
+//                playerNum = numberOfPlayers;
 //                break;
 //            } catch (NumberFormatException n) {
 //                System.out.println("Please enter a number between 3-6 only");
@@ -126,6 +126,11 @@ public class Game extends GUI {
 //        }
     }
 
+    /**
+     * Set the total number of players to input from user
+     * Calls character choice gui setup
+     * @param num
+     */
     @Override
     public void setPlayers(int num) {
         System.out.println(num);
@@ -137,6 +142,7 @@ public class Game extends GUI {
         }catch (IncorrectNumberOfPlayersException i){
             System.out.println(num + " is not a valid number of players");
         }
+        chooseCharacters();
     }
 
 

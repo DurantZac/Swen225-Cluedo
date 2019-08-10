@@ -17,6 +17,10 @@ public abstract class GUI {
     // this makes the program actually quit when the frame's close button is
     // pressed.
 
+    /**
+     * Create gui and add menu bar
+     * Calls setup players
+     */
     public GUI(){
         menuBar = new JMenuBar();
 
@@ -53,6 +57,9 @@ public abstract class GUI {
 
     }
 
+    /**
+     * Adds gui options for selecting number of players
+     */
     public void setupPlayerSelect(){
         JLabel label = new JLabel("How many players are playing?");
         String[] playerNum = {"3","4","5","6"};
@@ -76,7 +83,11 @@ public abstract class GUI {
 
     public abstract void setPlayers(int num);
 
+    /**
+     * Add gui items from selecting characters
+     */
     public void chooseCharacters(){
+        JLabel label = new JLabel("Player x, choose your character");
 
     }
 }
