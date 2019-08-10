@@ -2,9 +2,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -56,6 +54,7 @@ public abstract class GUI {
 
         frame.pack();
         frame.setVisible(true);
+
 
     }
 
@@ -206,6 +205,9 @@ public abstract class GUI {
      */
     class Screen extends JPanel{
         HashMap<java.net.URL,Image> imageMap = new HashMap<>();
+        //Divide up grid
+        double colDis;
+        double rowDis;
 
         public Screen(){
             super(); // Super constructor
@@ -258,6 +260,19 @@ public abstract class GUI {
                 Image wtr = ImageIO.read(getClass().getResource("WTR.jpg"));
                 imageMap.put(getClass().getResource("WTR.jpg"),wtr);
 
+                this.addMouseListener(new MouseAdapter() {
+                    public void mouseReleased(MouseEvent e) {
+                        int x = e.getX();
+                        int y = e.getY();
+
+                        int col = (int)(x/colDis);
+                        int row = (int)(y/rowDis);
+
+                        System.out.println("Col= "+ col);
+                        System.out.println("Row= "+ row);
+                        System.out.println();
+                    }
+                });
             }
             catch(Exception e){
 
@@ -272,10 +287,8 @@ public abstract class GUI {
         protected void paintComponent(Graphics g){
             super.paintComponent(g);
 
-            //Divide up grid
-            double colDis = this.getWidth() / 24;
-            double rowDis = this.getHeight() / 25;
-
+             colDis = this.getWidth() / 24;
+             rowDis = this.getHeight() / 25;
             // Paint images
             for(int row = 0; row < getHeight()-rowDis-1; row+=rowDis) {
                 for (int col =0; col < getWidth()-colDis-1; col += colDis) {
@@ -286,6 +299,7 @@ public abstract class GUI {
                 }
             }
         }
+
     }
 
     class Controls extends JPanel{
