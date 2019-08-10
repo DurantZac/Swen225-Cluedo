@@ -213,8 +213,12 @@ public abstract class GUI {
             super(); // Super constructor
             try{
                 // Fill map with all possible images
-                Image Cor = ImageIO.read(getClass().getResource("Cor.jpg"));
-                imageMap.put(getClass().getResource("Cor.jpg"),Cor);
+                Image cor = ImageIO.read(getClass().getResource("Cor.jpg"));
+                imageMap.put(getClass().getResource("Cor.jpg"),cor);
+                Image room = ImageIO.read(getClass().getResource("Room.jpg"));
+                imageMap.put(getClass().getResource("Room.jpg"),room);
+                Image wt = ImageIO.read(getClass().getResource("WT.jpg"));
+                imageMap.put(getClass().getResource("WT.jpg"),wt);
             }
             catch(Exception e){
 

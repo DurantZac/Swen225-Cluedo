@@ -67,27 +67,36 @@ public class Tile
   Tile(char symbol){
     this.symbol=symbol;
 
-    //Temp, should be based on tile
-    this.activeImage = getClass().getResource("Cor.jpg");
     switch (this.symbol){
       case '_':
         isAccessible = true;
+        defaultImage = getClass().getResource("Cor.jpg");
         break;
       case '>':
         isAccessible =true;
+        defaultImage = getClass().getResource("Room.jpg");
         break;
       case '<':
         isAccessible =true;
+        defaultImage = getClass().getResource("Room.jpg");
         break;
       case '^':
         isAccessible =true;
+        defaultImage = getClass().getResource("Room.jpg");
         break;
       case 'v':
         isAccessible =true;
+        defaultImage = getClass().getResource("Room.jpg");
         break;
+      case 'X':
+        isAccessible = false;
+        defaultImage = getClass().getResource("");
       default: // must be a wall or a person
         isAccessible =false;
+        defaultImage = getClass().getResource("WT.jpg");
     }
+
+    this.activeImage = this.defaultImage;
 
     if ( System.console() != null && System.getenv().get("TERM") != null){
       ANSI_RESET = "\u001B[0m";
@@ -157,6 +166,8 @@ public class Tile
    void setIsPartOf(Room aNewIsPartOf)
   {
     isPartOf = aNewIsPartOf;
+    defaultImage = getClass().getResource("Room.jpg");
+    activeImage = defaultImage;
   }
 
   /**
