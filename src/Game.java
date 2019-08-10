@@ -397,21 +397,18 @@ public class Game extends GUI {
     }
 
     /**
-     * Creates two "dice" which pick a random number from 1-6
+     * Creates a "dice" which pick a random number from 1-6
      *
-     * @return sum of roll
+     * @return the roll
      */
     private int rollDice() {
         Random dice1 = new Random();
-        Random dice2 = new Random();
 
         int roll1 = dice1.nextInt(6); //random int from 0-5
-        int roll2 = dice2.nextInt(6);
 
         roll1 += 1; // add 1 to make interval 1-6
-        roll2 += 1;
 
-        return roll1 + roll2;
+        return roll1;
     }
 
     /**
