@@ -1,9 +1,7 @@
 
-import java.io.InputStream;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class Game extends GUI {
 
@@ -23,12 +21,13 @@ public class Game extends GUI {
         return players;
     }
     private List<Player> players = new ArrayList<>();
-
     public List<CharacterCard> getCharacters() {
         return characters;
     }
 
     private List<CharacterCard> characters = new ArrayList<>();
+
+    private List <Card> allCards = new ArrayList<>();
 
     public List<Room> getRooms() {
         return rooms;
@@ -39,6 +38,8 @@ public class Game extends GUI {
 
     private static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
             "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+
+    private static int playerToAssignCharacter = 1;
 
 
     //------------------------
@@ -51,68 +52,7 @@ public class Game extends GUI {
         createBoard();
         setupPlayerSelect();
 
-//        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-//        int playerNum;
-//        while (true) { //Find out how many players there are
-//            try {
-//                System.out.println("How many players are playing? (3-6) ");
-//                int numberOfPlayers = Integer.parseInt(input.readLine());
-//                if (numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()) {
-//                    throw new IncorrectNumberOfPlayersException();
-//                }
-//                playerNum = numberOfPlayers;
-//                break;
-//            } catch (NumberFormatException n) {
-//                System.out.println("Please enter a number between 3-6 only");
-//            } catch (IOException e) {
-//                System.out.println("Error on input, please try again" + e);
-//            } catch (IncorrectNumberOfPlayersException i) {
-//                System.out.println("Please enter a number between 3-6 only");
-//            }
-//        }
 
-//        //Make all the characters
-//        characters.add(new CharacterCard("Col. Mustard", board.getBoardTile("Ar")));
-//        characters.add(new CharacterCard("Mrs White", board.getBoardTile("Ja")));
-//        characters.add(new CharacterCard("Rev. Green", board.getBoardTile("Oa")));
-//        characters.add(new CharacterCard("Prof. Plum", board.getBoardTile("Xt")));
-//        characters.add(new CharacterCard("Ms Turquoise", board.getBoardTile("Xg")));
-//        characters.add(new CharacterCard("Miss Red", board.getBoardTile("Hy")));
-
-
-//        List<CharacterCard> unusedCharacters = new ArrayList<>(characters); //List for players picking characters
-//        List<Card> cardsToBeDealt = createCards(characters); //All Cards
-//
-//        for (int i = 0; i < playerNum; i++) {
-//            System.out.println("Player " + (i + 1) + ". Please select your character");
-//            System.out.println("The available players are:");
-//
-//            //Prints out each of the characters
-//            for (int characterCounter = 1; characterCounter <= unusedCharacters.size(); characterCounter++) {
-//                System.out.println("[" + characterCounter + "] " + unusedCharacters.get(characterCounter - 1).toString());
-//            }
-//
-//            System.out.println("\nWhat player would you like to be? Please enter the number: ");
-//
-//            validityCheck:
-//            while (true) { //Keep asking who they want to be until there is a valid input
-//                try {
-//                    int characterToPlay = Integer.parseInt(input.readLine());
-//                    Player p = new Player(unusedCharacters.get(characterToPlay - 1));
-//                    players.add(p);
-//                    unusedCharacters.remove(characterToPlay - 1);
-//                    System.out.println("You have selected the character: " + p.getCharacter() + "\n");
-//                    break validityCheck;
-//                } catch (IOException e) {
-//                    System.out.println("Error on input, please try again" + e);
-//                } catch (NumberFormatException n) {
-//                    System.out.println("Please enter the number of your character");
-//                } catch (IndexOutOfBoundsException e) {
-//                    System.out.println("Please enter an available number between 1 and 6");
-//                }
-//            }
-//        }
-//
 //        //Deals hand
 //        dealCards(cardsToBeDealt);
 //
@@ -142,11 +82,40 @@ public class Game extends GUI {
         }catch (IncorrectNumberOfPlayersException i){
             System.out.println(num + " is not a valid number of players");
         }
+        makeCharacterCards();
         chooseCharacters(1);
     }
 
-    public void setCharacter(String character){
-        chooseCharacters(2);
+
+
+    private void makeCharacterCards(){
+        //Make all the characters
+        characters.add(new CharacterCard("Col. Mustard", board.getBoardTile("Ar")));
+        characters.add(new CharacterCard("Mrs White", board.getBoardTile("Ja")));
+        characters.add(new CharacterCard("Rev. Green", board.getBoardTile("Oa")));
+        characters.add(new CharacterCard("Prof. Plum", board.getBoardTile("Xt")));
+        characters.add(new CharacterCard("Ms Turquoise", board.getBoardTile("Xg")));
+        characters.add(new CharacterCard("Miss Red", board.getBoardTile("Hy")));
+
+        allCards = createCards(characters);
+    }
+
+
+    List<CharacterCard> unusedCharacters = new ArrayList<>(characters); //List for players picking characters
+    public void setCharacter(String characterToPlay){
+        while (playerToAssignCharacter < numberOfPlayers){
+
+           for (CharacterCard c : unusedCharacters){
+               if (c.toString().equalsIgnoreCase(characterToPlay)){
+                   Player p = new Player(c);
+                   players.add(p);
+                   unusedCharacters.remove(c);
+                   break;
+               }
+           }
+            playerToAssignCharacter++;
+            chooseCharacters(playerToAssignCharacter);
+        }
     }
 
     @Override
