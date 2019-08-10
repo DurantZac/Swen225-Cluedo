@@ -102,6 +102,7 @@ public class Game extends GUI {
 
 
     List<CharacterCard> unusedCharacters = new ArrayList<>(characters); //List for players picking characters
+
     public void setCharacter(String characterToPlay){
         if (playerToAssignCharacter <= numberOfPlayers){
                 for (CharacterCard c : unusedCharacters) {
@@ -110,6 +111,7 @@ public class Game extends GUI {
                         players.add(p);
                         unusedCharacters.remove(c);
                         playerToAssignCharacter++;
+                        System.out.println(p);
                         break;
                     }
             }
