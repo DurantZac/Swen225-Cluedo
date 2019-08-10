@@ -142,8 +142,11 @@ public class Game extends GUI {
         }catch (IncorrectNumberOfPlayersException i){
             System.out.println(num + " is not a valid number of players");
         }
-        chooseCharacters();
+        chooseCharacters(1);
     }
+
+
+
 
 
     /**
