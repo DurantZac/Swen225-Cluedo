@@ -13,6 +13,7 @@ public abstract class GUI {
     JMenuItem resignMenuItem;
     JMenuItem quitMenuItem;
     GridBagConstraints constraints;
+    int playerNum = 1;
 
     // this makes the program actually quit when the frame's close button is
     // pressed.
@@ -45,7 +46,7 @@ public abstract class GUI {
 
 
         frame = new JFrame("Cluedo");
-        frame.setLayout(new GridLayout(1,2));
+        frame.setLayout(new GridLayout(10,2));
         frame.setSize(new Dimension(500,500));
         frame.setMinimumSize(new Dimension(500,500));
         frame.setMaximumSize(new Dimension(1920,1080));
@@ -87,7 +88,12 @@ public abstract class GUI {
      * Add gui items from selecting characters
      */
     public void chooseCharacters(){
-        JLabel label = new JLabel("Player x, choose your character");
-
+        JLabel label = new JLabel("Player "+playerNum+", choose your character:");
+        JRadioButton mustard = new JRadioButton("Col. Mustard");
+        mustard.addActionListener(ev -> playerNum++);
+        frame.add(label);
+        frame.add(mustard);
+        frame.revalidate();
+        frame.repaint();
     }
 }
