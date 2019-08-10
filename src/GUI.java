@@ -221,6 +221,45 @@ public abstract class GUI {
                 imageMap.put(getClass().getResource("WT.jpg"),wt);
                 Image theVoid = ImageIO.read(getClass().getResource("The_Void.jpg"));
                 imageMap.put(getClass().getResource("The_Void.jpg"),theVoid);
+                Image gCor = ImageIO.read(getClass().getResource("G_Cor.jpg"));
+                imageMap.put(getClass().getResource("G_Cor.jpg"),gCor);
+                Image gRoom = ImageIO.read(getClass().getResource("G_Room.jpg"));
+                imageMap.put(getClass().getResource("G_Room.jpg"),gRoom);
+                Image mCor = ImageIO.read(getClass().getResource("M_Cor.jpg"));
+                imageMap.put(getClass().getResource("M_Cor.jpg"),mCor);
+                Image mRoom = ImageIO.read(getClass().getResource("M_Room.jpg"));
+                imageMap.put(getClass().getResource("M_Room.jpg"),mRoom);
+                Image pCor = ImageIO.read(getClass().getResource("P_Cor.jpg"));
+                imageMap.put(getClass().getResource("P_Cor.jpg"),pCor);
+                Image pRoom = ImageIO.read(getClass().getResource("P_Room.jpg"));
+                imageMap.put(getClass().getResource("P_Room.jpg"),pRoom);
+                Image rCor = ImageIO.read(getClass().getResource("R_Cor.jpg"));
+                imageMap.put(getClass().getResource("R_Cor.jpg"),rCor);
+                Image rRoom = ImageIO.read(getClass().getResource("R_Room.jpg"));
+                imageMap.put(getClass().getResource("R_Room.jpg"),rRoom);
+                Image tCor = ImageIO.read(getClass().getResource("T_Cor.jpg"));
+                imageMap.put(getClass().getResource("T_Cor.jpg"),tCor);
+                Image tRoom = ImageIO.read(getClass().getResource("T_Room.jpg"));
+                imageMap.put(getClass().getResource("T_Room.jpg"),tRoom);
+                Image wCor = ImageIO.read(getClass().getResource("W_Cor.jpg"));
+                imageMap.put(getClass().getResource("W_Cor.jpg"),wCor);
+                Image wRoom = ImageIO.read(getClass().getResource("W_Room.jpg"));
+                imageMap.put(getClass().getResource("W_Room.jpg"),wRoom);
+                Image wb = ImageIO.read(getClass().getResource("WB.jpg"));
+                imageMap.put(getClass().getResource("WB.jpg"),wb);
+                Image wbl = ImageIO.read(getClass().getResource("WBL.jpg"));
+                imageMap.put(getClass().getResource("WBL.jpg"),wbl);
+                Image wbr = ImageIO.read(getClass().getResource("WBR.jpg"));
+                imageMap.put(getClass().getResource("WBR.jpg"),wbr);
+                Image wl = ImageIO.read(getClass().getResource("WL.jpg"));
+                imageMap.put(getClass().getResource("WL.jpg"),wl);
+                Image wr = ImageIO.read(getClass().getResource("WR.jpg"));
+                imageMap.put(getClass().getResource("WR.jpg"),wr);
+                Image wtl = ImageIO.read(getClass().getResource("WTL.jpg"));
+                imageMap.put(getClass().getResource("WTL.jpg"),wtl);
+                Image wtr = ImageIO.read(getClass().getResource("WTR.jpg"));
+                imageMap.put(getClass().getResource("WTR.jpg"),wtr);
+
             }
             catch(Exception e){
 

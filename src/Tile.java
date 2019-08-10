@@ -31,6 +31,7 @@ public class Tile
 
   public void setDefaultImage(URL defaultImage) {
     this.defaultImage = defaultImage;
+    this.activeImage = defaultImage;
   }
 
   public URL getActiveImage() {

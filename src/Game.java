@@ -375,8 +375,106 @@ public class Game extends GUI {
         board.getBoardTile("Mb").setIsPartOf(roomCards.get(8).getRoom());
         board.getBoardTile("Lc").setIsPartOf(roomCards.get(8).getRoom());
         board.getBoardTile("Mc").setIsPartOf(roomCards.get(8).getRoom());
+
+        positionWalls();
+
     }
 
+
+    public void positionWalls(){
+        Class c = getClass();
+
+        //Library
+        board.getBoardTile("Gt").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Gu").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Gv").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Gw").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Gx").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Gy").setDefaultImage(c.getResource("WBR.jpg"));
+
+        board.getBoardTile("By").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Cy").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Dy").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Ey").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Fy").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Ay").setDefaultImage(c.getResource("WBL.jpg"));
+
+        board.getBoardTile("Au").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Av").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Aw").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Ax").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("At").setDefaultImage(c.getResource("WTL.jpg"));
+
+
+        //Dining
+        board.getBoardTile("Hp").setDefaultImage(c.getResource("WBR.jpg"));
+        board.getBoardTile("Gp").setDefaultImage(c.getResource("Room.jpg"));
+        board.getBoardTile("Fp").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Ep").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Dp").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Cp").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Bp").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Ap").setDefaultImage(c.getResource("WBL.jpg"));
+
+        board.getBoardTile("Ak").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Al").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Am").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("An").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Ao").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Aj").setDefaultImage(c.getResource("WTL.jpg"));
+
+        board.getBoardTile("Ej").setDefaultImage(c.getResource("WTR.jpg"));
+        board.getBoardTile("Ek").setDefaultImage(c.getResource("Room.jpg"));
+
+        board.getBoardTile("Hk").setDefaultImage(c.getResource("WTR.jpg"));
+        board.getBoardTile("Fp").setDefaultImage(c.getResource("WB.jpg"));
+
+        board.getBoardTile("Hl").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Hn").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Ho").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Hm").setDefaultImage(c.getResource("Room.jpg"));
+
+        //Kitchen
+        board.getBoardTile("Bg").setDefaultImage(c.getResource("WBL.jpg"));
+        board.getBoardTile("Cg").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Dg").setDefaultImage(c.getResource("WB.jpg"));
+
+        board.getBoardTile("Af").setDefaultImage(c.getResource("WBL.jpg"));
+        board.getBoardTile("Ac").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Ad").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Ae").setDefaultImage(c.getResource("WL.jpg"));
+
+        board.getBoardTile("Ab").setDefaultImage(c.getResource("WTL.jpg"));
+        board.getBoardTile("Fb").setDefaultImage(c.getResource("WTR.jpg"));
+
+        board.getBoardTile("Fc").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Fd").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Fe").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Ff").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Fg").setDefaultImage(c.getResource("WBR.jpg"));
+
+        //Auditorium
+        board.getBoardTile("Id").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Ie").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("If").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Ig").setDefaultImage(c.getResource("WL.jpg"));
+
+        board.getBoardTile("Ic").setDefaultImage(c.getResource("WTL.jpg"));
+        board.getBoardTile("Ih").setDefaultImage(c.getResource("WBL.jpg"));
+
+        board.getBoardTile("Kb").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Ka").setDefaultImage(c.getResource("WTL.jpg"));
+
+        board.getBoardTile("Na").setDefaultImage(c.getResource("WTR.jpg"));
+        board.getBoardTile("Nb").setDefaultImage(c.getResource("WR.jpg"));
+
+
+
+
+
+
+
+    }
 
     //------------------------
     // INTERFACE
