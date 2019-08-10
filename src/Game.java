@@ -125,9 +125,15 @@ public class Game extends GUI {
 //        }
     }
 
+    /**
+     * Set the total number of players to input from user
+     * Calls character choice gui setup
+     * @param num
+     */
     @Override
     public void setPlayers(int num) {
-        System.out.println(num);
+        // Luisa
+        chooseCharacters();
     }
 
 
