@@ -179,17 +179,23 @@ public abstract class GUI {
         Screen screen = new Screen();
         screen.setVisible(true);
         screen.setSize(new Dimension(800,800));
-        JPanel controls = new JPanel();
+
+        Controls controls = new Controls();
         controls.setBackground(Color.RED);
         controls.setVisible(true);
-        JSplitPane splitPane = new JSplitPane();
-        splitPane.setDividerSize(0);
-        splitPane.setResizeWeight(0.8);
-        splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-        splitPane.setTopComponent(screen);
-        splitPane.setBottomComponent(controls);
 
-        frame.setContentPane(splitPane);
+        JButton rollDice = new JButton("Roll Dice");
+        controls.add(rollDice);
+
+
+        JSplitPane mainSplit = new JSplitPane();
+        mainSplit.setDividerSize(0);
+        mainSplit.setResizeWeight(0.8);
+        mainSplit.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        mainSplit.setTopComponent(screen);
+        mainSplit.setBottomComponent(controls);
+
+        frame.setContentPane(mainSplit);
         frame.revalidate();
         frame.repaint();
     }
@@ -294,6 +300,37 @@ public abstract class GUI {
             }
         }
 
+    }
+
+    class Controls extends JPanel{
+
+        public void setDice1(int dice1) {
+            this.dice1 = dice1;
+        }
+
+        public void setDice2(int dice2) {
+            this.dice2 = dice2;
+        }
+
+        /**
+         * Called when repainting
+         * @param g
+         */
+        private int dice1 = 1;
+        private int dice2 = 2;
+
+        @Override
+        protected void paintComponent(Graphics g){
+            super.paintComponent(g);
+
+            try {
+                g.drawImage(ImageIO.read(getClass().getResource("roll" + dice1 + ".jpg")), getWidth()/45, getHeight()/10, getWidth()/15, getHeight()/3, null);
+                g.drawImage(ImageIO.read(getClass().getResource("roll" + dice2 + ".jpg")), getWidth()/45, getHeight()/10 + getHeight()/3 + getHeight()/10, getWidth()/15, getHeight()/3, null);
+            }
+            catch(IOException e){
+
+            }
+        }
     }
 
     public abstract Board getBoard();
