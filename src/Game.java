@@ -18,6 +18,7 @@ public class Game extends GUI {
         return murderScenario;
     }
     private List<Card> murderScenario = new ArrayList<>();
+    private int numberOfPlayers;
     public List<Player> getPlayers() {
         return players;
     }
@@ -132,7 +133,15 @@ public class Game extends GUI {
      */
     @Override
     public void setPlayers(int num) {
-        // Luisa
+        System.out.println(num);
+        try {
+            if (num < minimumNumberOfPlayers() || num > maximumNumberOfPlayers()) {
+                throw new IncorrectNumberOfPlayersException();
+            }
+            numberOfPlayers = num;
+        }catch (IncorrectNumberOfPlayersException i){
+            System.out.println(num + " is not a valid number of players");
+        }
         chooseCharacters();
     }
 
