@@ -45,7 +45,7 @@ public abstract class GUI {
 
 
         frame = new JFrame("Cluedo");
-        frame.setLayout(new GridLayout(1,2));
+        frame.setLayout(new GridLayout(10,2));
         frame.setSize(new Dimension(500,500));
         frame.setMinimumSize(new Dimension(500,500));
         frame.setMaximumSize(new Dimension(1920,1080));
@@ -83,11 +83,23 @@ public abstract class GUI {
 
     public abstract void setPlayers(int num);
 
+    public abstract void setCharacter(String character);
+
     /**
      * Add gui items from selecting characters
      */
-    public void chooseCharacters(){
-        JLabel label = new JLabel("Player x, choose your character");
-
+    public void chooseCharacters(int num){
+        JLabel label = new JLabel("Player "+num+", choose your character:");
+        JRadioButton mustard = new JRadioButton("Col. Mustard");
+        mustard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setCharacter(mustard.getText());
+            }
+        });
+        frame.add(label);
+        frame.add(mustard);
+        frame.revalidate();
+        frame.repaint();
     }
 }
