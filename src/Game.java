@@ -467,6 +467,83 @@ public class Game extends GUI {
 
         board.getBoardTile("Na").setDefaultImage(c.getResource("WTR.jpg"));
         board.getBoardTile("Nb").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Nc").setDefaultImage(c.getResource("Room.jpg"));
+
+        board.getBoardTile("Pc").setDefaultImage(c.getResource("WTR.jpg"));
+        board.getBoardTile("Pd").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Pe").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Pf").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Pg").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Ph").setDefaultImage(c.getResource("WBR.jpg"));
+
+        board.getBoardTile("Kh").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Lh").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Mh").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Nh").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Kc").setDefaultImage(c.getResource("Room.jpg"));
+
+
+        //Cons
+        board.getBoardTile("Sb").setDefaultImage(c.getResource("WTL.jpg"));
+        board.getBoardTile("Sc").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Sd").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Se").setDefaultImage(c.getResource("WL.jpg"));
+
+        board.getBoardTile("Tf").setDefaultImage(c.getResource("WBL.jpg"));
+        board.getBoardTile("Uf").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Vf").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Wf").setDefaultImage(c.getResource("WBR.jpg"));
+
+        board.getBoardTile("Xe").setDefaultImage(c.getResource("WBR.jpg"));
+        board.getBoardTile("Xd").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Xc").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Xb").setDefaultImage(c.getResource("WTR.jpg"));
+
+
+        //Entertainment Room
+        board.getBoardTile("Si").setDefaultImage(c.getResource("WTL.jpg"));
+        board.getBoardTile("Sk").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Sl").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Sm").setDefaultImage(c.getResource("WBL.jpg"));
+
+        board.getBoardTile("Tm").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Um").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Vm").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Xm").setDefaultImage(c.getResource("WBR.jpg"));
+
+        board.getBoardTile("Xj").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Xk").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Xl").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Xi").setDefaultImage(c.getResource("WTR.jpg"));
+
+
+        //Book Room
+        board.getBoardTile("Sr").setDefaultImage(c.getResource("Room.jpg"));
+        board.getBoardTile("Sp").setDefaultImage(c.getResource("Room.jpg"));
+
+        board.getBoardTile("Rp").setDefaultImage(c.getResource("WTL.jpg"));
+        board.getBoardTile("Rr").setDefaultImage(c.getResource("WBL.jpg"));
+
+        board.getBoardTile("Ss").setDefaultImage(c.getResource("WBL.jpg"));
+        board.getBoardTile("Ts").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Us").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Vs").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Ws").setDefaultImage(c.getResource("WBR.jpg"));
+
+        board.getBoardTile("Xr").setDefaultImage(c.getResource("WBR.jpg"));
+        board.getBoardTile("Xq").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Xp").setDefaultImage(c.getResource("WTR.jpg"));
+
+        board.getBoardTile("Wo").setDefaultImage(c.getResource("WTR.jpg"));
+        board.getBoardTile("So").setDefaultImage(c.getResource("WTL.jpg"));
+
+
+        //Study
+
+
+
+
+
 
 
 
