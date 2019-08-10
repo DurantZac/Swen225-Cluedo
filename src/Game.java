@@ -118,10 +118,6 @@ public class Game extends GUI {
         }
     }
 
-    @Override
-    public String getCharacterStrings() {
-        return "";
-    }
 
 
     /**
