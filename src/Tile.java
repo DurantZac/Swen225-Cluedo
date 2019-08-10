@@ -2,7 +2,10 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,28 @@ public class Tile
   private char symbol;
   private int row;
   private int col;
+
+
+  public URL getDefaultImage() {
+    return defaultImage;
+  }
+
+  public void setDefaultImage(URL defaultImage) {
+    this.defaultImage = defaultImage;
+  }
+
+  public URL getActiveImage() {
+    return activeImage;
+  }
+
+  public void setActiveImage(URL activeImage) {
+    this.activeImage = activeImage;
+  }
+
+  //URL's to default and current image in resources folder
+
+  private java.net.URL defaultImage;
+  private java.net.URL activeImage;
 
   //Tile Associations
   private Room isPartOf;
@@ -42,6 +67,8 @@ public class Tile
   Tile(char symbol){
     this.symbol=symbol;
 
+    //Temp, should be based on tile
+    this.activeImage = getClass().getResource("Cor.jpg");
     switch (this.symbol){
       case '_':
         isAccessible = true;
@@ -209,18 +236,5 @@ public class Tile
     col = c;
   }
 
-  Color getFillColour(){
-     if (isPartOf!=null){
-       return Color.decode("#b5ad94");
-     }
-     return Color.decode("#e6eddd");
-  }
-
-  Color getOutlineColour(){
-    if (isPartOf!=null){
-      return Color.decode("#b5ad94");
-    }
-    return Color.decode("#cdd1c9");
-  }
 
 }

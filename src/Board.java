@@ -103,6 +103,17 @@ public class Board
       return null;
     }
   }
+
+  /**
+   * Return tile at row,col
+   * @param row
+   * @param col
+   * @return
+   */
+  public Tile getBoardTile(int row, int col){
+    return boardTiles[row][col];
+  }
+
   /**
    * Prints the board based on the 2D array of tiles.
    */
