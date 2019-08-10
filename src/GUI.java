@@ -185,6 +185,17 @@ public abstract class GUI {
         controls.setVisible(true);
 
         JButton rollDice = new JButton("Roll Dice");
+        rollDice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int dice1 = rollDice();
+                int dice2 = rollDice();
+                controls.setDice1(dice1);
+                controls.setDice2(dice2);
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
         controls.add(rollDice);
 
 
@@ -334,4 +345,6 @@ public abstract class GUI {
     }
 
     public abstract Board getBoard();
+
+    public abstract int rollDice();
 }
