@@ -18,6 +18,7 @@ public class Game extends GUI {
         return murderScenario;
     }
     private List<Card> murderScenario = new ArrayList<>();
+    private int numberOfPlayers;
     public List<Player> getPlayers() {
         return players;
     }
@@ -56,10 +57,10 @@ public class Game extends GUI {
 //            try {
 //                System.out.println("How many players are playing? (3-6) ");
 //                int numberOfPlayers = Integer.parseInt(input.readLine());
-//                if (numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()) {
-//                    throw new IncorrectNumberOfPlayersException();
-//                }
-//                playerNum = numberOfPlayers;
+////                if (numberOfPlayers < minimumNumberOfPlayers() || numberOfPlayers > maximumNumberOfPlayers()) {
+////                    throw new IncorrectNumberOfPlayersException();
+////                }
+////                playerNum = numberOfPlayers;
 //                break;
 //            } catch (NumberFormatException n) {
 //                System.out.println("Please enter a number between 3-6 only");
@@ -128,6 +129,14 @@ public class Game extends GUI {
     @Override
     public void setPlayers(int num) {
         System.out.println(num);
+        try {
+            if (num < minimumNumberOfPlayers() || num > maximumNumberOfPlayers()) {
+                throw new IncorrectNumberOfPlayersException();
+            }
+            numberOfPlayers = num;
+        }catch (IncorrectNumberOfPlayersException i){
+            System.out.println(num + " is not a valid number of players");
+        }
     }
 
 
