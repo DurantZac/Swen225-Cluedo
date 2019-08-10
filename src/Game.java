@@ -539,6 +539,46 @@ public class Game extends GUI {
 
 
         //Study
+        board.getBoardTile("Rv").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Rw").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Rx").setDefaultImage(c.getResource("WL.jpg"));
+
+        board.getBoardTile("Ry").setDefaultImage(c.getResource("WBL.jpg"));
+        board.getBoardTile("Sy").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Ty").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Uy").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Vy").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Wy").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Xy").setDefaultImage(c.getResource("WB.jpg"));
+
+        //Hall
+        board.getBoardTile("Ky").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Ly").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("My").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Ny").setDefaultImage(c.getResource("WB.jpg"));
+        board.getBoardTile("Jy").setDefaultImage(c.getResource("WBL.jpg"));
+        board.getBoardTile("Oy").setDefaultImage(c.getResource("WBR.jpg"));
+
+        board.getBoardTile("Ox").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Ow").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Ou").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Ot").setDefaultImage(c.getResource("WR.jpg"));
+        board.getBoardTile("Os").setDefaultImage(c.getResource("WTR.jpg"));
+        board.getBoardTile("Js").setDefaultImage(c.getResource("WTL.jpg"));
+
+        board.getBoardTile("Jt").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Ju").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Jv").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Jw").setDefaultImage(c.getResource("WL.jpg"));
+        board.getBoardTile("Jx").setDefaultImage(c.getResource("WL.jpg"));
+
+
+
+
+
+
+
+
 
 
 

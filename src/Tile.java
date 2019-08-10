@@ -72,26 +72,32 @@ public class Tile
       case '_':
         isAccessible = true;
         defaultImage = getClass().getResource("Cor.jpg");
+        this.activeImage = this.defaultImage;
         break;
       case '>':
         isAccessible =true;
         defaultImage = getClass().getResource("Room.jpg");
+        this.activeImage = this.defaultImage;
         break;
       case '<':
         isAccessible =true;
         defaultImage = getClass().getResource("Room.jpg");
+        this.activeImage = this.defaultImage;
         break;
       case '^':
         isAccessible =true;
         defaultImage = getClass().getResource("Room.jpg");
+        this.activeImage = this.defaultImage;
         break;
       case 'v':
         isAccessible =true;
         defaultImage = getClass().getResource("Room.jpg");
+        this.activeImage = this.defaultImage;
         break;
       case 'X':
         isAccessible = false;
         defaultImage = getClass().getResource("The_Void.jpg");
+        this.activeImage = this.defaultImage;
         break;
       case 'M':
       case 'W':
@@ -101,13 +107,14 @@ public class Tile
       case 'R':
         isAccessible = false;
         defaultImage = getClass().getResource("Cor.jpg");
+        activeImage = getClass().getResource(symbol + "_Cor.jpg");
         break;
       default: // must be a wall
         isAccessible =false;
         defaultImage = getClass().getResource("WT.jpg");
+        this.activeImage = this.defaultImage;
     }
 
-    this.activeImage = this.defaultImage;
 
     if ( System.console() != null && System.getenv().get("TERM") != null){
       ANSI_RESET = "\u001B[0m";
