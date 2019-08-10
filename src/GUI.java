@@ -230,15 +230,15 @@ public abstract class GUI {
             super.paintComponent(g);
 
             //Divide up grid
-            int colDis = this.getWidth() / 24;
-            int rowDis = this.getHeight() / 25;
+            double colDis = this.getWidth() / 24;
+            double rowDis = this.getHeight() / 25;
 
             // Paint images
-            for(int row = 0; row < getHeight()-rowDis; row+=rowDis) {
-                for (int col =0; col < getWidth()-colDis; col += colDis) {
+            for(int row = 0; row < getHeight()-rowDis-1; row+=rowDis) {
+                for (int col =0; col < getWidth()-colDis-1; col += colDis) {
 
                     //Use boardTile url to find image
-                    Tile boardTile = getBoard().getBoardTile(row/rowDis,col/colDis);
+                    Tile boardTile = getBoard().getBoardTile(Math.min((int)(row/rowDis),24),Math.min((int)(col/colDis),23));
                     g.drawImage(imageMap.get(boardTile.getActiveImage()), col, row,getWidth()/24,getHeight()/25,null);
                 }
             }
