@@ -55,6 +55,7 @@ public abstract class GUI {
         frame.pack();
         frame.setVisible(true);
 
+
     }
 
     /**
@@ -196,12 +197,11 @@ public abstract class GUI {
     /**
      * Class for main display screen
      */
-    class Screen extends JPanel implements MouseListener {
+    class Screen extends JPanel{
         HashMap<java.net.URL,Image> imageMap = new HashMap<>();
-
         //Divide up grid
-        double colDis = this.getWidth() / 24;
-        double rowDis = this.getHeight() / 25;
+        double colDis;
+        double rowDis;
 
         public Screen(){
             super(); // Super constructor
@@ -254,6 +254,19 @@ public abstract class GUI {
                 Image wtr = ImageIO.read(getClass().getResource("WTR.jpg"));
                 imageMap.put(getClass().getResource("WTR.jpg"),wtr);
 
+                this.addMouseListener(new MouseAdapter() {
+                    public void mouseReleased(MouseEvent e) {
+                        int x = e.getX();
+                        int y = e.getY();
+
+                        int col = (int)(x/colDis);
+                        int row = (int)(y/rowDis);
+
+                        System.out.println("Col= "+ col);
+                        System.out.println("Row= "+ row);
+                        System.out.println();
+                    }
+                });
             }
             catch(Exception e){
 
@@ -268,6 +281,8 @@ public abstract class GUI {
         protected void paintComponent(Graphics g){
             super.paintComponent(g);
 
+             colDis = this.getWidth() / 24;
+             rowDis = this.getHeight() / 25;
             // Paint images
             for(int row = 0; row < getHeight()-rowDis-1; row+=rowDis) {
                 for (int col =0; col < getWidth()-colDis-1; col += colDis) {
@@ -279,64 +294,6 @@ public abstract class GUI {
             }
         }
 
-
-        /**
-         * Invoked when the mouse button has been clicked (pressed
-         * and released) on a component.
-         *
-         * @param e the event to be processed
-         */
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            int x = e.getX();
-            int y = e.getY();
-
-            int col = (int)(x/colDis);
-            int row = (int)(y/rowDis);
-
-            System.out.println("Col= "+ col);
-            System.out.println("Row= "+ row);
-        }
-
-        /**
-         * Invoked when a mouse button has been pressed on a component.
-         *
-         * @param e the event to be processed
-         */
-        @Override
-        public void mousePressed(MouseEvent e) {
-
-        }
-
-        /**
-         * Invoked when a mouse button has been released on a component.
-         *
-         * @param e the event to be processed
-         */
-        @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-
-        /**
-         * Invoked when the mouse enters a component.
-         *
-         * @param e the event to be processed
-         */
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        /**
-         * Invoked when the mouse exits a component.
-         *
-         * @param e the event to be processed
-         */
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
     }
 
     public abstract Board getBoard();
