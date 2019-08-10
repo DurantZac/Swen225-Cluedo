@@ -85,7 +85,6 @@ public abstract class GUI {
 
     public abstract void setCharacter(String character);
 
-    public abstract String getCharacterStrings();
 
     /**
      * Add gui items from selecting characters
@@ -98,51 +97,63 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mustard.setEnabled(false);
+                playerNum++;
+                label.setText("Player "+playerNum + ", choose your character:");
                 frame.repaint();
                 setCharacter(mustard.getText());
             }
         });
         JRadioButton white = new JRadioButton("Mrs White");
-        mustard.addActionListener(new ActionListener() {
+        white.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 white.setEnabled(false);
+                playerNum++;
+                label.setText("Player "+playerNum + ", choose your character:");
                 frame.repaint();
                 setCharacter(white.getText());
             }
         });
         JRadioButton green = new JRadioButton("Rev. Green");
-        mustard.addActionListener(new ActionListener() {
+        green.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 green.setEnabled(false);
+                playerNum++;
+                label.setText("Player "+playerNum + ", choose your character:");
                 frame.repaint();
                 setCharacter(green.getText());
             }
         });
         JRadioButton turquoise = new JRadioButton("Ms Turquoise");
-        mustard.addActionListener(new ActionListener() {
+        turquoise.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 turquoise.setEnabled(false);
+                playerNum++;
+                label.setText("Player "+playerNum + ", choose your character:");
                 frame.repaint();
                 setCharacter(turquoise.getText());
             }
         });
         JRadioButton plum = new JRadioButton("Prof. Plum");
-        mustard.addActionListener(new ActionListener() {
+        plum.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 plum.setEnabled(false);
+                playerNum++;
+                label.setText("Player "+playerNum + ", choose your character:");
                 frame.repaint();
                 setCharacter(plum.getText());
             }
         });
         JRadioButton red = new JRadioButton("Miss Red");
-        mustard.addActionListener(new ActionListener() {
+        red.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 red.setEnabled(false);
+                playerNum++;
+                label.setText("Player "+playerNum + ", choose your character:");
                 frame.repaint();
                 setCharacter(red.getText());
             }
@@ -155,15 +166,6 @@ public abstract class GUI {
         controls.add(turquoise);
         controls.add(plum);
         controls.add(red);
-
-        for(Component c : controls.getComponents()){
-            if(c instanceof JRadioButton){
-                JRadioButton j = (JRadioButton)c;
-                if(getCharacterStrings().contains(j.getText())){
-                    c.setEnabled(false);
-                }
-            }
-        }
 
         frame.getContentPane().add(controls, BorderLayout.PAGE_START);
         frame.pack();
