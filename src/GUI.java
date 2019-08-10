@@ -205,6 +205,7 @@ public abstract class GUI {
      * Class for main display screen
      */
     class Screen extends JPanel implements MouseListener {
+        HashMap<java.net.URL,Image> imageMap = new HashMap<>();
 
         //Divide up grid
         double colDis = this.getWidth() / 24;
