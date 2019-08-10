@@ -18,6 +18,7 @@ public class Game extends GUI {
         return murderScenario;
     }
     private List<Card> murderScenario = new ArrayList<>();
+    private int numberOfPlayers;
     public List<Player> getPlayers() {
         return players;
     }
@@ -141,11 +142,16 @@ public class Game extends GUI {
         }catch (IncorrectNumberOfPlayersException i){
             System.out.println(num + " is not a valid number of players");
         }
-        chooseCharacters();
+        chooseCharacters(1);
     }
 
     public void setCharacter(String character){
+        chooseCharacters(2);
+    }
 
+    @Override
+    public String getCharacterStrings() {
+        return "";
     }
 
 

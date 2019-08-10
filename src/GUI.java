@@ -85,20 +85,79 @@ public abstract class GUI {
 
     public abstract void setCharacter(String character);
 
+    public abstract String getCharacterStrings();
+
     /**
      * Add gui items from selecting characters
      */
     public void chooseCharacters(int num){
         JLabel label = new JLabel("Player "+num+", choose your character:");
+        JPanel controls = new JPanel();
         JRadioButton mustard = new JRadioButton("Col. Mustard");
         mustard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                controls.removeAll();
+                frame.remove(controls);
+                frame.remove(label);
                 setCharacter(mustard.getText());
             }
         });
+        JRadioButton white = new JRadioButton("Mrs White");
+        mustard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setCharacter(white.getText());
+            }
+        });
+        JRadioButton green = new JRadioButton("Rev. Green");
+        mustard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setCharacter(green.getText());
+            }
+        });
+        JRadioButton turquoise = new JRadioButton("Ms Turquoise");
+        mustard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setCharacter(turquoise.getText());
+            }
+        });
+        JRadioButton plum = new JRadioButton("Prof. Plum");
+        mustard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setCharacter(plum.getText());
+            }
+        });
+        JRadioButton red = new JRadioButton("Miss Red");
+        mustard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setCharacter(red.getText());
+            }
+        });
         frame.add(label);
-        frame.add(mustard);
+
+        controls.add(mustard);
+        controls.add(white);
+        controls.add(green);
+        controls.add(turquoise);
+        controls.add(plum);
+        controls.add(red);
+
+        for(Component c : controls.getComponents()){
+            if(c instanceof JRadioButton){
+                JRadioButton j = (JRadioButton)c;
+                if(getCharacterStrings().contains(j.getText())){
+                    c.setEnabled(false);
+                }
+            }
+        }
+
+        frame.getContentPane().add(controls, BorderLayout.PAGE_START);
+        frame.pack();
         frame.revalidate();
         frame.repaint();
     }
