@@ -13,7 +13,6 @@ public abstract class GUI {
     JMenuItem resignMenuItem;
     JMenuItem quitMenuItem;
     GridBagConstraints constraints;
-    int playerNum = 1;
 
     // this makes the program actually quit when the frame's close button is
     // pressed.
@@ -84,13 +83,20 @@ public abstract class GUI {
 
     public abstract void setPlayers(int num);
 
+    public abstract void setCharacter(String character);
+
     /**
      * Add gui items from selecting characters
      */
-    public void chooseCharacters(){
-        JLabel label = new JLabel("Player "+playerNum+", choose your character:");
+    public void chooseCharacters(int num){
+        JLabel label = new JLabel("Player "+num+", choose your character:");
         JRadioButton mustard = new JRadioButton("Col. Mustard");
-        mustard.addActionListener(ev -> playerNum++);
+        mustard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setCharacter(mustard.getText());
+            }
+        });
         frame.add(label);
         frame.add(mustard);
         frame.revalidate();

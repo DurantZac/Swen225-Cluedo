@@ -18,7 +18,6 @@ public class Game extends GUI {
         return murderScenario;
     }
     private List<Card> murderScenario = new ArrayList<>();
-    private int numberOfPlayers;
     public List<Player> getPlayers() {
         return players;
     }
@@ -143,6 +142,10 @@ public class Game extends GUI {
             System.out.println(num + " is not a valid number of players");
         }
         chooseCharacters();
+    }
+
+    public void setCharacter(String character){
+
     }
 
 
