@@ -104,7 +104,7 @@ public class Game extends GUI {
     List<CharacterCard> unusedCharacters = new ArrayList<>(characters); //List for players picking characters
     public void setCharacter(String characterToPlay){
 
-        while (playerToAssignCharacter < numberOfPlayers){
+        while (playerToAssignCharacter <= numberOfPlayers){
             if (characterToPlay!="") {
                 for (CharacterCard c : unusedCharacters) {
                     if (c.toString().equalsIgnoreCase(characterToPlay)) {
@@ -115,8 +115,7 @@ public class Game extends GUI {
                     }
                 }
             }
-            playerToAssignCharacter++;
-            chooseCharacters(playerToAssignCharacter);
+            chooseCharacters(playerToAssignCharacter++);
         }
     }
 

@@ -12,7 +12,7 @@ public abstract class GUI {
     JMenuItem restartMenuItem;
     JMenuItem resignMenuItem;
     JMenuItem quitMenuItem;
-    GridBagConstraints constraints;
+    int playerNum = 1;
 
     // this makes the program actually quit when the frame's close button is
     // pressed.
@@ -90,16 +90,15 @@ public abstract class GUI {
     /**
      * Add gui items from selecting characters
      */
-    public void chooseCharacters(int num){
-        JLabel label = new JLabel("Player "+num+", choose your character:");
+    public void chooseCharacters(){
+        JLabel label = new JLabel("Player "+playerNum+ ", choose your character:");
         JPanel controls = new JPanel();
         JRadioButton mustard = new JRadioButton("Col. Mustard");
         mustard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controls.removeAll();
-                frame.remove(controls);
-                frame.remove(label);
+                mustard.setEnabled(false);
+                frame.repaint();
                 setCharacter(mustard.getText());
             }
         });
@@ -107,6 +106,8 @@ public abstract class GUI {
         mustard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                white.setEnabled(false);
+                frame.repaint();
                 setCharacter(white.getText());
             }
         });
@@ -114,6 +115,8 @@ public abstract class GUI {
         mustard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                green.setEnabled(false);
+                frame.repaint();
                 setCharacter(green.getText());
             }
         });
@@ -121,6 +124,8 @@ public abstract class GUI {
         mustard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                turquoise.setEnabled(false);
+                frame.repaint();
                 setCharacter(turquoise.getText());
             }
         });
@@ -128,6 +133,8 @@ public abstract class GUI {
         mustard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                plum.setEnabled(false);
+                frame.repaint();
                 setCharacter(plum.getText());
             }
         });
@@ -135,6 +142,8 @@ public abstract class GUI {
         mustard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                red.setEnabled(false);
+                frame.repaint();
                 setCharacter(red.getText());
             }
         });
