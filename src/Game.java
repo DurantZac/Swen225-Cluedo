@@ -91,7 +91,7 @@ public class Game extends GUI {
 
 
     public void setCharacter(String characterToPlay){
-        if (playerToAssignCharacter <= numberOfPlayers){
+        if (playerToAssignCharacter < numberOfPlayers){
                 for (CharacterCard c : unusedCharacters) {
                     if (c.toString().equalsIgnoreCase(characterToPlay)) {
                         Player p = new Player(c);
