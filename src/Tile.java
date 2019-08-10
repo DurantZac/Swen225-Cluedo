@@ -2,6 +2,7 @@
 /*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
 
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,6 @@ public class Tile
   private List<Tile> adjacent = new ArrayList<>();
 
   //Colours
-
   private static String ANSI_RESET = "";
   private static String ANSI_RED = "";
   private static String ANSI_GREEN = "";
@@ -33,7 +33,6 @@ public class Tile
   private static String ANSI_BLUE= "";
   private static String ANSI_PURPLE= "";
   private static String ANSI_CYAN = "";
-
 
 
   /**
@@ -72,6 +71,7 @@ public class Tile
       ANSI_PURPLE = "\u001B[35m";
       ANSI_CYAN = "\u001B[36m";
     }
+
 
   }
 
@@ -207,6 +207,20 @@ public class Tile
    */
    void setCol(int c){
     col = c;
+  }
+
+  Color getFillColour(){
+     if (isPartOf!=null){
+       return Color.decode("#b5ad94");
+     }
+     return Color.decode("#e6eddd");
+  }
+
+  Color getOutlineColour(){
+    if (isPartOf!=null){
+      return Color.decode("#b5ad94");
+    }
+    return Color.decode("#cdd1c9");
   }
 
 }

@@ -1,6 +1,3 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4584.3d417815a modeling language!*/
-
 
 import java.util.*;
 
@@ -12,14 +9,6 @@ public class Board
   //------------------------
   // MEMBER VARIABLES
   //------------------------
-
-  private static final String TITLE = "\n" +
-          "   ____ _                _       \n" +
-          "  / ___| |_   _  ___  __| | ___  \n" +
-          " | |   | | | | |/ _ \\/ _` |/ _ \\ \n" +
-          " | |___| | |_| |  __/ (_| | (_) |\n" +
-          "  \\____|_|\\__,_|\\___|\\__,_|\\___/ \n" +
-          "                                 \n";
 
   //Board Associations
   private Tile[][] boardTiles = new Tile[25][24];
@@ -38,7 +27,6 @@ public class Board
    */
   public Board(Game aGame, List<Tile>allBoardTiles)
   {
-    System.out.println(TITLE);
     int i = 0;
     for(int row = 0; row < 25; row++){
       for(int col = 0; col < 24; col++){
@@ -215,7 +203,7 @@ public class Board
    * @return the final string
    */
   public String toString(){
-    String s = TITLE;
+    String s="";
     s+= "M - Col Mustard. W - Mrs White. G - Rev. Green. T - Ms Turquoise. P - Prof. Plum. R - Miss Red.\nL - Library. D - Dining Room. K - Kitchen. A - Auditorium. C - Conservatory. E - Entertainment Room. B - Book Room. S - Study. H - Hall\n" +
             "# - Wall. X - Out of bounds. _ - Open tile. ^>v< - Doorway (Direction).\n";
     char c = 'a';
