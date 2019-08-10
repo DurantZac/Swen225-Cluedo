@@ -26,12 +26,6 @@ public abstract class GUI {
     public GUI(){
         menuBar = new JMenuBar();
 
-        restartMenuItem = new JMenuItem("Restart");
-        restartMenuItem.addActionListener(ev -> {
-            frame.dispose();
-            new Game();
-        });
-
         quitMenuItem = new JMenuItem("Quit");
         quitMenuItem.addActionListener(new ActionListener() {
             @Override
@@ -45,8 +39,6 @@ public abstract class GUI {
         });
 
         JFrame.setDefaultLookAndFeelDecorated(true);
-
-        menuBar.add(restartMenuItem);
         menuBar.add(quitMenuItem);
 
         menuBar.setLayout(new GridBagLayout());
