@@ -83,6 +83,7 @@ public class Game extends GUI {
             System.out.println(num + " is not a valid number of players");
         }
         makeCharacterCards();
+        chooseCharacters();
     }
 
 
@@ -97,25 +98,21 @@ public class Game extends GUI {
         characters.add(new CharacterCard("Miss Red", board.getBoardTile("Hy")));
 
         allCards = createCards(characters);
-        setCharacter("");
     }
 
 
     List<CharacterCard> unusedCharacters = new ArrayList<>(characters); //List for players picking characters
     public void setCharacter(String characterToPlay){
-
-        while (playerToAssignCharacter <= numberOfPlayers){
-            if (characterToPlay!="") {
+        if (playerToAssignCharacter <= numberOfPlayers){
                 for (CharacterCard c : unusedCharacters) {
                     if (c.toString().equalsIgnoreCase(characterToPlay)) {
                         Player p = new Player(c);
                         players.add(p);
                         unusedCharacters.remove(c);
+                        playerToAssignCharacter++;
                         break;
                     }
-                }
             }
-            chooseCharacters(playerToAssignCharacter++);
         }
     }
 
