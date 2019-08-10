@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 
 public abstract class GUI {
@@ -202,26 +203,47 @@ public abstract class GUI {
         frame.repaint();
     }
 
+    /**
+     * Class for main display screen
+     */
     class Screen extends JPanel{
+        HashMap<java.net.URL,Image> imageMap = new HashMap<>();
+
+        public Screen(){
+            super(); // Super constructor
+            try{
+                // Fill map with all possible images
+                Image Cor = ImageIO.read(getClass().getResource("Cor.jpg"));
+                imageMap.put(getClass().getResource("Cor.jpg"),Cor);
+            }
+            catch(Exception e){
+
+            }
+        }
+
+        /**
+         * Called when repainting
+         * @param g
+         */
         @Override
         protected void paintComponent(Graphics g){
             super.paintComponent(g);
+
+            //Divide up grid
             int colDis = this.getWidth() / 24;
             int rowDis = this.getHeight() / 25;
-            Image Cor = null;
-            try {
-                Cor = ImageIO.read(getClass().getResource("Cor.jpg"));
-            }
-            catch(IOException e){
-                System.out.println("Failed to load resources");
-            }
-            g.setColor(Color.BLACK);
+
+            // Paint images
             for(int row = 0; row < getHeight()-rowDis; row+=rowDis) {
                 for (int col =0; col < getWidth()-colDis; col += colDis) {
-                    //g.fillOval(col, row, 10, 10);
-                    g.drawImage(Cor, col, row,getWidth()/24,getHeight()/25,null);
+
+                    //Use boardTile url to find image
+                    Tile boardTile = getBoard().getBoardTile(row/rowDis,col/colDis);
+                    g.drawImage(imageMap.get(boardTile.getActiveImage()), col, row,getWidth()/24,getHeight()/25,null);
                 }
             }
         }
     }
+
+    public abstract Board getBoard();
 }
