@@ -178,4 +178,8 @@ public abstract class GUI {
         frame.revalidate();
         frame.repaint();
     }
+
+    public void setupGameplay(){
+
+    }
 }

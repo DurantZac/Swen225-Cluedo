@@ -33,6 +33,8 @@ public class Game extends GUI {
         return rooms;
     }
 
+    List<CharacterCard> unusedCharacters;
+
     private List<Room> rooms = new ArrayList<>();
     private List<WeaponCard> weapons = new ArrayList<>();
 
@@ -51,19 +53,6 @@ public class Game extends GUI {
     public Game() {
         createBoard();
         setupPlayerSelect();
-
-
-//        //Deals hand
-//        dealCards(cardsToBeDealt);
-//
-//        //Game play begins
-//        playGame(input);
-//
-//        try { //Close the input after the game ends.
-//            input.close();
-//        } catch (IOException e) {
-//            System.out.println("Error closing input" + e);
-//        }
     }
 
     /**
@@ -73,7 +62,6 @@ public class Game extends GUI {
      */
     @Override
     public void setPlayers(int num) {
-        System.out.println(num);
         try {
             if (num < minimumNumberOfPlayers() || num > maximumNumberOfPlayers()) {
                 throw new IncorrectNumberOfPlayersException();
@@ -96,12 +84,12 @@ public class Game extends GUI {
         characters.add(new CharacterCard("Prof. Plum", board.getBoardTile("Xt")));
         characters.add(new CharacterCard("Ms Turquoise", board.getBoardTile("Xg")));
         characters.add(new CharacterCard("Miss Red", board.getBoardTile("Hy")));
-
+        unusedCharacters = new ArrayList<>(characters); //List for players picking characters
         allCards = createCards(characters);
     }
 
 
-    List<CharacterCard> unusedCharacters = new ArrayList<>(characters); //List for players picking characters
+
     public void setCharacter(String characterToPlay){
         if (playerToAssignCharacter <= numberOfPlayers){
                 for (CharacterCard c : unusedCharacters) {
@@ -113,6 +101,13 @@ public class Game extends GUI {
                         break;
                     }
             }
+        }
+        else{
+        //Deals hand
+        dealCards(allCards);
+
+        //Game play begins
+         setupGameplay();
         }
     }
 
