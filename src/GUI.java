@@ -219,6 +219,8 @@ public abstract class GUI {
                 imageMap.put(getClass().getResource("Room.jpg"),room);
                 Image wt = ImageIO.read(getClass().getResource("WT.jpg"));
                 imageMap.put(getClass().getResource("WT.jpg"),wt);
+                Image theVoid = ImageIO.read(getClass().getResource("The_Void.jpg"));
+                imageMap.put(getClass().getResource("The_Void.jpg"),theVoid);
             }
             catch(Exception e){
 

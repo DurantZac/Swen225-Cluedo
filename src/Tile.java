@@ -90,7 +90,7 @@ public class Tile
         break;
       case 'X':
         isAccessible = false;
-        defaultImage = getClass().getResource("");
+        defaultImage = getClass().getResource("The_Void.jpg");
       default: // must be a wall or a person
         isAccessible =false;
         defaultImage = getClass().getResource("WT.jpg");
