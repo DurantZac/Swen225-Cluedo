@@ -3,6 +3,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -180,7 +181,7 @@ public abstract class GUI {
         screen.setVisible(true);
         screen.setSize(new Dimension(800,800));
 
-        Controls controls = new Controls();
+        Controls controls = new Controls(new GridBagLayout());
         controls.setBackground(Color.RED);
         controls.setVisible(true);
 
@@ -188,15 +189,25 @@ public abstract class GUI {
         rollDice.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                // Roll dice
                 int dice1 = rollDice();
                 int dice2 = rollDice();
+
+                // Pass information to game class
+                setMoves(dice1 + dice2);
+
+                // Update gui
                 controls.setDice1(dice1);
                 controls.setDice2(dice2);
+                rollDice.setEnabled(false);
                 frame.revalidate();
                 frame.repaint();
             }
         });
-        controls.add(rollDice);
+
+        // Add dice button to panel
+        controls.diceSection.add(rollDice,controls.rollDiceContraints);
 
 
         JSplitPane mainSplit = new JSplitPane();
@@ -211,6 +222,7 @@ public abstract class GUI {
         frame.repaint();
     }
 
+    public abstract void setMoves(int moves);
     /**
      * Class for main display screen
      */
@@ -282,6 +294,10 @@ public abstract class GUI {
                         System.out.println("Col= "+ col);
                         System.out.println("Row= "+ row);
                         System.out.println();
+
+                        processMove(getBoard().getBoardTile(row,col));
+                        frame.revalidate();
+                        frame.repaint();
                     }
                 });
             }
@@ -315,36 +331,96 @@ public abstract class GUI {
 
     class Controls extends JPanel{
 
-        public void setDice1(int dice1) {
-            this.dice1 = dice1;
-        }
+        // Dice section, will be placed on left side
+        JPanel diceSection = new JPanel(new GridBagLayout());
 
-        public void setDice2(int dice2) {
-            this.dice2 = dice2;
+        // Values for each dice
+        private int dice1 = 1;
+        private int dice2 = 1;
+
+        // Labels for each image
+        JLabel diceLabel1 = new JLabel();
+        JLabel diceLabel2 = new JLabel();
+
+        // Placement data for elements
+        GridBagConstraints dice1Constraints = new GridBagConstraints();
+        GridBagConstraints dice2Constraints = new GridBagConstraints();
+        GridBagConstraints rollDiceContraints = new GridBagConstraints();
+
+
+        public Controls (GridBagLayout g){
+            super(g);
+
+            // Create dice section
+            diceSection.setSize(getWidth()/5,getHeight());
+            diceSection.setBackground(Color.black);
+            GridBagConstraints dicePanel = new GridBagConstraints();
+            dicePanel.gridx = 0;
+            dicePanel.gridy = 0;
+            dicePanel.gridwidth = 10;
+            add(diceSection,dicePanel);
+
+
+            // Position dice
+            dice1Constraints.ipadx = 0;
+            dice1Constraints.ipady = 0;
+
+            dice1Constraints.ipadx = 0;
+            dice1Constraints.ipady = 0;
+
+            dice1Constraints.gridx = 0;
+            dice2Constraints.gridx =0;
+            dice1Constraints.gridy=0;
+            dice2Constraints.gridy = 1;
+
+            rollDiceContraints.gridx = 0;
+            rollDiceContraints.gridy =2;
+
+            // Set initial values
+            setDice1(1);
+            setDice2(1);
         }
 
         /**
-         * Called when repainting
-         * @param g
+         * Update dice 1
+         * @param d1
          */
-        private int dice1 = 1;
-        private int dice2 = 2;
-
-        @Override
-        protected void paintComponent(Graphics g){
-            super.paintComponent(g);
-
+        public void setDice1(int d1) {
+            diceSection.remove(diceLabel1);
+            this.dice1 = d1;
             try {
-                g.drawImage(ImageIO.read(getClass().getResource("roll" + dice1 + ".jpg")), getWidth()/45, getHeight()/10, getWidth()/15, getHeight()/3, null);
-                g.drawImage(ImageIO.read(getClass().getResource("roll" + dice2 + ".jpg")), getWidth()/45, getHeight()/10 + getHeight()/3 + getHeight()/10, getWidth()/15, getHeight()/3, null);
-            }
-            catch(IOException e){
+                BufferedImage myPicture = ImageIO.read(getClass().getResource("roll" + dice1 + ".jpg"));
+                diceLabel1 = new JLabel(new ImageIcon(myPicture));
+                diceLabel1.setSize(getWidth()/15, getHeight()/3);
+                diceSection.add(diceLabel1,dice1Constraints);
+            }catch (IOException e){
 
             }
         }
+
+        /**
+         * Update dice 2
+         * @param d2
+         */
+        public void setDice2(int d2) {
+            diceSection.remove(diceLabel2);
+            this.dice2 = d2;
+            try {
+                BufferedImage myPicture = ImageIO.read(getClass().getResource("roll" + dice2 + ".jpg"));
+                diceLabel2 = new JLabel(new ImageIcon(myPicture));
+                diceLabel2.setSize(getWidth()/15, getHeight()/3);
+                diceSection.add(diceLabel2,dice2Constraints);
+            }catch (IOException e){
+
+            }
+        }
+
+
     }
 
     public abstract Board getBoard();
 
     public abstract int rollDice();
+
+    public abstract boolean processMove(Tile t);
 }
