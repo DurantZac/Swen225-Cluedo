@@ -181,7 +181,9 @@ public abstract class GUI {
         frame.setSize(new Dimension(800,1000));
         Screen screen = new Screen();
         screen.setVisible(true);
+        screen.setBackground(Color.blue);
         screen.setSize(new Dimension(800,800));
+
 
         controls = new Controls(new GridBagLayout());
         controls.setBackground(Color.RED);
@@ -214,7 +216,7 @@ public abstract class GUI {
 
         JSplitPane mainSplit = new JSplitPane();
         mainSplit.setDividerSize(0);
-        mainSplit.setResizeWeight(0.8);
+        mainSplit.setResizeWeight(0.99);
         mainSplit.setOrientation(JSplitPane.VERTICAL_SPLIT);
         mainSplit.setTopComponent(screen);
         mainSplit.setBottomComponent(controls);
@@ -471,5 +473,7 @@ public abstract class GUI {
         }
         controls.setDice1(1);
         controls.setDice2(1);
+        frame.revalidate();
+        frame.repaint();
     }
 }
