@@ -45,7 +45,7 @@ public class Game extends GUI {
 
     // Store moves from rollDice event
     private int moves = 0;
-
+    private int currentPlayer=0;
 
     //------------------------
     // CONSTRUCTOR
@@ -111,11 +111,25 @@ public class Game extends GUI {
 
         //Game play begins
          setupGameplay();
+
+         //Find the player that starts
+         findFirstPlayer();
+         
          playGame();
         }
     }
 
-
+    /**
+     * Find the player that should start the game, this is Miss Red unless she isnt playing
+     */
+    private void findFirstPlayer(){
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getCharacter().getCharacter().equalsIgnoreCase("Miss Red")) {
+                currentPlayer = i;
+                break;
+            }
+        }
+    }
 
     /**
      * Generate board from string
@@ -576,25 +590,6 @@ public class Game extends GUI {
         board.getBoardTile("Jw").setDefaultImage(c.getResource("WL.jpg"));
         board.getBoardTile("Jx").setDefaultImage(c.getResource("WL.jpg"));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     //------------------------
@@ -639,13 +634,7 @@ public class Game extends GUI {
     private void playGame() {
         int currentPlayer = 0; // Default player to start
 
-//        // Rule "Miss Scarlet always goes first", so check if Miss Red is playing
-//        for (int i = 0; i < players.size(); i++) {
-//            if (players.get(i).getCharacter().getCharacter().equalsIgnoreCase("Miss Red")) {
-//                currentPlayer = i;
-//                break;
-//            }
-//        }
+
 //
 //        while (players.stream().filter(p -> p.getIsStillPlaying() == true).count() > 1) { // Still players left to play
 //            //Clear the screen and print the current board.
