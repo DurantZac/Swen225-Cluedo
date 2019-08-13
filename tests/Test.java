@@ -1,15 +1,15 @@
-import java.io.*;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.junit.Assert.*;
-
-public class Test{
-    /**
-     * Load initial board
-     */
+//import java.io.*;
+//import java.util.Collections;
+//import java.util.HashSet;
+//import java.util.List;
+//import java.util.Set;
+//
+//import static org.junit.Assert.*;
+//
+//public class Test{
+//    /**
+//     * Load initial board
+//     */
 //    @org.junit.Test
 //    public void test_1() {
 //        ByteArrayInputStream in = new ByteArrayInputStream(("3" + System.lineSeparator() + "1" + System.lineSeparator() +
@@ -843,10 +843,10 @@ public class Test{
 //        }
 //        return 0;
 //    }
-
-
-
-
-    public static void main(String[] args){
-    }
-}
+//
+//
+//
+//
+//    public static void main(String[] args){
+//    }
+//}
