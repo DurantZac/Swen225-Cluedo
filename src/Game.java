@@ -43,6 +43,9 @@ public class Game extends GUI {
 
     private static int playerToAssignCharacter = 1;
 
+    // Store moves from rollDice event
+    private int moves = 0;
+
 
     //------------------------
     // CONSTRUCTOR
@@ -108,6 +111,7 @@ public class Game extends GUI {
 
         //Game play begins
          setupGameplay();
+         playGame();
         }
     }
 
@@ -140,8 +144,8 @@ public class Game extends GUI {
                 "|M|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|_|_|_|_|#|" + "\n" +
                 "|X|_|_|_|_|_|_|_|_|#|#|^|^|#|#|_|_|_|#|#|#|#|#|X|" + "\n" +
                 "|#|#|#|#|#|#|^|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|P|" + "\n" +
-                "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|X|" + "\n" +
-                "|L|_|_|_|_|_|#|_|_|#|_|_|_|_|>|_|_|^|S|#|#|#|#|#|" + "\n" +
+                "|#|_|_|_|_|_|_|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|X|" + "\n" +
+                "|L|_|_|_|_|_|_|_|_|#|_|_|_|_|>|_|_|^|S|#|#|#|#|#|" + "\n" +
                 "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|" + "\n" +
                 "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|" + "\n" +
                 "|#|#|#|#|#|#|#|R|X|#|#|H|#|#|#|X|_|#|#|#|#|#|#|#|" + "\n";
@@ -631,99 +635,118 @@ public class Game extends GUI {
      * The game continues while players are still in the game (have not made a false accusation)
      * And the murder has not been solved.
      *
-     * @param input buffered reader getting input from the players
      */
-    private void playGame(BufferedReader input) {
+    private void playGame() {
         int currentPlayer = 0; // Default player to start
 
-        // Rule "Miss Scarlet always goes first", so check if Miss Red is playing
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getCharacter().getCharacter().equalsIgnoreCase("Miss Red")) {
-                currentPlayer = i;
-                break;
-            }
-        }
-
-        while (players.stream().filter(p -> p.getIsStillPlaying() == true).count() > 1) { // Still players left to play
-            //Clear the screen and print the current board.
-            System.out.println(CLEAR_SCREEN);
-            board.printBoard();
-
-            System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
-
-            //If they are in a room, tell them
-            Room room = players.get(currentPlayer).getPosition().getIsPartOf();
-            if (room != null) {
-                System.out.println("You are currently in the " + room);
-            }
-
-            //Check to see if they wish to see their hand
-            if(!seeHand(input, players.get(currentPlayer))) return;
-
-            //Move the player
-            boolean ableToSuggest = processMove(input, players.get(currentPlayer));
-
-            //Check to see if they want to make a suggestion
-            if (ableToSuggest) processSuggestion(input, players.get(currentPlayer));
-
-            //Check to see if they want to make an accusation
-            //If it returns true it means they correctly guessed, hence they won.
-            if (processAccusation(input, players.get(currentPlayer))) return;
-
-            //Pick the next character to play
-            System.out.println();
-            currentPlayer = getNextCharacter(currentPlayer);
-        }
-
-        //In this case there is only one player remaining (else it would have returned above) so it must be game over, last player wins.
-        System.out.printf("%s, you are the last player standing, you win! \n", players.get(currentPlayer).getCharacter());
-        System.out.println("The murder occurred as follows:");
-        System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
+//        // Rule "Miss Scarlet always goes first", so check if Miss Red is playing
+//        for (int i = 0; i < players.size(); i++) {
+//            if (players.get(i).getCharacter().getCharacter().equalsIgnoreCase("Miss Red")) {
+//                currentPlayer = i;
+//                break;
+//            }
+//        }
+//
+//        while (players.stream().filter(p -> p.getIsStillPlaying() == true).count() > 1) { // Still players left to play
+//            //Clear the screen and print the current board.
+//            System.out.println(CLEAR_SCREEN);
+//            board.printBoard();
+//
+//            System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
+//
+//            //If they are in a room, tell them
+//            Room room = players.get(currentPlayer).getPosition().getIsPartOf();
+//            if (room != null) {
+//                System.out.println("You are currently in the " + room);
+//            }
+//
+//            //Check to see if they wish to see their hand
+//            if(!seeHand(input, players.get(currentPlayer))) return;
+//
+//            //Move the player
+//            boolean ableToSuggest = processMove(input, players.get(currentPlayer));
+//
+//            //Check to see if they want to make a suggestion
+//            if (ableToSuggest) processSuggestion(input, players.get(currentPlayer));
+//
+//            //Check to see if they want to make an accusation
+//            //If it returns true it means they correctly guessed, hence they won.
+//            if (processAccusation(input, players.get(currentPlayer))) return;
+//
+//            //Pick the next character to play
+//            System.out.println();
+//            currentPlayer = getNextCharacter(currentPlayer);
+//        }
+//
+//        //In this case there is only one player remaining (else it would have returned above) so it must be game over, last player wins.
+//        System.out.printf("%s, you are the last player standing, you win! \n", players.get(currentPlayer).getCharacter());
+//        System.out.println("The murder occurred as follows:");
+//        System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
     }
 
+//    /**
+//     * Moves the current player to a new valid location
+//     *@param input buffered reader getting input from the players
+//     *@param player the current player to be moved
+//     * @return if they moved - hence if they can suggest while in a room
+//     */
+//    private boolean processMove(BufferedReader input, Player player) {
+//        try {
+//            //Find out how many moves the player has
+//            int numMoves = rollDice();
+//            System.out.println("You have " + numMoves + " moves.");
+//
+//            //finds out where to move to
+//            System.out.println("Where would you like to move to? If you cannot move or do not wish to, type SKIP");
+//            String move = input.readLine();
+//            if (move.equalsIgnoreCase("skip"))
+//                return false;
+//
+//            Tile goal = board.getBoardTile(move);
+//            while (goal == null) { // ensures the tile is valid (as in 2 letters, one upper one lower)
+//                System.out.println("Invalid tile, please choose again");
+//                System.out.println("Where would you like to move to?");
+//                move = input.readLine();
+//                goal = board.getBoardTile(move);
+//            }
+//
+//            //Finds a path and moves the player, returns true if successful
+//            boolean validInput = board.movePlayer(player, goal, numMoves);
+//
+//            while (!validInput) { // ensures the move is valid and there is a path to it
+//                System.out.println("That move is not valid, please try a different move");
+//                move = input.readLine();
+//                goal = board.getBoardTile(move);
+//                validInput = board.movePlayer(player, goal, numMoves);
+//            }
+//
+//            //Reprints the board with their new position.
+//            board.printBoard();
+//
+//        } catch (IOException e) {
+//            System.out.println("Error moving player" + e);
+//        }
+//        return true;
+//    }
+
+
     /**
-     * Moves the current player to a new valid location
-     *@param input buffered reader getting input from the players
-     *@param player the current player to be moved
-     * @return if they moved - hence if they can suggest while in a room
+     * Take tile t and check if current player can reach this tile with currents moves.
+     * If so, move the player, if not, return false for now.
+     * Will need to use player field and moves fields that are updated.
+     * Moves are updated on dice roll.
+     * Player not currently updating
+     * @param t Tile to move to
+     * @return
      */
-    private boolean processMove(BufferedReader input, Player player) {
-        try {
-            //Find out how many moves the player has
-            int numMoves = rollDice();
-            System.out.println("You have " + numMoves + " moves.");
-
-            //finds out where to move to
-            System.out.println("Where would you like to move to? If you cannot move or do not wish to, type SKIP");
-            String move = input.readLine();
-            if (move.equalsIgnoreCase("skip"))
-                return false;
-
-            Tile goal = board.getBoardTile(move);
-            while (goal == null) { // ensures the tile is valid (as in 2 letters, one upper one lower)
-                System.out.println("Invalid tile, please choose again");
-                System.out.println("Where would you like to move to?");
-                move = input.readLine();
-                goal = board.getBoardTile(move);
-            }
-
-            //Finds a path and moves the player, returns true if successful
-            boolean validInput = board.movePlayer(player, goal, numMoves);
-
-            while (!validInput) { // ensures the move is valid and there is a path to it
-                System.out.println("That move is not valid, please try a different move");
-                move = input.readLine();
-                goal = board.getBoardTile(move);
-                validInput = board.movePlayer(player, goal, numMoves);
-            }
-
-            //Reprints the board with their new position.
-            board.printBoard();
-
-        } catch (IOException e) {
-            System.out.println("Error moving player" + e);
+    public boolean processMove(Tile t){
+        if(board.movePlayer(players.get(0),t,moves)){
+            System.out.println("TRUE");
         }
-        return true;
+        else{
+            System.out.println("FALSE");
+        }
+        return false;
     }
 
 
@@ -1128,6 +1151,11 @@ public class Game extends GUI {
     public Board getBoard(){
         return board;
     }
+
+    public void setMoves(int m){
+        moves = m;
+    }
+
 
     /**
      * Exception used to check the correct number of players are playing.

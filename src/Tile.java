@@ -211,7 +211,11 @@ public class Tile
    */
    void addCharacter(CharacterCard c){
     symbol = c.getCharacterSymbol();
-    setIsAccessible(false);
+    if(isPartOf == null)
+    activeImage = getClass().getResource(c.getCharacterSymbol() + "_Cor.jpg");
+    else
+      activeImage = getClass().getResource(c.getCharacterSymbol() + "_Room.jpg");
+     setIsAccessible(false);
   }
 
   /**
@@ -220,6 +224,7 @@ public class Tile
    */
    void removeCharacter(){
     symbol = '_';
+    activeImage = defaultImage;
     setIsAccessible(true);
   }
 
