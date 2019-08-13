@@ -1156,6 +1156,10 @@ public class Game extends GUI {
         moves = m;
     }
 
+    public void nextTurn(){
+        
+    }
+
 
     /**
      * Exception used to check the correct number of players are playing.
