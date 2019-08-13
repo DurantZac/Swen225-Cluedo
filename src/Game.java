@@ -616,7 +616,7 @@ public class Game extends GUI {
      *
      * @return the roll
      */
-    private int rollDice() {
+    public int rollDice() {
         Random diceRoll1 = new Random();
 
         int roll1 = diceRoll1.nextInt(6); //random int from 0-5
