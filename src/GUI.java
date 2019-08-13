@@ -430,7 +430,8 @@ public abstract class GUI {
             accuse.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    processAccusation();
+                    //Pop up window to choose the 3 cards then call check accusation, returns if it was right
+                    //boolean correct=checkAccusation(String charcter, String weapon, String room);
                 }
             });
             constraints.gridy= 2;
@@ -555,7 +556,7 @@ public abstract class GUI {
 
     public abstract Card checkSuggestion(String character, String weapon);
 
-    public abstract boolean processAccusation();
+    public abstract boolean checkAccusation(String character, String weapon, String room);
 
     public abstract List<Player> getPlayers();
 
