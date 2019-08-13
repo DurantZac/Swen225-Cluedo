@@ -36,7 +36,6 @@ public abstract class GUI {
         quitMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controls.showCards();
                 int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to quit?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
@@ -182,6 +181,7 @@ public abstract class GUI {
     }
 
     public void setupGameplay(){
+        playerNum = 1;
         frame.setSize(new Dimension(800,1000));
         Screen screen = new Screen();
         screen.setVisible(true);
@@ -350,6 +350,7 @@ public abstract class GUI {
         // Labels for each image
         JLabel diceLabel1 = new JLabel();
         JLabel diceLabel2 = new JLabel();
+        JLabel playerLabel;
 
         // Placement data for elements
         GridBagConstraints constraints = new GridBagConstraints();
@@ -396,7 +397,7 @@ public abstract class GUI {
             setDice1(1);
             setDice2(1);
 
-            JLabel playerLabel = new JLabel("Player " + playerNum +"'s Turn");
+            playerLabel = new JLabel("Player " + (playerNum) +"'s Turn");
             constraints.gridx = 1;
             constraints.gridy = 0;
             add(playerLabel,constraints);
@@ -408,6 +409,7 @@ public abstract class GUI {
                 public void actionPerformed(ActionEvent e) {
                     showCards = false;
                     nextTurn();
+                    playerNum = currentPlayer +1;
                 }
             });
             constraints.gridx = 2;
@@ -541,6 +543,12 @@ public abstract class GUI {
         }
 
 
+        @Override
+        public void paintComponent(Graphics g){
+            super.paintComponent(g);
+            playerLabel.setText("Player " + playerNum +"'s turn");
+            repaint();
+        }
 
     }
 
