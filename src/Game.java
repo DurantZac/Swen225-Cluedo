@@ -94,7 +94,7 @@ public class Game extends GUI {
 
 
     public void setCharacter(String characterToPlay){
-        if (playerToAssignCharacter < numberOfPlayers){
+        if (playerToAssignCharacter <= numberOfPlayers){
                 for (CharacterCard c : unusedCharacters) {
                     if (c.toString().equalsIgnoreCase(characterToPlay)) {
                         Player p = new Player(c);
@@ -105,7 +105,7 @@ public class Game extends GUI {
                     }
             }
         }
-        else{
+        if(playerToAssignCharacter == numberOfPlayers+1){
         //Deals hand
         dealCards(allCards);
 
@@ -754,7 +754,7 @@ public class Game extends GUI {
         if (players.stream().filter(p -> p.getIsStillPlaying() == true).count() == 0) return 0;
 
         //Get the next player
-        if (current < players.size() - 1) {
+        if (current < players.size()-1) {
             if (!players.get(current + 1).getIsStillPlaying())
                 return getNextCharacter(current + 1); //Find the next one
             else {
