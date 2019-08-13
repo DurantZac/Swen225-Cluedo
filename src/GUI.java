@@ -6,8 +6,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
+import java.util.List;
 
 
 public abstract class GUI {
@@ -16,7 +16,9 @@ public abstract class GUI {
     JMenuItem quitMenuItem;
     Controls controls;
     int playerNum = 1;
+    int currentPlayer = 0;
     JPanel diceSection = new JPanel(new GridBagLayout());
+    boolean showCards = false;
 
 
 
@@ -34,6 +36,7 @@ public abstract class GUI {
         quitMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                controls.showCards();
                 int dialogButton = JOptionPane.YES_NO_OPTION;
                 int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to quit?","Warning",dialogButton);
                 if(dialogResult == JOptionPane.YES_OPTION){
@@ -351,6 +354,8 @@ public abstract class GUI {
         // Placement data for elements
         GridBagConstraints constraints = new GridBagConstraints();
 
+        JPanel handSection;
+
 
         public Controls (GridBagLayout g){
             super(g);
@@ -367,13 +372,13 @@ public abstract class GUI {
 
 
             //Setup hand stuff
-            JPanel handSection = new JPanel(new GridLayout(2,3));
+            handSection = new JPanel(new GridLayout(2,3));
             for(int i =0; i < 6; i++){
                 try {
-                    BufferedImage myPicture = ImageIO.read(getClass().getResource("card_study.jpg"));
-                    JLabel test = new JLabel(new ImageIcon(myPicture));
-                    test.setSize(getWidth() / 15, getHeight() / 3);
-                    handSection.add(test);
+                    BufferedImage myPicture = ImageIO.read(getClass().getResource("card_back.jpg"));
+                    JLabel card = new JLabel(new ImageIcon(myPicture));
+                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(card);
                 }
                 catch(IOException e){
 
@@ -401,6 +406,7 @@ public abstract class GUI {
             nextTurn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    showCards = false;
                     nextTurn();
                 }
             });
@@ -429,6 +435,25 @@ public abstract class GUI {
             });
             constraints.gridy= 2;
             this.add(accuse);
+
+            //Show/hide button
+            JButton showHide = new JButton("Show/Hide");
+            showHide.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    showCards = !showCards;
+                    if(showCards){
+                        controls.showCards();
+                    }
+                    else{
+                        controls.hideCards();
+                    }
+                }
+            });
+            constraints.gridx = 3;
+            constraints.gridy = 2;
+            this.add(showHide,constraints);
+
         }
 
         /**
@@ -458,13 +483,58 @@ public abstract class GUI {
             diceSection.remove(diceLabel2);
             this.dice2 = d2;
             try {
-                BufferedImage myPicture = ImageIO.read(getClass().getResource("roll" + dice2 + ".jpg"));
-                diceLabel2 = new JLabel(new ImageIcon(myPicture));
+                BufferedImage image = ImageIO.read(getClass().getResource("roll" + dice2 + ".jpg"));
+                diceLabel2 = new JLabel(new ImageIcon(image));
                 diceLabel2.setSize(getWidth()/15, getHeight()/3);
                 constraints.gridx = 0;
                 constraints.gridy = 1;
                 diceSection.add(diceLabel2,constraints);
             }catch (IOException e){
+
+            }
+        }
+
+        public void showCards(){
+            handSection.removeAll();
+            Player p = getPlayers().get(currentPlayer);
+            try {
+                Set<Card> hand = p.getHand();
+                for(Card c : hand){
+                    BufferedImage image = ImageIO.read(c.getImage());
+                    JLabel card = new JLabel(new ImageIcon(image));
+                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(card);
+                }
+                for(int i = hand.size(); i < 6; i++){
+                    BufferedImage nullImage = ImageIO.read(getClass().getResource("card_back.jpg"));
+                    JLabel card = new JLabel(new ImageIcon(nullImage));
+                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(card);
+                }
+                frame.revalidate();
+                frame.repaint();
+            }catch (IOException e){
+
+            }
+            catch (IllegalArgumentException i){
+                System.out.println(i);
+            }
+        }
+
+        public void hideCards(){
+            handSection.removeAll();
+            try{
+                for(int i = 0; i < 6; i++){
+                    BufferedImage nullImage = ImageIO.read(getClass().getResource("card_back.jpg"));
+                    JLabel card = new JLabel(new ImageIcon(nullImage));
+                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(card);
+                }
+                frame.revalidate();
+                frame.repaint();
+                frame.repaint();
+            }
+            catch (IOException e){
 
             }
         }
@@ -487,6 +557,8 @@ public abstract class GUI {
 
     public abstract boolean processAccusation();
 
+    public abstract List<Player> getPlayers();
+
 
     /**
      * Enable controls for next player and reset dice to 1's
@@ -497,6 +569,7 @@ public abstract class GUI {
         }
         controls.setDice1(1);
         controls.setDice2(1);
+        controls.hideCards();
         frame.revalidate();
         frame.repaint();
     }

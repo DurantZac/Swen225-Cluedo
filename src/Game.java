@@ -17,6 +17,8 @@ public class Game extends GUI {
     }
     private List<Card> murderScenario = new ArrayList<>();
     private int numberOfPlayers;
+
+    @Override
     public List<Player> getPlayers() {
         return players;
     }
@@ -45,7 +47,6 @@ public class Game extends GUI {
 
     // Store moves from rollDice event
     private int moves = 0;
-    private int currentPlayer=0;
 
     //------------------------
     // CONSTRUCTOR

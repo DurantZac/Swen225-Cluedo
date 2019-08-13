@@ -1,3 +1,5 @@
+import java.net.URL;
+
 public class WeaponCard implements Card
 {
 
@@ -9,6 +11,7 @@ public class WeaponCard implements Card
   private String weapon;
   private Room location;
   private int index;
+  public java.net.URL image;
 
   //------------------------
   // CONSTRUCTOR
@@ -23,21 +26,27 @@ public class WeaponCard implements Card
     weapon = aWeapon;
     switch(aWeapon){
       case "Dagger":
+        image = getClass().getResource("card_dagger.jpg");
         index = 1;
         break;
       case "Rope":
+        image = getClass().getResource("card_rope.jpg");
         index = 2;
         break;
       case "CandleStick":
+        image = getClass().getResource("card_candlestick.jpg");
         index = 3;
         break;
       case "Revolver":
+        image = getClass().getResource("card_revolver.jpg");
         index = 4;
         break;
       case "Spanner":
+        image = getClass().getResource("card_spanner.jpg");
         index = 5;
         break;
       case "Lead Pipe":
+        image = getClass().getResource("card_lead.jpg");
         index = 6;
         break;
     }
@@ -81,5 +90,10 @@ public class WeaponCard implements Card
 
   public int getIndex(){
     return index;
+  }
+
+  @Override
+  public URL getImage() {
+    return image;
   }
 }
