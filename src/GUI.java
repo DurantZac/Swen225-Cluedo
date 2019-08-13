@@ -6,16 +6,18 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 
 
 public abstract class GUI {
     JFrame frame;
     JMenuBar menuBar;
-    JMenuItem restartMenuItem;
-    JMenuItem resignMenuItem;
     JMenuItem quitMenuItem;
+    Controls controls;
     int playerNum = 1;
+    JPanel diceSection = new JPanel(new GridBagLayout());
+
 
     // this makes the program actually quit when the frame's close button is
     // pressed.
@@ -181,7 +183,7 @@ public abstract class GUI {
         screen.setVisible(true);
         screen.setSize(new Dimension(800,800));
 
-        Controls controls = new Controls(new GridBagLayout());
+        controls = new Controls(new GridBagLayout());
         controls.setBackground(Color.RED);
         controls.setVisible(true);
 
@@ -207,7 +209,7 @@ public abstract class GUI {
         });
 
         // Add dice button to panel
-        controls.diceSection.add(rollDice,controls.rollDiceContraints);
+        diceSection.add(rollDice,controls.rollDiceContraints);
 
 
         JSplitPane mainSplit = new JSplitPane();
@@ -332,7 +334,6 @@ public abstract class GUI {
     class Controls extends JPanel{
 
         // Dice section, will be placed on left side
-        JPanel diceSection = new JPanel(new GridBagLayout());
 
         // Values for each dice
         private int dice1 = 1;
@@ -416,6 +417,7 @@ public abstract class GUI {
         }
 
 
+
     }
 
     public abstract Board getBoard();
@@ -423,4 +425,15 @@ public abstract class GUI {
     public abstract int rollDice();
 
     public abstract boolean processMove(Tile t);
+
+    /**
+     * Enable controls for next player and reset dice to 1's
+     */
+    public void resetControls(){
+        for(Component c : diceSection.getComponents()){
+            c.setEnabled(true);
+        }
+        controls.setDice1(1);
+        controls.setDice2(1);
+    }
 }
