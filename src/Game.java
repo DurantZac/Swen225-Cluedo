@@ -832,54 +832,22 @@ public class Game extends GUI {
      * @param player the current input
      */
 //    public void processSuggestion(BufferedReader input, Player player) {
-//        try {
-//            Room room = player.getPosition().getIsPartOf();
-//            if (room == null) { // only allow them to make suggestions in a room
-//                return;
-//            }
-//
-//            System.out.println("Would you like to make a suggestion? (Y/N)");
-//            boolean validInput = false;
-//
-//            while (!validInput) { // ensure the input is read correctly
-//                String suggest = input.readLine();
-//
-//                //Yes they want to suggest
-//                if (suggest.equalsIgnoreCase("yes") || suggest.equalsIgnoreCase("y")) {
-//                    validInput = true;
-//
-//                    //Ask if they wish to see their hand
-//                    if(!seeHand(input, player)) return;
-//
-//                    //Get the weapon and character they wish to suggest
-//                    WeaponCard weapon = checkWeapon(input);
-//                    CharacterCard character = checkCharacter(input);
-//                    //Clear the screen, move the weapon and character into that room
-//                    System.out.println(CLEAR_SCREEN);
+    //Get the weapon and character they wish to suggest
+//    WeaponCard weapon = checkWeapon(input);
+//    CharacterCard character = checkCharacter(input);
+//    //Clear the screen, move the weapon and character into that room
 //                    board.teleportCharacter(character, room);
 //                    board.teleportWeapon(weapon, room);
 //
-//                    //Check if the suggestion is disputed by any character
-//                    Card dispute = checkSuggestion(player, weapon, character, room.getRoomCard(), input);
+//    //Check if the suggestion is disputed by any character
+//    Card dispute = checkSuggestion(player, weapon, character, room.getRoomCard(), input);
 //                    board.printBoard();
 //                    if (dispute != null) { //A dispute has occured
-//                        System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
-//                    } else { // No dispute
-//                        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
-//                    }
-//                }
-//                //They do not want to make a suggestion
-//                else if (suggest.equalsIgnoreCase("no") || suggest.equalsIgnoreCase("n")) {
-//                    return;
-//                }
-//                //Unclear answer, ask again.
-//                else {
-//                    System.out.println("Please answer with Y or N.");
-//                }
-//            }
-//        } catch (IOException e) {
-//            System.out.println("Error Processing Suggestion" + e);
-//        }
+//        System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
+//    } else { // No dispute
+//        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
+//    }
+
 //    }
 
     /**
@@ -1150,9 +1118,20 @@ public class Game extends GUI {
         resetControls();
     }
 
+    @Override
     public boolean processSuggestion(){
-        return false;
+        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
+        if (room == null) { // only allow them to make suggestions in a room
+            return false;
+        }
+        return true;
     }
+
+    @Override
+    public Card checkSuggestion(String character, String weapon) {
+        return null;
+    }
+
 
     public boolean processAccusation(){
         return false;
