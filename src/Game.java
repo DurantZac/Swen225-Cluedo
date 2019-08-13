@@ -741,10 +741,10 @@ public class Game extends GUI {
      */
     public boolean processMove(Tile t){
         if(board.movePlayer(players.get(0),t,moves)){
-            System.out.println("TRUE");
+            moves = 0;
         }
         else{
-            System.out.println("FALSE");
+            System.out.println("INVALID MOVE");
         }
         return false;
     }
