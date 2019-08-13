@@ -483,7 +483,10 @@ public abstract class GUI {
 
     public abstract boolean processSuggestion();
 
+    public abstract Card checkSuggestion(String character, String weapon);
+
     public abstract boolean processAccusation();
+
 
     /**
      * Enable controls for next player and reset dice to 1's
