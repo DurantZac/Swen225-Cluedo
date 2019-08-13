@@ -931,98 +931,50 @@ public class Game extends GUI {
 
 
     /**
-     * Asks the user what they think the murder weapon is
+     * turn a string into the weapon card
      * Used for suggestions and accusations
      *
-     * @param input the buffered reader to process input from the user
+     * @param weapon the string of the weapon the user would like to suggest
      * @return the card the player would like to suggest/accuse
      */
-    private WeaponCard checkWeapon(BufferedReader input) {
-        System.out.println("What do you think is the murder weapon?");
-
-        //Prints a list of all the weapons
-        List <WeaponCard> weapons = getWeapons();
-        for (int weaponCount = 1; weaponCount <= weapons.size(); weaponCount++) {
-            System.out.println("[" + weaponCount + "] " + weapons.get(weaponCount - 1).toString());
-        }
-
-        while (true) { //since we return this should be fine
-            try {
-                //Get the input and return the corresponding weapon card
-                int weapon = Integer.parseInt(input.readLine());
-                WeaponCard suggestedWeapon = (WeaponCard) weapons.get(weapon - 1);
-                System.out.println("You have selected the weapon: " + suggestedWeapon + "\n");
-                return suggestedWeapon;
-            } catch (IOException e) {
-                System.out.println("Error on input, please try again" + e);
-            } catch (NumberFormatException n) {
-                System.out.println("Please enter the number of the weapon");
-            } catch (IndexOutOfBoundsException f) {
-                System.out.println("Please enter a number between 1 and 6");
+    private WeaponCard checkWeapon(String weapon) {
+        //Get the input and return the corresponding weapon card
+        for (WeaponCard w: weapons){
+            if (w.toString().equalsIgnoreCase(weapon)){
+                return w;
             }
         }
+        return null;
     }
 
     /**
      * Asks the user who they think the murderer is
      * Used for suggestions and accusations
      *
-     * @param input the buffered reader to process input from the user
+     * @param character the string of the character card the player chose
      * @return the card the player would like to suggest/accuse
      */
-    private CharacterCard checkCharacter(BufferedReader input) {
-        //Prints each of the characters
-        System.out.println("Who do you think is the murderer?");
-        for (int characterCount = 1; characterCount <= characters.size(); characterCount++) {
-            System.out.println("[" + characterCount + "] " + characters.get(characterCount - 1).toString());
+    private CharacterCard checkCharacter(String character) {
+        for (CharacterCard c: characters){
+            if (c.toString().equalsIgnoreCase(character))
+                return c;
         }
-
-        while (true) {
-            try {
-                //Get the input and return the corresponding character card
-                int murderer = Integer.parseInt(input.readLine());
-                CharacterCard suggestedmurderer = characters.get(murderer - 1);
-                System.out.println("You have selected the character: " + suggestedmurderer + "\n");
-                return suggestedmurderer;
-            } catch (IOException e) {
-                System.out.println("Error on input, please try again" + e);
-            } catch (NumberFormatException n) {
-                System.out.println("Please enter the number of the weapon");
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Please enter a number between 1 and 6");
-            }
-        }
+        return null;
     }
 
     /**
      * Asks the user what they think the murder room is
      * Used for accusations only as suggestions use the room players are in.
      *
-     * @param input the buffered reader to process input from the user
+     * @param room the room the player chose (as a string)
      * @return the card the player would like to suggest/accuse
      */
-    private RoomCard checkRoom(BufferedReader input) {
-        //Prints all the rooms
-        System.out.println("What do you think is the murder room?");
-        for (int roomCount = 1; roomCount <= rooms.size(); roomCount++) {
-            System.out.println("[" + roomCount + "] " + rooms.get(roomCount - 1).toString());
+    private RoomCard checkRoom(String room) {
+        for (Room r: rooms){
+            if (r.toString().equalsIgnoreCase(room))
+                return r.getRoomCard();
         }
-
-        while (true) {
-            try {
-                //Gets the input and returns the corresponding room
-                int room = Integer.parseInt(input.readLine());
-                RoomCard suggestedRoom = rooms.get(room - 1).getRoomCard();
-                System.out.println("You have selected the weapon: " + suggestedRoom + "\n");
-                return suggestedRoom;
-            } catch (IOException e) {
-                System.out.println("Error on input, please try again" + e);
-            } catch (NumberFormatException n) {
-                System.out.println("Please enter the number of the weapon");
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Please enter a number between 1 and 6");
-            }
-        }
+        return null;
     }
 
     /**
@@ -1086,20 +1038,7 @@ public class Game extends GUI {
 //        return false; // guessed false or didnt accuse
 //    }
 
-    /**
-     * Checks what the player thinks happened by getting the murderer, murder weapon and location
-     * And checking this against the murder scenario
-     *
-     * @param input the buffered reader to process input from the user
-     * @return if the accusation made was correct or not
-     */
-    private boolean checkAccusation(BufferedReader input) {
-        CharacterCard character = checkCharacter(input);
-        WeaponCard weapon = checkWeapon(input);
-        RoomCard room = checkRoom(input);
 
-        return (character.equals(murderScenario.get(0)) && room.equals(murderScenario.get(1)) && weapon.equals(murderScenario.get(2)));
-    }
 
     /**
      * Return board object for testing
@@ -1129,14 +1068,44 @@ public class Game extends GUI {
 
     @Override
     public Card checkSuggestion(String character, String weapon) {
+        //Get the weapon and character they wish to suggest
+        WeaponCard weaponCard = checkWeapon(weapon);
+        CharacterCard characterCard = checkCharacter(character);
+        board.teleportCharacter(characterCard, players.get(currentPlayer).getPosition().getIsPartOf());
+        board.teleportWeapon(weaponCard, players.get(currentPlayer).getPosition().getIsPartOf());
+        //Check if the suggestion is disputed by any character
+
+
+//        Card dispute = checkSuggestion(player, weapon, character, room.getRoomCard(), input);
+//                    board.printBoard();
+//                    if (dispute != null) { //A dispute has occured
+//        System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
+//    } else { // No dispute
+//        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
+//    }    }
         return null;
     }
-
 
     public boolean processAccusation(){
         return false;
     }
 
+    /**
+     * Checks what the player thinks happened by getting the murderer, murder weapon and location
+     * And checking this against the murder scenario
+     *
+     * @param character the character to accuse
+     * @param weapon the weapon to accuse
+     * @param room the room to accuse
+     * @return if the accusation was correct/incorrect
+     */
+    public boolean checkAccusation(String character, String weapon, String room) {
+        CharacterCard characterCard = checkCharacter(character);
+        WeaponCard weaponCard = checkWeapon(weapon);
+        RoomCard roomCard = checkRoom(room);
+
+        return (character.equals(murderScenario.get(0)) && room.equals(murderScenario.get(1)) && weapon.equals(murderScenario.get(2)));
+    }
 
     /**
      * Exception used to check the correct number of players are playing.
