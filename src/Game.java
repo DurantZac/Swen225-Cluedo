@@ -842,56 +842,56 @@ public class Game extends GUI {
      *@param input  input stream
      * @param player the current input
      */
-    public void processSuggestion(BufferedReader input, Player player) {
-        try {
-            Room room = player.getPosition().getIsPartOf();
-            if (room == null) { // only allow them to make suggestions in a room
-                return;
-            }
-
-            System.out.println("Would you like to make a suggestion? (Y/N)");
-            boolean validInput = false;
-
-            while (!validInput) { // ensure the input is read correctly
-                String suggest = input.readLine();
-
-                //Yes they want to suggest
-                if (suggest.equalsIgnoreCase("yes") || suggest.equalsIgnoreCase("y")) {
-                    validInput = true;
-
-                    //Ask if they wish to see their hand
-                    if(!seeHand(input, player)) return;
-
-                    //Get the weapon and character they wish to suggest
-                    WeaponCard weapon = checkWeapon(input);
-                    CharacterCard character = checkCharacter(input);
-                    //Clear the screen, move the weapon and character into that room
-                    System.out.println(CLEAR_SCREEN);
-                    board.teleportCharacter(character, room);
-                    board.teleportWeapon(weapon, room);
-
-                    //Check if the suggestion is disputed by any character
-                    Card dispute = checkSuggestion(player, weapon, character, room.getRoomCard(), input);
-                    board.printBoard();
-                    if (dispute != null) { //A dispute has occured
-                        System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
-                    } else { // No dispute
-                        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
-                    }
-                }
-                //They do not want to make a suggestion
-                else if (suggest.equalsIgnoreCase("no") || suggest.equalsIgnoreCase("n")) {
-                    return;
-                }
-                //Unclear answer, ask again.
-                else {
-                    System.out.println("Please answer with Y or N.");
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error Processing Suggestion" + e);
-        }
-    }
+//    public void processSuggestion(BufferedReader input, Player player) {
+//        try {
+//            Room room = player.getPosition().getIsPartOf();
+//            if (room == null) { // only allow them to make suggestions in a room
+//                return;
+//            }
+//
+//            System.out.println("Would you like to make a suggestion? (Y/N)");
+//            boolean validInput = false;
+//
+//            while (!validInput) { // ensure the input is read correctly
+//                String suggest = input.readLine();
+//
+//                //Yes they want to suggest
+//                if (suggest.equalsIgnoreCase("yes") || suggest.equalsIgnoreCase("y")) {
+//                    validInput = true;
+//
+//                    //Ask if they wish to see their hand
+//                    if(!seeHand(input, player)) return;
+//
+//                    //Get the weapon and character they wish to suggest
+//                    WeaponCard weapon = checkWeapon(input);
+//                    CharacterCard character = checkCharacter(input);
+//                    //Clear the screen, move the weapon and character into that room
+//                    System.out.println(CLEAR_SCREEN);
+//                    board.teleportCharacter(character, room);
+//                    board.teleportWeapon(weapon, room);
+//
+//                    //Check if the suggestion is disputed by any character
+//                    Card dispute = checkSuggestion(player, weapon, character, room.getRoomCard(), input);
+//                    board.printBoard();
+//                    if (dispute != null) { //A dispute has occured
+//                        System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
+//                    } else { // No dispute
+//                        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
+//                    }
+//                }
+//                //They do not want to make a suggestion
+//                else if (suggest.equalsIgnoreCase("no") || suggest.equalsIgnoreCase("n")) {
+//                    return;
+//                }
+//                //Unclear answer, ask again.
+//                else {
+//                    System.out.println("Please answer with Y or N.");
+//                }
+//            }
+//        } catch (IOException e) {
+//            System.out.println("Error Processing Suggestion" + e);
+//        }
+//    }
 
     /**
      * Checks if anyone can refute the suggestion that has just been made.
@@ -1089,45 +1089,45 @@ public class Game extends GUI {
      * @param player the current player
      * @return if the accusation was true or false
      */
-    public boolean processAccusation(BufferedReader input, Player player) {
-        try {
-            System.out.println("Would you like to make an accusation? (Y/N)");
-
-            boolean validInput = false; //checks for a yes or no answer
-            while (!validInput) {
-                String accuse = input.readLine();
-                if (accuse.equalsIgnoreCase("yes") || accuse.equalsIgnoreCase("y")) {
-
-                   //Finds out what they think occured, and returns if this is true or false
-                    boolean accusation = checkAccusation(input);
-
-                    if (accusation) { // they won, prints it for everyone to see
-                        System.out.println("Congratulations, " + player.getCharacter().toString() + " has solved the murder!");
-                        System.out.println("The murder occurred as follows:");
-                        System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
-                        return true;
-                    } else { // false, can no longer play
-                        System.out.println("The accusation is incorrect, " + player.getCharacter().toString());
-                        System.out.println("You can no longer win the game");
-                        player.setIsStillPlaying(false);
-                        System.out.println("Press any letter to continue");
-                        input.readLine();
-                        System.out.println(CLEAR_SCREEN);
-                    }
-                    validInput = true; // to break out of the loop
-                } else if (accuse.equalsIgnoreCase("no") || accuse.equalsIgnoreCase("n")) {
-                    // do not wish to make an accusation
-                    validInput = true;
-                }
-                else { // invalid input
-                    System.out.println("Please answer with Y or N.");
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error processing Accusation" + e);
-        }
-        return false; // guessed false or didnt accuse
-    }
+//    public boolean processAccusation(BufferedReader input, Player player) {
+//        try {
+//            System.out.println("Would you like to make an accusation? (Y/N)");
+//
+//            boolean validInput = false; //checks for a yes or no answer
+//            while (!validInput) {
+//                String accuse = input.readLine();
+//                if (accuse.equalsIgnoreCase("yes") || accuse.equalsIgnoreCase("y")) {
+//
+//                   //Finds out what they think occured, and returns if this is true or false
+//                    boolean accusation = checkAccusation(input);
+//
+//                    if (accusation) { // they won, prints it for everyone to see
+//                        System.out.println("Congratulations, " + player.getCharacter().toString() + " has solved the murder!");
+//                        System.out.println("The murder occurred as follows:");
+//                        System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
+//                        return true;
+//                    } else { // false, can no longer play
+//                        System.out.println("The accusation is incorrect, " + player.getCharacter().toString());
+//                        System.out.println("You can no longer win the game");
+//                        player.setIsStillPlaying(false);
+//                        System.out.println("Press any letter to continue");
+//                        input.readLine();
+//                        System.out.println(CLEAR_SCREEN);
+//                    }
+//                    validInput = true; // to break out of the loop
+//                } else if (accuse.equalsIgnoreCase("no") || accuse.equalsIgnoreCase("n")) {
+//                    // do not wish to make an accusation
+//                    validInput = true;
+//                }
+//                else { // invalid input
+//                    System.out.println("Please answer with Y or N.");
+//                }
+//            }
+//        } catch (IOException e) {
+//            System.out.println("Error processing Accusation" + e);
+//        }
+//        return false; // guessed false or didnt accuse
+//    }
 
     /**
      * Checks what the player thinks happened by getting the murderer, murder weapon and location
@@ -1157,7 +1157,15 @@ public class Game extends GUI {
     }
 
     public void nextTurn(){
-        
+
+    }
+
+    public boolean processSuggestion(){
+        return false;
+    }
+
+    public boolean processAccusation(){
+        return false;
     }
 
 

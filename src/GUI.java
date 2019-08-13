@@ -390,6 +390,26 @@ public abstract class GUI {
                 }
             });
             this.add(nextTurn);
+
+            // Suggest button
+            JButton suggest = new JButton("Suggest?");
+            suggest.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    processSuggestion();
+                }
+            });
+            this.add(suggest);
+
+            // Accuse button
+            JButton accuse = new JButton("Accuse?");
+            accuse.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    processAccusation();
+                }
+            });
+            this.add(accuse);
         }
 
         /**
@@ -437,6 +457,10 @@ public abstract class GUI {
     public abstract boolean processMove(Tile t);
 
     public abstract void nextTurn();
+
+    public abstract boolean processSuggestion();
+
+    public abstract boolean processAccusation();
 
     /**
      * Enable controls for next player and reset dice to 1's
