@@ -380,6 +380,36 @@ public abstract class GUI {
             // Set initial values
             setDice1(1);
             setDice2(1);
+
+            // Next turn button
+            JButton nextTurn = new JButton("Next Turn");
+            nextTurn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    nextTurn();
+                }
+            });
+            this.add(nextTurn);
+
+            // Suggest button
+            JButton suggest = new JButton("Suggest?");
+            suggest.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    processSuggestion();
+                }
+            });
+            this.add(suggest);
+
+            // Accuse button
+            JButton accuse = new JButton("Accuse?");
+            accuse.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    processAccusation();
+                }
+            });
+            this.add(accuse);
         }
 
         /**
@@ -425,6 +455,12 @@ public abstract class GUI {
     public abstract int rollDice();
 
     public abstract boolean processMove(Tile t);
+
+    public abstract void nextTurn();
+
+    public abstract boolean processSuggestion();
+
+    public abstract boolean processAccusation();
 
     /**
      * Enable controls for next player and reset dice to 1's
