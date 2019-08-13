@@ -114,7 +114,7 @@ public class Game extends GUI {
 
          //Find the player that starts
          findFirstPlayer();
-         
+
          playGame();
         }
     }
