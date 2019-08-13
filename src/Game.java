@@ -729,7 +729,7 @@ public class Game extends GUI {
      * @return
      */
     public boolean processMove(Tile t){
-        if(board.movePlayer(players.get(0),t,moves)){
+        if(board.movePlayer(players.get(currentPlayer),t,moves)){
             moves = 0;
         }
         else{
@@ -1146,7 +1146,8 @@ public class Game extends GUI {
     }
 
     public void nextTurn(){
-
+        currentPlayer = getNextCharacter(currentPlayer);
+        resetControls();
     }
 
     public boolean processSuggestion(){
