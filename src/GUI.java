@@ -19,6 +19,7 @@ public abstract class GUI {
     JPanel diceSection = new JPanel(new GridBagLayout());
 
 
+
     // this makes the program actually quit when the frame's close button is
     // pressed.
 
@@ -211,7 +212,9 @@ public abstract class GUI {
         });
 
         // Add dice button to panel
-        diceSection.add(rollDice,controls.rollDiceContraints);
+        controls.constraints.gridy = 2;
+        controls.constraints.gridx = 0;
+        diceSection.add(rollDice,controls.constraints);
 
 
         JSplitPane mainSplit = new JSplitPane();
@@ -346,42 +349,52 @@ public abstract class GUI {
         JLabel diceLabel2 = new JLabel();
 
         // Placement data for elements
-        GridBagConstraints dice1Constraints = new GridBagConstraints();
-        GridBagConstraints dice2Constraints = new GridBagConstraints();
-        GridBagConstraints rollDiceContraints = new GridBagConstraints();
+        GridBagConstraints constraints = new GridBagConstraints();
 
 
         public Controls (GridBagLayout g){
             super(g);
 
+
+
+            constraints.ipadx = 0;
+            constraints.ipady = 0;
             // Create dice section
-            diceSection.setSize(getWidth()/5,getHeight());
             diceSection.setBackground(Color.black);
-            GridBagConstraints dicePanel = new GridBagConstraints();
-            dicePanel.gridx = 0;
-            dicePanel.gridy = 0;
-            dicePanel.gridwidth = 10;
-            add(diceSection,dicePanel);
+            constraints.gridx = 0;
+            constraints.gridy = 0;
+            add(diceSection,constraints);
 
 
-            // Position dice
-            dice1Constraints.ipadx = 0;
-            dice1Constraints.ipady = 0;
+            //Setup hand stuff
+            JPanel handSection = new JPanel(new GridLayout(2,3));
+            for(int i =0; i < 6; i++){
+                try {
+                    BufferedImage myPicture = ImageIO.read(getClass().getResource("card_study.jpg"));
+                    JLabel test = new JLabel(new ImageIcon(myPicture));
+                    test.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(test);
+                }
+                catch(IOException e){
 
-            dice1Constraints.ipadx = 0;
-            dice1Constraints.ipady = 0;
+                }
+            }
+            handSection.setBackground(Color.CYAN);
+            handSection.setVisible(true);
+            constraints.gridx = 5;
+            constraints.gridy=0;
+            add(handSection,constraints);
 
-            dice1Constraints.gridx = 0;
-            dice2Constraints.gridx =0;
-            dice1Constraints.gridy=0;
-            dice2Constraints.gridy = 1;
 
-            rollDiceContraints.gridx = 0;
-            rollDiceContraints.gridy =2;
 
             // Set initial values
             setDice1(1);
             setDice2(1);
+
+            JLabel playerLabel = new JLabel("Player " + playerNum +"'s Turn");
+            constraints.gridx = 1;
+            constraints.gridy = 0;
+            add(playerLabel,constraints);
 
             // Next turn button
             JButton nextTurn = new JButton("Next Turn");
@@ -391,7 +404,8 @@ public abstract class GUI {
                     nextTurn();
                 }
             });
-            this.add(nextTurn);
+            constraints.gridx = 2;
+            this.add(nextTurn,constraints);
 
             // Suggest button
             JButton suggest = new JButton("Suggest?");
@@ -401,6 +415,8 @@ public abstract class GUI {
                     processSuggestion();
                 }
             });
+            constraints.gridx = 2;
+            constraints.gridy = 1;
             this.add(suggest);
 
             // Accuse button
@@ -411,6 +427,7 @@ public abstract class GUI {
                     processAccusation();
                 }
             });
+            constraints.gridy= 2;
             this.add(accuse);
         }
 
@@ -425,7 +442,9 @@ public abstract class GUI {
                 BufferedImage myPicture = ImageIO.read(getClass().getResource("roll" + dice1 + ".jpg"));
                 diceLabel1 = new JLabel(new ImageIcon(myPicture));
                 diceLabel1.setSize(getWidth()/15, getHeight()/3);
-                diceSection.add(diceLabel1,dice1Constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 0;
+                diceSection.add(diceLabel1,constraints);
             }catch (IOException e){
 
             }
@@ -442,7 +461,9 @@ public abstract class GUI {
                 BufferedImage myPicture = ImageIO.read(getClass().getResource("roll" + dice2 + ".jpg"));
                 diceLabel2 = new JLabel(new ImageIcon(myPicture));
                 diceLabel2.setSize(getWidth()/15, getHeight()/3);
-                diceSection.add(diceLabel2,dice2Constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 1;
+                diceSection.add(diceLabel2,constraints);
             }catch (IOException e){
 
             }
