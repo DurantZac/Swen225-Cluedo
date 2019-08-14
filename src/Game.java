@@ -1061,16 +1061,16 @@ public class Game extends GUI {
 
     @Override
     public boolean processSuggestion(){
-        //return true;
-        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
-        if (room == null) { // only allow them to make suggestions in a room
-            return false;
-        }
         return true;
+//        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
+//        if (room == null) { // only allow them to make suggestions in a room
+//            return false;
+//        }
+//        return true;
     }
 
     @Override
-    public void checkSuggestion(String character, String weapon) {
+    public List<Card> checkSuggestion(String character, String weapon) {
         //Get the weapon and character they wish to suggest
         WeaponCard weaponCard = checkWeapon(weapon);
         CharacterCard characterCard = checkCharacter(character);
@@ -1086,10 +1086,11 @@ public class Game extends GUI {
 //    } else { // No dispute
 //        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
 //    }    }
+        return null;
     }
 
     @Override
-    public Card refuteSuggestion() {
+    public List<Card> refuteSuggestion() {
         if (refutingPlayer==-1)return null;
         Player player = players.get(refutingPlayer);
 

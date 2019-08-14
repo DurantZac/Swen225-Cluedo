@@ -595,9 +595,9 @@ public abstract class GUI {
 
     public abstract boolean processSuggestion();
 
-    public abstract void checkSuggestion(String character, String weapon);
+    public abstract List<Card> checkSuggestion(String character, String weapon);
 
-    public abstract Card refuteSuggestion();
+    public abstract List<Card> refuteSuggestion();
 
     public abstract boolean checkAccusation(String character, String weapon, String room);
 
@@ -640,7 +640,10 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(charPick.getSelectedIndex() != -1 && weapPick.getSelectedIndex() != -1){
-                    //Submit
+                    String characterString = charPick.getSelectedItem().toString();
+                    String weaponString = weapPick.getSelectedItem().toString();
+                    popup.dispose();
+                    showRefuteWindow(checkSuggestion(characterString,weaponString);
                 }
             }
         });
@@ -651,6 +654,33 @@ public abstract class GUI {
         popup.add(weapPick);
         popup.add(submit);
 
+        popup.pack();
+        popup.revalidate();
+        popup.repaint();
+    }
+
+
+    public void showRefuteWindow(List<Card> cards){
+        JFrame popup = new JFrame();
+        popup.setVisible(true);
+        popup.setLayout(new FlowLayout());
+        if(cards == null || cards.size() < 2){
+            // Nobody can refute
+            JLabel message = new JLabel("Nobody can refute your suggestion");
+            popup.add(message);
+        }
+        else{
+            CharacterCard character = (CharacterCard)cards.get(0);
+            cards.remove(0);
+            JLabel charName = new JLabel(character.toString() + " please chose which card you wish to refute with.");
+            popup.add(charName);
+            String[] options = new String[cards.size()];
+            for(int i = 0; i < cards.size(); i++){
+                options[i] = cards.get(i).toString();
+            }
+            JComboBox optionBox = new JComboBox(options);
+            popup.add(optionBox);
+        }
         popup.pack();
         popup.revalidate();
         popup.repaint();
