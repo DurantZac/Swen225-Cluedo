@@ -445,7 +445,7 @@ public abstract class GUI {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(processSuggestion()){
-                        
+                        showSuggestionWindow();
                     }
                 }
             });
