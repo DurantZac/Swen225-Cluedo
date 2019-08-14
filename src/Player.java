@@ -12,7 +12,7 @@ public class Player
   private CharacterCard character;
   private boolean isStillPlaying;
   private Set <Card> hand = new HashSet<>();
-  String notes;
+  String notes = "";
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -122,7 +122,11 @@ public class Player
    * @param notes the note to append
    */
   public void setNotes(String notes) {
-    this.notes+='\n';
-    this.notes+=notes;
+    StringBuilder sb = new StringBuilder();
+    sb.append(this.notes);
+    sb.append("<br/>");
+    sb.append(notes);
+
+    this.notes = sb.toString();
   }
 }
