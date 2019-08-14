@@ -307,6 +307,24 @@ public abstract class GUI {
                 Image spanner = ImageIO.read(getClass().getResource("spanner_Room.jpg"));
                 imageMap.put(getClass().getResource("spanner_Room.jpg"),spanner);
 
+                Image kitchen = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
+                imageMap.put(getClass().getResource("card_kitchen.jpg"),kitchen);
+                Image lounge = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
+                imageMap.put(getClass().getResource("card_kitchen.jpg"),lounge);
+                Image dining = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
+                imageMap.put(getClass().getResource("card_kitchen.jpg"),dining);
+                Image entertainment = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
+                imageMap.put(getClass().getResource("card_kitchen.jpg"),entertainment);
+                Image hall = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
+                imageMap.put(getClass().getResource("card_kitchen.jpg"),hall);
+                Image book = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
+                imageMap.put(getClass().getResource("card_kitchen.jpg"),book);
+                Image audi = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
+                imageMap.put(getClass().getResource("card_kitchen.jpg"),audi);
+                Image con = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
+                imageMap.put(getClass().getResource("card_kitchen.jpg"),con);
+                Image study = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
+                imageMap.put(getClass().getResource("card_kitchen.jpg"),study);
 
                 this.addMouseListener(new MouseAdapter() {
                     public void mouseReleased(MouseEvent e) {
@@ -425,7 +443,7 @@ public abstract class GUI {
             setDice1(1);
             setDice2(1);
 
-            playerLabel = new JLabel(getPlayers().get(playerNum-1).getCharacter().toString() + "'s Turn");
+            playerLabel = new JLabel(getPlayers().get(currentPlayer).getCharacter().toString() + "'s Turn");
             constraints.gridx = 1;
             constraints.gridy = 0;
             add(playerLabel,constraints);
@@ -586,7 +604,7 @@ public abstract class GUI {
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
-            playerLabel.setText(getPlayers().get(playerNum-1).getCharacter().toString() +"'s turn");
+            playerLabel.setText(getPlayers().get(currentPlayer).getCharacter().toString() +"'s turn");
             repaint();
         }
 
@@ -729,6 +747,8 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loseScreen.dispose();
+                frame.revalidate();
+                frame.repaint();
             }
         });
         loseScreen.add(close);

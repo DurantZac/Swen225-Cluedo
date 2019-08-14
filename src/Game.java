@@ -165,10 +165,10 @@ public class Game extends GUI {
                 "|X|_|_|_|_|_|_|_|_|#|#|^|^|#|#|_|_|_|#|#|#|#|#|X|" + "\n" +
                 "|#|#|#|#|#|#|^|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|P|" + "\n" +
                 "|#|_|_|_|_|_|_|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|X|" + "\n" +
-                "|L|_|_|_|_|_|_|_|_|#|_|_|_|_|>|_|_|^|S|#|#|#|#|#|" + "\n" +
+                "|L|_|_|_|_|_|_|_|_|#|_|_|_|_|>|_|_|^|#|#|#|#|#|#|" + "\n" +
                 "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|" + "\n" +
                 "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|" + "\n" +
-                "|#|#|#|#|#|#|#|R|X|#|#|H|#|#|#|X|_|#|#|#|#|#|#|#|" + "\n";
+                "|#|#|#|#|#|#|#|R|X|#|#|H|#|#|#|X|_|#|#|#|#|#|#|S|" + "\n";
 
         //Splits the string into tiles, and stores these in a list, which is used to make the board.
         List<Tile> tiles = new ArrayList<>();
@@ -304,101 +304,119 @@ public class Game extends GUI {
     public void markRoom(List<RoomCard> roomCards) {
         //Kitchen
         Room k = roomCards.get(0).getRoom();
-        for (char r = 'c'; r < 'g'; r++) {
-            for (char c = 'b'; c < 'f'; c++) {
+        for (char r = 'b'; r < 'h'; r++) {
+            for (char c = 'a'; c < 'g'; c++) {
+                if(r != 'g' && c != 'a') {
                     Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
                     t.setIsPartOf(k);
-                    if (!k.getEntrances().contains(t) && t.getSymbol()!='#') k.addEmptySpace(t);
+                    if (!k.getEntrances().contains(t) && t.getSymbol() == '_') k.addEmptySpace(t);
+                }
             }
         }
 
         //Dining
         Room d = roomCards.get(1).getRoom();
-        for (char r = 'l'; r < 'p'; r++) {
-            for (char c = 'b'; c < 'h'; c++) {
+        for (char r = 'k'; r < 'q'; r++) {
+            for (char c = 'a'; c < 'i'; c++) {
                 Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
                 t.setIsPartOf(d);
-                if (!d.getEntrances().contains(t)) d.addEmptySpace(t);
+                if (!d.getEntrances().contains(t)&& t.getSymbol() == '_') d.addEmptySpace(t);
             }
         }
-        board.getBoardTile("Bk").setIsPartOf(roomCards.get(1).getRoom());
-        board.getBoardTile("Ck").setIsPartOf(roomCards.get(1).getRoom());
-        board.getBoardTile("Dk").setIsPartOf(roomCards.get(1).getRoom());
+        board.getBoardTile("Aj").setIsPartOf(roomCards.get(1).getRoom());
+        board.getBoardTile("Bj").setIsPartOf(roomCards.get(1).getRoom());
+        board.getBoardTile("Cj").setIsPartOf(roomCards.get(1).getRoom());
+        board.getBoardTile("Dj").setIsPartOf(roomCards.get(1).getRoom());
+        board.getBoardTile("Ej").setIsPartOf(roomCards.get(1).getRoom());
+
 
         //Lounge
         Room l = roomCards.get(2).getRoom();
-        for (char r = 'u'; r < 'y'; r++) {
-            for (char c = 'b'; c < 'g'; c++) {
+        for (char r = 't'; r < 'z'; r++) {
+            for (char c = 'a'; c < 'h'; c++) {
                 Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
                 t.setIsPartOf(l);
-                if (!l.getEntrances().contains(t)) l.addEmptySpace(t);
+                if (!l.getEntrances().contains(t)&& t.getSymbol() == '_') l.addEmptySpace(t);
             }
         }
 
         //Hall
         Room h = roomCards.get(3).getRoom();
-        for (char r = 't'; r < 'y'; r++) {
-            for (char c = 'k'; c < 'o'; c++) {
+        for (char r = 's'; r < 'z'; r++) {
+            for (char c = 'j'; c < 'p'; c++) {
                 Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
                 t.setIsPartOf(h);
-                if (!h.getEntrances().contains(t)) h.addEmptySpace(t);
+                if (!h.getEntrances().contains(t)&& t.getSymbol() == '_') h.addEmptySpace(t);
             }
         }
 
         //Study
         Room s = roomCards.get(4).getRoom();
-        for (char r = 'w'; r < 'y'; r++) {
-            for (char c = 's'; c < 'y'; c++) {
+        for (char r = 'v'; r < 'z'; r++) {
+            for (char c = 'r'; c < 'y'; c++) {
                 Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
                 t.setIsPartOf(s);
-                if (!s.getEntrances().contains(t)) s.addEmptySpace(t);
+                if (!s.getEntrances().contains(t)&& t.getSymbol() == '_') s.addEmptySpace(t);
             }
         }
 
         //BookRoom
         Room b = roomCards.get(5).getRoom();
-        for (char r = 'p'; r < 's'; r++) {
-            for (char c = 't'; c < 'x'; c++) {
+        for (char r = 'o'; r < 't'; r++) {
+            for (char c = 's'; c < 'y'; c++) {
+                if(r == 's' && c == 'x') continue;
+                if(r == 'o'&& c == 'x') continue;
                 Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
                 t.setIsPartOf(b);
-                if (!b.getEntrances().contains(t)) b.addEmptySpace(t);
+                if (!b.getEntrances().contains(t)&& t.getSymbol() == '_') b.addEmptySpace(t);
             }
         }
-        board.getBoardTile("Sq").setIsPartOf(roomCards.get(5).getRoom());
+        board.getBoardTile("Rp").setIsPartOf(roomCards.get(5).getRoom());
+        board.getBoardTile("Rq").setIsPartOf(roomCards.get(5).getRoom());
+        board.getBoardTile("Rr").setIsPartOf(roomCards.get(5).getRoom());
+
 
         //EntertainmentRoom
         Room e = roomCards.get(6).getRoom();
-        for (char r = 'j'; r < 'm'; r++) {
-            for (char c = 't'; c < 'x'; c++) {
+        for (char r = 'i'; r < 'n'; r++) {
+            for (char c = 's'; c < 'y'; c++) {
                 Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
                 t.setIsPartOf(e);
-                if (!e.getEntrances().contains(t)) e.addEmptySpace(t);
+                if (!e.getEntrances().contains(t)&& t.getSymbol() == '_') e.addEmptySpace(t);
             }
         }
 
         //Conservatory
         Room con = roomCards.get(7).getRoom();
-        for (char r = 'c'; r < 'f'; r++) {
-            for (char c = 't'; c < 'x'; c++) {
-                Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
-                t.setIsPartOf(con);
-                if (!con.getEntrances().contains(t)) con.addEmptySpace(t);
+        for (char r = 'b'; r < 'g'; r++) {
+            for (char c = 's'; c < 'y'; c++) {
+                if(r != 'f' && c != 's') {
+                    Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
+                    t.setIsPartOf(con);
+                    if (!con.getEntrances().contains(t)&& t.getSymbol() == '_') con.addEmptySpace(t);
+                }
             }
         }
 
+
+
         //Auditorium
         Room a = roomCards.get(8).getRoom();
-        for (char r = 'd'; r < 'h'; r++) {
-            for (char c = 'J'; c < 'P'; c++) {
+        for (char r = 'c'; r < 'i'; r++) {
+            for (char c = 'i'; c < 'q'; c++) {
                 Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
                 t.setIsPartOf(a);
-                if (!a.getEntrances().contains(t)) a.addEmptySpace(t);
+                if (!a.getEntrances().contains(t)&& t.getSymbol() == '_') a.addEmptySpace(t);
             }
         }
-        board.getBoardTile("Lb").setIsPartOf(roomCards.get(8).getRoom());
-        board.getBoardTile("Mb").setIsPartOf(roomCards.get(8).getRoom());
-        board.getBoardTile("Lc").setIsPartOf(roomCards.get(8).getRoom());
-        board.getBoardTile("Mc").setIsPartOf(roomCards.get(8).getRoom());
+
+        for(char r = 'a'; r < 'c'; r++){
+            for(char c = 'k'; c < 'o'; c++){
+                Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
+                t.setIsPartOf(a);
+                if (!a.getEntrances().contains(t) && t.getSymbol() == '_') a.addEmptySpace(t);
+            }
+        }
 
         positionWalls();
 
@@ -464,7 +482,7 @@ public class Game extends GUI {
         board.getBoardTile("Dg").setDefaultImage(c.getResource("WB.jpg"));
 
         board.getBoardTile("Af").setDefaultImage(c.getResource("WBL.jpg"));
-        board.getBoardTile("Ac").setDefaultImage(c.getResource("WL.jpg"));
+//        board.getBoardTile("Ac").setDefaultImage(c.getResource("WL.jpg"));
         board.getBoardTile("Ad").setDefaultImage(c.getResource("WL.jpg"));
         board.getBoardTile("Ae").setDefaultImage(c.getResource("WL.jpg"));
 
@@ -595,6 +613,9 @@ public class Game extends GUI {
         board.getBoardTile("Jv").setDefaultImage(c.getResource("WL.jpg"));
         board.getBoardTile("Jw").setDefaultImage(c.getResource("WL.jpg"));
         board.getBoardTile("Jx").setDefaultImage(c.getResource("WL.jpg"));
+
+        board.getBoardTile("If").setDefaultImage(c.getResource("Room.jpg"));
+        board.getBoardTile("Pf").setDefaultImage(c.getResource("Room.jpg"));
 
     }
 
@@ -1136,6 +1157,10 @@ public class Game extends GUI {
 
         if (!(characterCard.equals(murderScenario.get(0)) && roomCard.equals(murderScenario.get(1)) && weaponCard.equals(murderScenario.get(2)))) {
             players.get(currentPlayer).setIsStillPlaying(false);
+            nextTurn();
+            if(players.stream().filter(p -> p.getIsStillPlaying() == true).count() == 1){
+                showWinScreen();
+            }
             return false;
         }
         return true;
