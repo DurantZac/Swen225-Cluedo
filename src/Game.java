@@ -48,10 +48,10 @@ public class Game extends GUI {
     // Store moves from rollDice event
     private int moves = 0;
 
-    int refutingPlayer=-1;
-    CharacterCard suggestedCharacter=null;
-    RoomCard suggestedRoom=null;
-    WeaponCard suggestedWeapon=null;
+    private int refutingPlayer=0;
+    private CharacterCard suggestedCharacter=null;
+    private RoomCard suggestedRoom=null;
+    private WeaponCard suggestedWeapon=null;
 
     //------------------------
     // CONSTRUCTOR
@@ -1112,7 +1112,7 @@ public class Game extends GUI {
                 if (refutingPlayer < players.size() - 1) {
                     refutingPlayer++;
                 } else {
-                    refutingPlayer = -1;
+                    refutingPlayer = 0;
                     return null;
                 }
         }
