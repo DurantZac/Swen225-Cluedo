@@ -16,8 +16,10 @@ public abstract class GUI {
     Controls controls;
     int playerNum = 1;
     int currentPlayer = 0;
+    int refutingPlayer=-1;
     JPanel diceSection = new JPanel(new GridBagLayout());
     boolean showCards = false;
+    JButton suggest;
 
 
 
@@ -318,7 +320,9 @@ public abstract class GUI {
                         System.out.println("Row= "+ row);
                         System.out.println();
 
-                        processMove(getBoard().getBoardTile(row,col));
+                        if(processMove(getBoard().getBoardTile(row,col))){
+                            suggest.setEnabled(true);
+                        }
                         frame.revalidate();
                         frame.repaint();
                     }
@@ -421,7 +425,7 @@ public abstract class GUI {
             setDice1(1);
             setDice2(1);
 
-            playerLabel = new JLabel("Player " + (playerNum) +"'s Turn");
+            playerLabel = new JLabel(getPlayers().get(playerNum-1).getCharacter().toString() + "'s Turn");
             constraints.gridx = 1;
             constraints.gridy = 0;
             add(playerLabel,constraints);
@@ -440,12 +444,14 @@ public abstract class GUI {
             this.add(nextTurn,constraints);
 
             // Suggest button
-            JButton suggest = new JButton("Suggest?");
+            suggest = new JButton("Suggest?");
+            suggest.setEnabled(false);
             suggest.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    suggest.setEnabled(false);
                     if(processSuggestion()){
-                        
+                        showSuggestionWindow();
                     }
                 }
             });
@@ -460,6 +466,8 @@ public abstract class GUI {
                 public void actionPerformed(ActionEvent e) {
                     //Pop up window to choose the 3 cards then call check accusation, returns if it was right
                     //boolean correct=checkAccusation(String charcter, String weapon, String room);
+
+                    showAccusationWindow();
                 }
             });
             constraints.gridy= 2;
@@ -578,7 +586,7 @@ public abstract class GUI {
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
-            playerLabel.setText("Player " + playerNum +"'s turn");
+            playerLabel.setText(getPlayers().get(playerNum-1).getCharacter().toString() +"'s turn");
             repaint();
         }
 
@@ -617,9 +625,177 @@ public abstract class GUI {
     }
 
     public void showSuggestionWindow(){
-        JPanel popup = new JPanel();
-        popup.setSize(500,500);
+        JFrame popup = new JFrame();
+        popup.setLayout(new GridLayout(3,2));
         popup.setVisible(true);
+        popup.setSize(500,500);
+        popup.setMinimumSize(new Dimension(200,200));
+        JLabel character = new JLabel("Character: ");
+        JLabel weapon = new JLabel("Weapon");
+        String[] characters = {"Col. Mustard","Mrs White", "Rev. Green","Ms Turquoise","Prof. Plum","Miss Red"};
+        String[] weapons = {"Dagger","Rope","Lead Pipe","Revolver","Candlestick","Spanner"};
+        JComboBox charPick = new JComboBox(characters);
+        JComboBox weapPick = new JComboBox(weapons);
+        charPick.setSelectedIndex(-1);
+        weapPick.setSelectedIndex(-1);
+
+        //Submit button
+        JButton submit = new JButton("Submit");
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(charPick.getSelectedIndex() != -1 && weapPick.getSelectedIndex() != -1){
+                    String characterString = charPick.getSelectedItem().toString();
+                    String weaponString = weapPick.getSelectedItem().toString();
+                    popup.dispose();
+                    showRefuteWindow(checkSuggestion(characterString,weaponString));
+                }
+            }
+        });
+
+        popup.add(character);
+        popup.add(charPick);
+        popup.add(weapon);
+        popup.add(weapPick);
+        popup.add(submit);
+
+        popup.pack();
+        popup.revalidate();
+        popup.repaint();
+    }
+
+    public void showAccusationWindow(){
+        JFrame popup = new JFrame();
+        popup.setLayout(new FlowLayout());
+        popup.setVisible(true);
+        popup.setSize(500,500);
+        popup.setMinimumSize(new Dimension(200,200));
+        JLabel character = new JLabel("Character: ");
+        JLabel weapon = new JLabel("Weapon: ");
+        JLabel room = new JLabel("Room: ");
+        String[] characters = {"Col. Mustard","Mrs White", "Rev. Green","Ms Turquoise","Prof. Plum","Miss Red"};
+        String[] weapons = {"Dagger","Rope","Lead Pipe","Revolver","Candlestick","Spanner"};
+        String[] rooms = {"Kitchen","Lounge","Conservatory","Hall","Book Room","Study","Auditorium","Dining Room","Entertainment Room"};
+        JComboBox charPick = new JComboBox(characters);
+        JComboBox weapPick = new JComboBox(weapons);
+        JComboBox roomPick = new JComboBox(rooms);
+        charPick.setSelectedIndex(-1);
+        weapPick.setSelectedIndex(-1);
+        roomPick.setSelectedIndex(-1);
+
+        //Submit button
+        JButton submit = new JButton("Submit");
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(charPick.getSelectedIndex() != -1 && weapPick.getSelectedIndex() != -1){
+                    String characterString = charPick.getSelectedItem().toString();
+                    String weaponString = weapPick.getSelectedItem().toString();
+                    String roomString = roomPick.getSelectedItem().toString();
+                    popup.dispose();
+                    if(checkAccusation(characterString,weaponString,roomString)){
+                        // Show winner
+                    }
+                    else{
+                        showLoseScreen();
+                    }
+                }
+            }
+        });
+
+        popup.add(character);
+        popup.add(charPick);
+        popup.add(weapon);
+        popup.add(weapPick);
+        popup.add(room);
+        popup.add(roomPick);
+        popup.add(submit);
+
+        popup.pack();
+        popup.revalidate();
+        popup.repaint();
+    }
+
+    public void showLoseScreen(){
+        JFrame loseScreen = new JFrame();
+        loseScreen.setVisible(true);
+        loseScreen.setLayout(new FlowLayout());
+        JLabel message = new JLabel("That accusation was incorrect! You are out of the game!");
+        loseScreen.add(message);
+
+        JButton close = new JButton("Close");
+        close.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loseScreen.dispose();
+            }
+        });
+        loseScreen.add(close);
+        loseScreen.pack();
+        loseScreen.revalidate();
+        loseScreen.repaint();
+    }
+
+
+    public void showRefuteWindow(List<Card> cards){
+        frame.revalidate();
+        frame.repaint();
+        JFrame popup = new JFrame();
+        popup.setVisible(true);
+        popup.setLayout(new FlowLayout());
+        if(cards == null || cards.size() < 2){
+            // Nobody can refute
+            JLabel message = new JLabel("Nobody can refute your suggestion");
+            popup.add(message);
+            JButton close = new JButton("Close");
+            close.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    popup.dispose();
+                }
+            });
+            popup.add(close);
+
+        }
+        else{
+            CharacterCard character = (CharacterCard)cards.get(0);
+            cards.remove(0);
+            JLabel charName = new JLabel(character.toString() + " please chose which card you wish to refute with.");
+            popup.add(charName);
+            String[] options = new String[cards.size()];
+            for(int i = 0; i < cards.size(); i++){
+                options[i] = cards.get(i).toString();
+            }
+            JComboBox optionBox = new JComboBox(options);
+            optionBox.setSelectedIndex(-1);
+            popup.add(optionBox);
+            JButton submit = new JButton("Submit");
+            submit.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String value = optionBox.getSelectedItem().toString();
+                    popup.dispose();
+                    JFrame showRefute = new JFrame();
+                    showRefute.setVisible(true);
+                    showRefute.setLayout(new FlowLayout());
+                    JLabel message = new JLabel("Your suggestion has been refuted with: " + value);
+                    showRefute.add(message);
+                    JButton close = new JButton("Close");
+                    close.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            showRefute.dispose();
+                        }
+                    });
+                    showRefute.add(close);
+                    showRefute.pack();
+                    showRefute.revalidate();
+                    showRefute.repaint();
+                }
+            });
+            popup.add(submit);
+        }
+        popup.pack();
         popup.revalidate();
         popup.repaint();
     }

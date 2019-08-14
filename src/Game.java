@@ -737,6 +737,7 @@ public class Game extends GUI {
     public boolean processMove(Tile t){
         if(board.movePlayer(players.get(currentPlayer),t,moves)){
             moves = 0;
+            return true;
         }
         else{
             System.out.println("INVALID MOVE");
@@ -1065,11 +1066,12 @@ public class Game extends GUI {
 
     @Override
     public boolean processSuggestion(){
-        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
-        if (room == null) { // only allow them to make suggestions in a room
-            return false;
-        }
         return true;
+//        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
+//        if (room == null) { // only allow them to make suggestions in a room
+//            return false;
+//        }
+//        return true;
     }
 
     @Override
