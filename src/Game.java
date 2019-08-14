@@ -47,6 +47,8 @@ public class Game extends GUI {
     private int moves = 0;
     private int currentPlayer=0;
 
+
+    
     //------------------------
     // CONSTRUCTOR
     //------------------------
@@ -1067,7 +1069,7 @@ public class Game extends GUI {
     }
 
     @Override
-    public Card checkSuggestion(String character, String weapon) {
+    public void checkSuggestion(String character, String weapon) {
         //Get the weapon and character they wish to suggest
         WeaponCard weaponCard = checkWeapon(weapon);
         CharacterCard characterCard = checkCharacter(character);
@@ -1083,6 +1085,10 @@ public class Game extends GUI {
 //    } else { // No dispute
 //        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
 //    }    }
+    }
+
+    @Override
+    public Card refuteSuggestion() {
         return null;
     }
 
