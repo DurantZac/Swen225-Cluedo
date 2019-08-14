@@ -619,9 +619,38 @@ public abstract class GUI {
     }
 
     public void showSuggestionWindow(){
-        JPanel popup = new JPanel();
-        popup.setSize(500,500);
+        JFrame popup = new JFrame();
+        popup.setLayout(new GridLayout(3,2));
         popup.setVisible(true);
+        popup.setSize(500,500);
+        popup.setMinimumSize(new Dimension(200,200));
+        JLabel character = new JLabel("Character: ");
+        JLabel weapon = new JLabel("Weapon");
+        String[] characters = {"Col. Mustard","Mrs White", "Rev. Green","Ms Turquoise","Prof. Plum","Miss Red"};
+        String[] weapons = {"Dagger","Rope","Lead Pipe","Revolver","Candlestick","Spanner"};
+        JComboBox charPick = new JComboBox(characters);
+        JComboBox weapPick = new JComboBox(weapons);
+        charPick.setSelectedIndex(-1);
+        weapPick.setSelectedIndex(-1);
+
+        //Submit button
+        JButton submit = new JButton("Submit");
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(charPick.getSelectedIndex() != -1 && weapPick.getSelectedIndex() != -1){
+                    //Submit
+                }
+            }
+        });
+
+        popup.add(character);
+        popup.add(charPick);
+        popup.add(weapon);
+        popup.add(weapPick);
+        popup.add(submit);
+
+        popup.pack();
         popup.revalidate();
         popup.repaint();
     }
