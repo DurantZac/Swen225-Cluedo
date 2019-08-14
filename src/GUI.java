@@ -608,8 +608,6 @@ public abstract class GUI {
 
     public abstract List<Player> getPlayers();
 
-
-
     /**
      * Enable controls for next player and reset dice to 1's
      */
