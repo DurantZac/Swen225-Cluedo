@@ -229,7 +229,7 @@ public class Tile
   }
 
   void setWeapon(WeaponCard w){
-    activeImage = w.getImage();
+    activeImage = w.icon;
     setIsAccessible(false);
   }
 

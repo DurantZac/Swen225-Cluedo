@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -185,12 +184,12 @@ public abstract class GUI {
         frame.setSize(new Dimension(800,1000));
         Screen screen = new Screen();
         screen.setVisible(true);
-        screen.setBackground(Color.blue);
+        //screen.setBackground(Color.blue);
         screen.setSize(new Dimension(800,800));
 
 
         controls = new Controls(new GridBagLayout());
-        controls.setBackground(Color.RED);
+        //controls.setBackground(Color.RED);
         controls.setVisible(true);
 
         JButton rollDice = new JButton("Roll Dice");
@@ -293,8 +292,19 @@ public abstract class GUI {
                 Image wtr = ImageIO.read(getClass().getResource("WTR.jpg"));
                 imageMap.put(getClass().getResource("WTR.jpg"),wtr);
 
-                Image knife = ImageIO.read(getClass().getResource("knife_Room.jpg"));
-                imageMap.put(getClass().getResource("knife_Room.jpg"),knife);
+                Image knife = ImageIO.read(getClass().getResource("dagger_Room.jpg"));
+                imageMap.put(getClass().getResource("dagger_Room.jpg"),knife);
+                Image candle = ImageIO.read(getClass().getResource("candlestick_Room.jpg"));
+                imageMap.put(getClass().getResource("candlestick_Room.jpg"),candle);
+                Image gun = ImageIO.read(getClass().getResource("revolver_Room.jpg"));
+                imageMap.put(getClass().getResource("revolver_Room.jpg"),gun);
+                Image pipe = ImageIO.read(getClass().getResource("lead_Room.jpg"));
+                imageMap.put(getClass().getResource("lead_Room.jpg"),pipe);
+                Image rope = ImageIO.read(getClass().getResource("rope_Room.jpg"));
+                imageMap.put(getClass().getResource("rope_Room.jpg"),rope);
+                Image spanner = ImageIO.read(getClass().getResource("spanner_Room.jpg"));
+                imageMap.put(getClass().getResource("spanner_Room.jpg"),spanner);
+
 
                 this.addMouseListener(new MouseAdapter() {
                     public void mouseReleased(MouseEvent e) {
@@ -369,7 +379,7 @@ public abstract class GUI {
             constraints.ipadx = 0;
             constraints.ipady = 0;
             // Create dice section
-            diceSection.setBackground(Color.black);
+            //diceSection.setBackground(Color.black);
             constraints.gridx = 0;
             constraints.gridy = 0;
             add(diceSection,constraints);
@@ -434,7 +444,9 @@ public abstract class GUI {
             suggest.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    processSuggestion();
+                    if(processSuggestion()){
+                        
+                    }
                 }
             });
             constraints.gridx = 2;
@@ -601,5 +613,13 @@ public abstract class GUI {
         controls.hideCards();
         frame.revalidate();
         frame.repaint();
+    }
+
+    public void showSuggestionWindow(){
+        JPanel popup = new JPanel();
+        popup.setSize(500,500);
+        popup.setVisible(true);
+        popup.revalidate();
+        popup.repaint();
     }
 }
