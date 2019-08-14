@@ -16,7 +16,6 @@ public abstract class GUI {
     Controls controls;
     int playerNum = 1;
     int currentPlayer = 0;
-    int refutingPlayer=-1;
     JPanel diceSection = new JPanel(new GridBagLayout());
     boolean showCards = false;
 
@@ -595,9 +594,7 @@ public abstract class GUI {
 
     public abstract boolean processSuggestion();
 
-    public abstract void checkSuggestion(String character, String weapon);
-
-    public abstract Card refuteSuggestion();
+    public abstract List<Card> checkSuggestion(String character, String weapon);
 
     public abstract boolean checkAccusation(String character, String weapon, String room);
 
