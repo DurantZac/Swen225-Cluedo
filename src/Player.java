@@ -12,7 +12,7 @@ public class Player
   private CharacterCard character;
   private boolean isStillPlaying;
   private Set <Card> hand = new HashSet<>();
-
+  String notes;
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -107,5 +107,22 @@ public class Player
     return super.toString() + "["+
             "isStillPlaying" + ":" + getIsStillPlaying()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "character" + "=" + (getCharacter() != null ? !getCharacter().equals(this)  ? getCharacter().toString().replaceAll("  ","    ") : "this" : "null");
+  }
+
+  /**
+   * @return The current notes the player has made.
+   */
+  public String getNotes() {
+    return notes;
+  }
+
+  /**
+   * Add a note to the current notes
+   * Appends a new line, plus the new note
+   * @param notes the note to append
+   */
+  public void setNotes(String notes) {
+    this.notes+='\n';
+    this.notes+=notes;
   }
 }
