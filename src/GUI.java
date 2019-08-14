@@ -594,11 +594,14 @@ public abstract class GUI {
 
     public abstract boolean processSuggestion();
 
-    public abstract Card checkSuggestion(String character, String weapon);
+    public abstract void checkSuggestion(String character, String weapon);
+
+    public abstract Card refuteSuggestion();
 
     public abstract boolean checkAccusation(String character, String weapon, String room);
 
     public abstract List<Player> getPlayers();
+
 
 
     /**
