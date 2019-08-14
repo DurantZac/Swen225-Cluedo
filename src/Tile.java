@@ -281,7 +281,7 @@ public class Tile
     col = c;
   }
 
-
-
-
+  public char getSymbol() {
+    return symbol;
+  }
 }
