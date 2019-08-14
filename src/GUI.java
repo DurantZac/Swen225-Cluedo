@@ -315,12 +315,11 @@ public abstract class GUI {
                         int col = (int)(x/colDis);
                         int row = (int)(y/rowDis);
 
-                        System.out.println("Col= "+ col);
-                        System.out.println("Row= "+ row);
-                        System.out.println();
-
                         if(processMove(getBoard().getBoardTile(row,col))){
                             suggest.setEnabled(true);
+                        }
+                        else{
+                            showInvalidMoveScreen();
                         }
                         frame.revalidate();
                         frame.repaint();
@@ -799,7 +798,7 @@ public abstract class GUI {
         popup.repaint();
     }
 
-    public void showWinScreen(){
+    private void showWinScreen(){
         frame.dispose();
         JFrame winScreen = new JFrame();
         winScreen.setVisible(true);
@@ -825,5 +824,24 @@ public abstract class GUI {
         winScreen.repaint();
     }
 
+    private void showInvalidMoveScreen(){
+        JFrame invalidMove = new JFrame();
+        invalidMove.setVisible(true);
+        invalidMove.setLayout(new FlowLayout());
+        JLabel message = new JLabel("That move is not valid.");
+        invalidMove.add(message);
+
+        JButton close = new JButton("Close");
+        close.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                invalidMove.dispose();
+            }
+        });
+        invalidMove.add(close);
+        invalidMove.pack();
+        invalidMove.revalidate();
+        invalidMove.repaint();
+    }
     public abstract List<Card> getMurderScenario();
 }

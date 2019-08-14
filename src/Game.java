@@ -17,6 +17,12 @@ public class Game extends GUI {
     public List<Player> getPlayers() {
         return players;
     }
+
+    @Override
+    public List<Card> getMurderScenario() {
+        return murderScenario;
+    }
+
     private List<Player> players = new ArrayList<>();
 
     private List<CharacterCard> characters = new ArrayList<>();
@@ -640,9 +646,8 @@ public class Game extends GUI {
             return true;
         }
         else{
-            System.out.println("INVALID MOVE");
+            return false;
         }
-        return false;
     }
 
 
