@@ -49,7 +49,6 @@ public class Game extends GUI {
     private int moves = 0;
 
 
-
     //------------------------
     // CONSTRUCTOR
     //------------------------
@@ -1090,11 +1089,17 @@ public class Game extends GUI {
 
     @Override
     public Card refuteSuggestion() {
-        return null;
-    }
+        if (refutingPlayer==-1)return null;
+        Player player = players.get(refutingPlayer);
 
-    public boolean processAccusation(){
-        return false;
+
+        //Get the next player
+        if (refutingPlayer < players.size()-1) {
+            refutingPlayer++;
+        } else {
+            refutingPlayer=-1;
+        }
+        return null;
     }
 
     /**
