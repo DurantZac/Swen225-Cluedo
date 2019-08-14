@@ -805,9 +805,12 @@ public abstract class GUI {
         frame.dispose();
         JFrame winScreen = new JFrame();
         winScreen.setVisible(true);
+        winScreen.setLayout(new FlowLayout());
 
-        JLabel message = new JLabel(getPlayers().get(currentPlayer).getCharacter().toString() + " wins!\n" + getMurderScenario().get(0) + " committed the crime in the " + getMurderScenario().get(1) + " with the " + getMurderScenario().get(2));
+        JLabel message = new JLabel(getPlayers().get(currentPlayer).getCharacter().toString() + " wins!");
+        JLabel message2 = new JLabel(getMurderScenario().get(0) + " committed the crime in the " + getMurderScenario().get(1) + " with the " + getMurderScenario().get(2));
         winScreen.add(message);
+        winScreen.add(message2);
 
         JButton endGame = new JButton("Close Game");
         endGame.addActionListener(new ActionListener() {
