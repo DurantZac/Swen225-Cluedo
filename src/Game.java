@@ -1134,7 +1134,7 @@ public class Game extends GUI {
         RoomCard roomCard = checkRoom(room);
 
 
-        if (!(character.equals(murderScenario.get(0)) && room.equals(murderScenario.get(1)) && weapon.equals(murderScenario.get(2)))) {
+        if (!(characterCard.equals(murderScenario.get(0)) && roomCard.equals(murderScenario.get(1)) && weaponCard.equals(murderScenario.get(2)))) {
             players.get(currentPlayer).setIsStillPlaying(false);
             return false;
         }
