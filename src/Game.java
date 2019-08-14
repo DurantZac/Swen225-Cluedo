@@ -17,6 +17,8 @@ public class Game extends GUI {
     }
     private List<Card> murderScenario = new ArrayList<>();
     private int numberOfPlayers;
+
+    @Override
     public List<Player> getPlayers() {
         return players;
     }
@@ -45,7 +47,6 @@ public class Game extends GUI {
 
     // Store moves from rollDice event
     private int moves = 0;
-    private int currentPlayer=0;
 
 
 
@@ -218,7 +219,7 @@ public class Game extends GUI {
         Collections.shuffle(roomsShuffled);
         for (int i = 0; i < weapons.size(); i++) {
             WeaponCard w = (WeaponCard) (weapons.get(i));
-            w.setLocation(roomsShuffled.get(i));
+            w.setLocation(roomsShuffled.get(i).getEmptySpace());
         }
 
         //Add a random weapon to the murder scenario and remove this from the list

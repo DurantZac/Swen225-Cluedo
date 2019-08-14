@@ -228,6 +228,17 @@ public class Tile
     setIsAccessible(true);
   }
 
+  void setWeapon(WeaponCard w){
+    activeImage = w.icon;
+    setIsAccessible(false);
+  }
+
+  void removeWeapon(){
+     activeImage = defaultImage;
+     getIsPartOf().addEmptySpace(this);
+     setIsAccessible(true);
+  }
+
   /**
    * To String used for printing the board to the console
    * @return The symbol of this tile with a divider
@@ -269,6 +280,8 @@ public class Tile
    void setCol(int c){
     col = c;
   }
+
+
 
 
 }

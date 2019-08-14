@@ -12,6 +12,7 @@ public class Room
   private String name;
   private List<Tile> entrances;
   private List<Tile> openSquares = new ArrayList<>();
+  public WeaponCard weapon = null;
 
   //------------------------
   // CONSTRUCTOR
@@ -47,6 +48,7 @@ public class Room
     List<Tile> newEntrances = Collections.unmodifiableList(entrances);
     return newEntrances;
   }
+
 
   /**
    * Adds a given tile as an entrance

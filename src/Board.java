@@ -207,7 +207,7 @@ public class Board
    * @param goal Room goal
    */
   public void teleportWeapon(WeaponCard w, Room goal){
-    w.setLocation(goal);
+    w.setLocation(goal.getEmptySpace());
   }
 
   /**

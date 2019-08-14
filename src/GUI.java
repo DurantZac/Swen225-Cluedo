@@ -4,10 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
+import java.util.List;
 
 
 public abstract class GUI {
@@ -16,7 +15,10 @@ public abstract class GUI {
     JMenuItem quitMenuItem;
     Controls controls;
     int playerNum = 1;
+    int currentPlayer = 0;
     JPanel diceSection = new JPanel(new GridBagLayout());
+    boolean showCards = false;
+
 
 
     // this makes the program actually quit when the frame's close button is
@@ -178,15 +180,16 @@ public abstract class GUI {
     }
 
     public void setupGameplay(){
+        playerNum = 1;
         frame.setSize(new Dimension(800,1000));
         Screen screen = new Screen();
         screen.setVisible(true);
-        screen.setBackground(Color.blue);
+        //screen.setBackground(Color.blue);
         screen.setSize(new Dimension(800,800));
 
 
         controls = new Controls(new GridBagLayout());
-        controls.setBackground(Color.RED);
+        //controls.setBackground(Color.RED);
         controls.setVisible(true);
 
         JButton rollDice = new JButton("Roll Dice");
@@ -211,7 +214,9 @@ public abstract class GUI {
         });
 
         // Add dice button to panel
-        diceSection.add(rollDice,controls.rollDiceContraints);
+        controls.constraints.gridy = 2;
+        controls.constraints.gridx = 0;
+        diceSection.add(rollDice,controls.constraints);
 
 
         JSplitPane mainSplit = new JSplitPane();
@@ -287,6 +292,20 @@ public abstract class GUI {
                 Image wtr = ImageIO.read(getClass().getResource("WTR.jpg"));
                 imageMap.put(getClass().getResource("WTR.jpg"),wtr);
 
+                Image knife = ImageIO.read(getClass().getResource("dagger_Room.jpg"));
+                imageMap.put(getClass().getResource("dagger_Room.jpg"),knife);
+                Image candle = ImageIO.read(getClass().getResource("candlestick_Room.jpg"));
+                imageMap.put(getClass().getResource("candlestick_Room.jpg"),candle);
+                Image gun = ImageIO.read(getClass().getResource("revolver_Room.jpg"));
+                imageMap.put(getClass().getResource("revolver_Room.jpg"),gun);
+                Image pipe = ImageIO.read(getClass().getResource("lead_Room.jpg"));
+                imageMap.put(getClass().getResource("lead_Room.jpg"),pipe);
+                Image rope = ImageIO.read(getClass().getResource("rope_Room.jpg"));
+                imageMap.put(getClass().getResource("rope_Room.jpg"),rope);
+                Image spanner = ImageIO.read(getClass().getResource("spanner_Room.jpg"));
+                imageMap.put(getClass().getResource("spanner_Room.jpg"),spanner);
+
+
                 this.addMouseListener(new MouseAdapter() {
                     public void mouseReleased(MouseEvent e) {
                         int x = e.getX();
@@ -344,63 +363,94 @@ public abstract class GUI {
         // Labels for each image
         JLabel diceLabel1 = new JLabel();
         JLabel diceLabel2 = new JLabel();
+        JLabel playerLabel;
 
         // Placement data for elements
-        GridBagConstraints dice1Constraints = new GridBagConstraints();
-        GridBagConstraints dice2Constraints = new GridBagConstraints();
-        GridBagConstraints rollDiceContraints = new GridBagConstraints();
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        JPanel handSection;
 
 
         public Controls (GridBagLayout g){
             super(g);
 
+
+
+            constraints.ipadx = 0;
+            constraints.ipady = 0;
             // Create dice section
-            diceSection.setSize(getWidth()/5,getHeight());
-            diceSection.setBackground(Color.black);
-            GridBagConstraints dicePanel = new GridBagConstraints();
-            dicePanel.gridx = 0;
-            dicePanel.gridy = 0;
-            dicePanel.gridwidth = 10;
-            add(diceSection,dicePanel);
+            //diceSection.setBackground(Color.black);
+            constraints.gridx = 0;
+            constraints.gridy = 0;
+            add(diceSection,constraints);
 
 
-            // Position dice
-            dice1Constraints.ipadx = 0;
-            dice1Constraints.ipady = 0;
+            //Setup hand stuff
+            handSection = new JPanel(new GridLayout(2,3));
+            for(int i =0; i < getPlayers().get(0).getHand().size(); i++){
+                try {
+                    BufferedImage myPicture = ImageIO.read(getClass().getResource("card_back.jpg"));
+                    JLabel card = new JLabel(new ImageIcon(myPicture));
+                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(card);
+                }
+                catch(IOException e){
 
-            dice1Constraints.ipadx = 0;
-            dice1Constraints.ipady = 0;
+                }
+            }
+            for(int i =getPlayers().get(0).getHand().size(); i < 6; i++){
+                try {
+                    BufferedImage myPicture = ImageIO.read(getClass().getResource("card_blank.jpg"));
+                    JLabel card = new JLabel(new ImageIcon(myPicture));
+                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(card);
+                }
+                catch(IOException e){
 
-            dice1Constraints.gridx = 0;
-            dice2Constraints.gridx =0;
-            dice1Constraints.gridy=0;
-            dice2Constraints.gridy = 1;
+                }
+            }
+            handSection.setBackground(Color.CYAN);
+            handSection.setVisible(true);
+            constraints.gridx = 5;
+            constraints.gridy=0;
+            add(handSection,constraints);
 
-            rollDiceContraints.gridx = 0;
-            rollDiceContraints.gridy =2;
+
 
             // Set initial values
             setDice1(1);
             setDice2(1);
+
+            playerLabel = new JLabel("Player " + (playerNum) +"'s Turn");
+            constraints.gridx = 1;
+            constraints.gridy = 0;
+            add(playerLabel,constraints);
 
             // Next turn button
             JButton nextTurn = new JButton("Next Turn");
             nextTurn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    showCards = false;
                     nextTurn();
+                    playerNum = currentPlayer +1;
                 }
             });
-            this.add(nextTurn);
+            constraints.gridx = 2;
+            this.add(nextTurn,constraints);
 
             // Suggest button
             JButton suggest = new JButton("Suggest?");
             suggest.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    processSuggestion();
+                    if(processSuggestion()){
+                        
+                    }
                 }
             });
+            constraints.gridx = 2;
+            constraints.gridy = 1;
             this.add(suggest);
 
             // Accuse button
@@ -412,7 +462,27 @@ public abstract class GUI {
                     //boolean correct=checkAccusation(String charcter, String weapon, String room);
                 }
             });
+            constraints.gridy= 2;
             this.add(accuse);
+
+            //Show/hide button
+            JButton showHide = new JButton("Show/Hide");
+            showHide.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    showCards = !showCards;
+                    if(showCards){
+                        controls.showCards();
+                    }
+                    else{
+                        controls.hideCards();
+                    }
+                }
+            });
+            constraints.gridx = 5;
+            constraints.gridy = 2;
+            this.add(showHide,constraints);
+
         }
 
         /**
@@ -426,7 +496,9 @@ public abstract class GUI {
                 BufferedImage myPicture = ImageIO.read(getClass().getResource("roll" + dice1 + ".jpg"));
                 diceLabel1 = new JLabel(new ImageIcon(myPicture));
                 diceLabel1.setSize(getWidth()/15, getHeight()/3);
-                diceSection.add(diceLabel1,dice1Constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 0;
+                diceSection.add(diceLabel1,constraints);
             }catch (IOException e){
 
             }
@@ -440,16 +512,75 @@ public abstract class GUI {
             diceSection.remove(diceLabel2);
             this.dice2 = d2;
             try {
-                BufferedImage myPicture = ImageIO.read(getClass().getResource("roll" + dice2 + ".jpg"));
-                diceLabel2 = new JLabel(new ImageIcon(myPicture));
+                BufferedImage image = ImageIO.read(getClass().getResource("roll" + dice2 + ".jpg"));
+                diceLabel2 = new JLabel(new ImageIcon(image));
                 diceLabel2.setSize(getWidth()/15, getHeight()/3);
-                diceSection.add(diceLabel2,dice2Constraints);
+                constraints.gridx = 0;
+                constraints.gridy = 1;
+                diceSection.add(diceLabel2,constraints);
             }catch (IOException e){
 
             }
         }
 
+        public void showCards(){
+            handSection.removeAll();
+            Player p = getPlayers().get(currentPlayer);
+            try {
+                Set<Card> hand = p.getHand();
+                for(Card c : hand){
+                    BufferedImage image = ImageIO.read(c.getImage());
+                    JLabel card = new JLabel(new ImageIcon(image));
+                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(card);
+                }
+                for(int i = hand.size(); i < 6; i++){
+                    BufferedImage nullImage = ImageIO.read(getClass().getResource("card_blank.jpg"));
+                    JLabel card = new JLabel(new ImageIcon(nullImage));
+                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(card);
+                }
+                frame.revalidate();
+                frame.repaint();
+            }catch (IOException e){
 
+            }
+            catch (IllegalArgumentException i){
+                System.out.println(i);
+            }
+        }
+
+        public void hideCards(){
+            handSection.removeAll();
+            try{
+                for(int i = 0; i < getPlayers().get(currentPlayer).getHand().size(); i++){
+                    BufferedImage nullImage = ImageIO.read(getClass().getResource("card_back.jpg"));
+                    JLabel card = new JLabel(new ImageIcon(nullImage));
+                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(card);
+                }
+                for(int i = getPlayers().get(currentPlayer).getHand().size(); i < 6;i++){
+                    BufferedImage nullImage = ImageIO.read(getClass().getResource("card_blank.jpg"));
+                    JLabel card = new JLabel(new ImageIcon(nullImage));
+                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(card);
+                }
+                frame.revalidate();
+                frame.repaint();
+                frame.repaint();
+            }
+            catch (IOException e){
+
+            }
+        }
+
+
+        @Override
+        public void paintComponent(Graphics g){
+            super.paintComponent(g);
+            playerLabel.setText("Player " + playerNum +"'s turn");
+            repaint();
+        }
 
     }
 
@@ -469,6 +600,8 @@ public abstract class GUI {
 
     public abstract boolean checkAccusation(String character, String weapon, String room);
 
+    public abstract List<Player> getPlayers();
+
 
 
     /**
@@ -480,7 +613,16 @@ public abstract class GUI {
         }
         controls.setDice1(1);
         controls.setDice2(1);
+        controls.hideCards();
         frame.revalidate();
         frame.repaint();
+    }
+
+    public void showSuggestionWindow(){
+        JPanel popup = new JPanel();
+        popup.setSize(500,500);
+        popup.setVisible(true);
+        popup.revalidate();
+        popup.repaint();
     }
 }
