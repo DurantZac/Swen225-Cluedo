@@ -48,6 +48,10 @@ public class Game extends GUI {
     // Store moves from rollDice event
     private int moves = 0;
 
+    private int refutingPlayer=0;
+    private CharacterCard suggestedCharacter=null;
+    private RoomCard suggestedRoom=null;
+    private WeaponCard suggestedWeapon=null;
 
     //------------------------
     // CONSTRUCTOR
@@ -733,6 +737,7 @@ public class Game extends GUI {
     public boolean processMove(Tile t){
         if(board.movePlayer(players.get(currentPlayer),t,moves)){
             moves = 0;
+            return true;
         }
         else{
             System.out.println("INVALID MOVE");
@@ -1076,32 +1081,43 @@ public class Game extends GUI {
         CharacterCard characterCard = checkCharacter(character);
         board.teleportCharacter(characterCard, players.get(currentPlayer).getPosition().getIsPartOf());
         board.teleportWeapon(weaponCard, players.get(currentPlayer).getPosition().getIsPartOf());
-        //Check if the suggestion is disputed by any character
 
 
-//        Card dispute = checkSuggestion(player, weapon, character, room.getRoomCard(), input);
-//                    board.printBoard();
-//                    if (dispute != null) { //A dispute has occured
-//        System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
-//    } else { // No dispute
-//        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
-//    }    }
-        return null;
+        suggestedCharacter = characterCard;
+        suggestedWeapon = weaponCard;
+        suggestedRoom = players.get(currentPlayer).getPosition().getIsPartOf().getRoomCard();
+
+       return refuteSuggestion();
     }
 
-    @Override
     public List<Card> refuteSuggestion() {
-        if (refutingPlayer==-1)return null;
-        Player player = players.get(refutingPlayer);
+        while (true) { //must return so while true is okay
+            if (refutingPlayer!=currentPlayer) {
+                Player player = players.get(refutingPlayer);
+
+                //get the players hand
+                Set<Card> hand = player.getHand();
+                List<Card> suggestions = new ArrayList<>();
+
+                //Check if any of the items are in the hand
+                suggestions.add(player.getCharacter());
+                if (hand.contains(suggestedCharacter)) suggestions.add(suggestedCharacter);
+                if (hand.contains(suggestedRoom)) suggestions.add(suggestedRoom);
+                if (hand.contains(suggestedWeapon)) suggestions.add(suggestedWeapon);
 
 
-        //Get the next player
-        if (refutingPlayer < players.size()-1) {
-            refutingPlayer++;
-        } else {
-            refutingPlayer=-1;
+                if (suggestions.size()>1){
+                    return suggestions;
+                }
+            }
+                //Get the next player
+                if (refutingPlayer < players.size() - 1) {
+                    refutingPlayer++;
+                } else {
+                    refutingPlayer = 0;
+                    return null;
+                }
         }
-        return null;
     }
 
     /**
