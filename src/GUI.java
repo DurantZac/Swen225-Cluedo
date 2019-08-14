@@ -10,16 +10,15 @@ import java.util.List;
 
 
 public abstract class GUI {
-    JFrame frame;
-    JMenuBar menuBar;
-    JMenuItem quitMenuItem;
-    Controls controls;
-    int playerNum = 1;
+    private JFrame frame;
+    private JMenuBar menuBar;
+    private JMenuItem quitMenuItem;
+    private Controls controls;
+    private int playerNum = 1;
     int currentPlayer = 0;
-    int refutingPlayer=-1;
-    JPanel diceSection = new JPanel(new GridBagLayout());
-    boolean showCards = false;
-    JButton suggest;
+    private JPanel diceSection = new JPanel(new GridBagLayout());
+    private boolean showCards = false;
+    private JButton suggest;
 
 
 
@@ -68,7 +67,7 @@ public abstract class GUI {
     /**
      * Adds gui options for selecting number of players
      */
-    public void setupPlayerSelect(){
+     void setupPlayerSelect(){
         JLabel label = new JLabel("How many players are playing?");
         String[] playerNum = {"3","4","5","6"};
         JComboBox players = new JComboBox(playerNum);
@@ -97,7 +96,7 @@ public abstract class GUI {
     /**
      * Add gui items from selecting characters
      */
-    public void chooseCharacters(){
+     void chooseCharacters(){
         JLabel label = new JLabel("Player "+playerNum+ ", choose your character:");
         JPanel controls = new JPanel();
         JRadioButton mustard = new JRadioButton("Col. Mustard");
@@ -181,7 +180,7 @@ public abstract class GUI {
         frame.repaint();
     }
 
-    public void setupGameplay(){
+     void setupGameplay(){
         playerNum = 1;
         frame.setSize(new Dimension(800,1000));
         Screen screen = new Screen();
@@ -243,7 +242,7 @@ public abstract class GUI {
         double colDis;
         double rowDis;
 
-        public Screen(){
+         Screen(){
             super(); // Super constructor
             try{
                 // Fill map with all possible images
@@ -334,12 +333,11 @@ public abstract class GUI {
                         int col = (int)(x/colDis);
                         int row = (int)(y/rowDis);
 
-                        System.out.println("Col= "+ col);
-                        System.out.println("Row= "+ row);
-                        System.out.println();
-
                         if(processMove(getBoard().getBoardTile(row,col))){
                             suggest.setEnabled(true);
+                        }
+                        else{
+                            showInvalidMoveScreen();
                         }
                         frame.revalidate();
                         frame.repaint();
@@ -347,14 +345,15 @@ public abstract class GUI {
                 });
             }
             catch(Exception e){
-
+                System.out.println(e);
             }
         }
 
         /**
          * Called when repainting
-         * @param g
+         * @param g the graphics of the game
          */
+        @SuppressWarnings("IntegerDivisionInFloatingPointContext")
         @Override
         protected void paintComponent(Graphics g){
             super.paintComponent(g);
@@ -393,7 +392,7 @@ public abstract class GUI {
         JPanel handSection;
 
 
-        public Controls (GridBagLayout g){
+         Controls (GridBagLayout g){
             super(g);
 
 
@@ -513,9 +512,9 @@ public abstract class GUI {
 
         /**
          * Update dice 1
-         * @param d1
+         * @param d1 dice roll 1
          */
-        public void setDice1(int d1) {
+         void setDice1(int d1) {
             diceSection.remove(diceLabel1);
             this.dice1 = d1;
             try {
@@ -526,15 +525,15 @@ public abstract class GUI {
                 constraints.gridy = 0;
                 diceSection.add(diceLabel1,constraints);
             }catch (IOException e){
-
+                System.out.println(e);
             }
         }
 
         /**
          * Update dice 2
-         * @param d2
+         * @param d2 dice roll 2
          */
-        public void setDice2(int d2) {
+         void setDice2(int d2) {
             diceSection.remove(diceLabel2);
             this.dice2 = d2;
             try {
@@ -549,7 +548,7 @@ public abstract class GUI {
             }
         }
 
-        public void showCards(){
+         void showCards(){
             handSection.removeAll();
             Player p = getPlayers().get(currentPlayer);
             try {
@@ -576,7 +575,7 @@ public abstract class GUI {
             }
         }
 
-        public void hideCards(){
+         void hideCards(){
             handSection.removeAll();
             try{
                 for(int i = 0; i < getPlayers().get(currentPlayer).getHand().size(); i++){
@@ -626,12 +625,10 @@ public abstract class GUI {
 
     public abstract List<Player> getPlayers();
 
-
-
     /**
      * Enable controls for next player and reset dice to 1's
      */
-    public void resetControls(){
+     void resetControls(){
         for(Component c : diceSection.getComponents()){
             c.setEnabled(true);
         }
@@ -642,7 +639,7 @@ public abstract class GUI {
         frame.repaint();
     }
 
-    public void showSuggestionWindow(){
+    private void showSuggestionWindow(){
         JFrame popup = new JFrame();
         popup.setLayout(new GridLayout(3,2));
         popup.setVisible(true);
@@ -735,7 +732,7 @@ public abstract class GUI {
         popup.repaint();
     }
 
-    public void showLoseScreen(){
+    private void showLoseScreen(){
         JFrame loseScreen = new JFrame();
         loseScreen.setVisible(true);
         loseScreen.setLayout(new FlowLayout());
@@ -758,7 +755,7 @@ public abstract class GUI {
     }
 
 
-    public void showRefuteWindow(List<Card> cards){
+    private void showRefuteWindow(List<Card> cards){
         frame.revalidate();
         frame.repaint();
         JFrame popup = new JFrame();
@@ -821,7 +818,7 @@ public abstract class GUI {
         popup.repaint();
     }
 
-    public void showWinScreen(){
+    private void showWinScreen(){
         frame.dispose();
         JFrame winScreen = new JFrame();
         winScreen.setVisible(true);
@@ -847,5 +844,24 @@ public abstract class GUI {
         winScreen.repaint();
     }
 
+    private void showInvalidMoveScreen(){
+        JFrame invalidMove = new JFrame();
+        invalidMove.setVisible(true);
+        invalidMove.setLayout(new FlowLayout());
+        JLabel message = new JLabel("That move is not valid.");
+        invalidMove.add(message);
+
+        JButton close = new JButton("Close");
+        close.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                invalidMove.dispose();
+            }
+        });
+        invalidMove.add(close);
+        invalidMove.pack();
+        invalidMove.revalidate();
+        invalidMove.repaint();
+    }
     public abstract List<Card> getMurderScenario();
 }

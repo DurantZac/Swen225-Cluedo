@@ -1,7 +1,5 @@
 
 import java.util.*;
-import java.io.BufferedReader;
-import java.io.IOException;
 
 public class Game extends GUI {
 
@@ -12,9 +10,6 @@ public class Game extends GUI {
     //Game Associations
     private Board board;
 
-    public List<Card> getMurderScenario() {
-        return murderScenario;
-    }
     private List<Card> murderScenario = new ArrayList<>();
     private int numberOfPlayers;
 
@@ -22,26 +17,22 @@ public class Game extends GUI {
     public List<Player> getPlayers() {
         return players;
     }
-    private List<Player> players = new ArrayList<>();
-    public List<CharacterCard> getCharacters() {
-        return characters;
+
+    @Override
+    public List<Card> getMurderScenario() {
+        return murderScenario;
     }
+
+    private List<Player> players = new ArrayList<>();
 
     private List<CharacterCard> characters = new ArrayList<>();
 
     private List <Card> allCards = new ArrayList<>();
 
-    public List<Room> getRooms() {
-        return rooms;
-    }
-
-    List<CharacterCard> unusedCharacters;
+    private List<CharacterCard> unusedCharacters;
 
     private List<Room> rooms = new ArrayList<>();
     private List<WeaponCard> weapons = new ArrayList<>();
-
-    private static final String CLEAR_SCREEN = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-            "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 
     private static int playerToAssignCharacter = 1;
 
@@ -59,7 +50,7 @@ public class Game extends GUI {
     /**
      * Create new game by initialising board, assigning each player a character, and starting the game.
      */
-    public Game() {
+    private Game() {
         createBoard();
         setupPlayerSelect();
     }
@@ -67,7 +58,7 @@ public class Game extends GUI {
     /**
      * Set the total number of players to input from user
      * Calls character choice gui setup
-     * @param num
+     * @param num the total numbers of players playing
      */
     @Override
     public void setPlayers(int num) {
@@ -83,8 +74,11 @@ public class Game extends GUI {
         chooseCharacters();
     }
 
-
-
+    /**
+     * Makes all the character cards,
+     * adds these to a list to pick characters from,
+     * followed by making the rest of the cards to be dealt
+     */
     private void makeCharacterCards(){
         //Make all the characters
         characters.add(new CharacterCard("Col. Mustard", board.getBoardTile("Ar")));
@@ -97,8 +91,13 @@ public class Game extends GUI {
         allCards = createCards(characters);
     }
 
-
-
+    /**
+     * Creates the player from a string (name) that they have chosen
+     * Keeps track of how many players have been made
+     * once all characters are assigned to a player, it deals the cards,
+     * sets up the board, and plays the game.
+     * @param characterToPlay the character they want to play
+     */
     public void setCharacter(String characterToPlay){
         if (playerToAssignCharacter <= numberOfPlayers){
                 for (CharacterCard c : unusedCharacters) {
@@ -120,15 +119,14 @@ public class Game extends GUI {
 
          //Find the player that starts
          findFirstPlayer();
-
-         playGame();
         }
     }
 
     /**
-     * Find the player that should start the game, this is Miss Red unless she isnt playing
+     * Find the player that should start the game, this is Miss Red unless she isn't playing
      */
     private void findFirstPlayer(){
+        //Default to 0
         for (int i = 0; i < players.size(); i++) {
             if (players.get(i).getCharacter().getCharacter().equalsIgnoreCase("Miss Red")) {
                 currentPlayer = i;
@@ -140,9 +138,8 @@ public class Game extends GUI {
     /**
      * Generate board from string
      *
-     * @return a new board matching the string
      */
-    public void createBoard() {
+    private void createBoard() {
 
         String gameBoard = "|X|X|X|X|X|X|X|X|X|W|#|#|#|#|G|X|X|X|X|X|X|X|X|X|" + "\n" +
                 "|#|#|#|#|#|#|X|_|_|_|#|_|_|#|_|_|_|X|#|#|#|#|#|#|" + "\n" +
@@ -194,10 +191,9 @@ public class Game extends GUI {
      *                  as these are required previously.
      * @return List of all cards after murder scenario removed
      */
-    public List<Card> createCards(List<CharacterCard> characters) {
-        List<Card> allCards = new ArrayList<>();
+    private List<Card> createCards(List<CharacterCard> characters) {
+        List<Card> allCards = new ArrayList<>(characters);
         // Characters
-        allCards.addAll(characters);
         Collections.shuffle(allCards);
         murderScenario.add(allCards.get(0)); //Pick a random murderer
         allCards.remove(0); // remove that from the list of cards to deal
@@ -236,12 +232,12 @@ public class Game extends GUI {
 
     /**
      * Create rooms and add entrances
-     * Each of the rooms is created by making the room, adding each enterance to it,
+     * Each of the rooms is created by making the room, adding each entrance to it,
      * and adding this room to a list of cards.
      *
      * @return a list of all rooms (minus the murder room)
      */
-    public List<RoomCard> createRooms() {
+    private List<RoomCard> createRooms() {
         List<RoomCard> cards = new ArrayList<>();
         Room kitchen = new Room("Kitchen");
         kitchen.addEntrance(board.getBoardTile("Eg"));
@@ -301,7 +297,7 @@ public class Game extends GUI {
     /**
      * Mark room tiles as being part of a room
      */
-    public void markRoom(List<RoomCard> roomCards) {
+    private void markRoom(List<RoomCard> roomCards) {
         //Kitchen
         Room k = roomCards.get(0).getRoom();
         for (char r = 'b'; r < 'h'; r++) {
@@ -422,8 +418,11 @@ public class Game extends GUI {
 
     }
 
-
-    public void positionWalls(){
+    /**
+     * Marks the walls of the room as the correct wall shape
+     * Purely stylistic
+     */
+    private void positionWalls(){
         Class c = getClass();
 
         //Library
@@ -626,14 +625,14 @@ public class Game extends GUI {
     /**
      * @return the minimum number of players needed to play Cluedo.
      */
-    public static int minimumNumberOfPlayers() {
+    private static int minimumNumberOfPlayers() {
         return 3;
     }
 
     /**
      * @return the maximum number of players needed to play Cluedo.
      */
-    public static int maximumNumberOfPlayers() {
+    private static int maximumNumberOfPlayers() {
         return 6;
     }
 
@@ -652,99 +651,6 @@ public class Game extends GUI {
         return roll1;
     }
 
-    /**
-     * Runs the main game loop
-     * The game continues while players are still in the game (have not made a false accusation)
-     * And the murder has not been solved.
-     *
-     */
-    private void playGame() {
-        int currentPlayer = 0; // Default player to start
-
-
-//
-//        while (players.stream().filter(p -> p.getIsStillPlaying() == true).count() > 1) { // Still players left to play
-//            //Clear the screen and print the current board.
-//            System.out.println(CLEAR_SCREEN);
-//            board.printBoard();
-//
-//            System.out.println(players.get(currentPlayer).getCharacter() + "'s turn.");
-//
-//            //If they are in a room, tell them
-//            Room room = players.get(currentPlayer).getPosition().getIsPartOf();
-//            if (room != null) {
-//                System.out.println("You are currently in the " + room);
-//            }
-//
-//            //Check to see if they wish to see their hand
-//            if(!seeHand(input, players.get(currentPlayer))) return;
-//
-//            //Move the player
-//            boolean ableToSuggest = processMove(input, players.get(currentPlayer));
-//
-//            //Check to see if they want to make a suggestion
-//            if (ableToSuggest) processSuggestion(input, players.get(currentPlayer));
-//
-//            //Check to see if they want to make an accusation
-//            //If it returns true it means they correctly guessed, hence they won.
-//            if (processAccusation(input, players.get(currentPlayer))) return;
-//
-//            //Pick the next character to play
-//            System.out.println();
-//            currentPlayer = getNextCharacter(currentPlayer);
-//        }
-//
-//        //In this case there is only one player remaining (else it would have returned above) so it must be game over, last player wins.
-//        System.out.printf("%s, you are the last player standing, you win! \n", players.get(currentPlayer).getCharacter());
-//        System.out.println("The murder occurred as follows:");
-//        System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
-    }
-
-//    /**
-//     * Moves the current player to a new valid location
-//     *@param input buffered reader getting input from the players
-//     *@param player the current player to be moved
-//     * @return if they moved - hence if they can suggest while in a room
-//     */
-//    private boolean processMove(BufferedReader input, Player player) {
-//        try {
-//            //Find out how many moves the player has
-//            int numMoves = rollDice();
-//            System.out.println("You have " + numMoves + " moves.");
-//
-//            //finds out where to move to
-//            System.out.println("Where would you like to move to? If you cannot move or do not wish to, type SKIP");
-//            String move = input.readLine();
-//            if (move.equalsIgnoreCase("skip"))
-//                return false;
-//
-//            Tile goal = board.getBoardTile(move);
-//            while (goal == null) { // ensures the tile is valid (as in 2 letters, one upper one lower)
-//                System.out.println("Invalid tile, please choose again");
-//                System.out.println("Where would you like to move to?");
-//                move = input.readLine();
-//                goal = board.getBoardTile(move);
-//            }
-//
-//            //Finds a path and moves the player, returns true if successful
-//            boolean validInput = board.movePlayer(player, goal, numMoves);
-//
-//            while (!validInput) { // ensures the move is valid and there is a path to it
-//                System.out.println("That move is not valid, please try a different move");
-//                move = input.readLine();
-//                goal = board.getBoardTile(move);
-//                validInput = board.movePlayer(player, goal, numMoves);
-//            }
-//
-//            //Reprints the board with their new position.
-//            board.printBoard();
-//
-//        } catch (IOException e) {
-//            System.out.println("Error moving player" + e);
-//        }
-//        return true;
-//    }
-
 
     /**
      * Take tile t and check if current player can reach this tile with currents moves.
@@ -753,7 +659,7 @@ public class Game extends GUI {
      * Moves are updated on dice roll.
      * Player not currently updating
      * @param t Tile to move to
-     * @return
+     * @return if the move was valid
      */
     public boolean processMove(Tile t){
         if(board.movePlayer(players.get(currentPlayer),t,moves)){
@@ -761,9 +667,8 @@ public class Game extends GUI {
             return true;
         }
         else{
-            System.out.println("INVALID MOVE");
+            return false;
         }
-        return false;
     }
 
 
@@ -779,7 +684,7 @@ public class Game extends GUI {
      */
     private int getNextCharacter(int current) {
         // No more players
-        if (players.stream().filter(p -> p.getIsStillPlaying() == true).count() == 0) return 0;
+        if (players.stream().noneMatch(p -> p.getIsStillPlaying())) return 0;
 
         //Get the next player
         if (current < players.size()-1) {
@@ -797,37 +702,6 @@ public class Game extends GUI {
             }
         }
     }
-
-    /**
-     * Offers to show the hand to the current player
-     * Prints hand on screen.
-     *
-     * @param input buffered reader getting input from the players
-     * @param p the current player
-     */
-    private boolean seeHand(BufferedReader input, Player p) {
-        try {
-            boolean validInput = false;
-            while (!validInput) { // Makes sure input is clear yes or no answer
-                System.out.println("Would you like to see your hand? (Y/N)");
-                String hand = input.readLine();
-                if(hand.equalsIgnoreCase("EXIT")) return false;
-                if (hand.equalsIgnoreCase("yes") || hand.equalsIgnoreCase("y")) {
-                    System.out.println(p.returnHand());
-                    validInput = true;
-                } else if (hand.equalsIgnoreCase("no") || hand.equalsIgnoreCase("n")) {
-                    validInput = true;
-                }
-                else {
-                    System.out.println("Please answer with Y or N.");
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error printing hand" + e);
-        }
-        return true;
-    }
-
 
     /**
      * Deals all of the cards excluding the murder scenario to the players.
@@ -850,111 +724,6 @@ public class Game extends GUI {
             currentPlayer = players.get(currentPlayerIndex);
         }
 
-    }
-
-    /**
-     * Checks the current player is able to make a suggestion,
-     * and gets the room, character and weapon they are suggesting
-     *
-     *@param input  input stream
-     * @param player the current input
-     */
-//    public void processSuggestion(BufferedReader input, Player player) {
-    //Get the weapon and character they wish to suggest
-//    WeaponCard weapon = checkWeapon(input);
-//    CharacterCard character = checkCharacter(input);
-//    //Clear the screen, move the weapon and character into that room
-//                    board.teleportCharacter(character, room);
-//                    board.teleportWeapon(weapon, room);
-//
-//    //Check if the suggestion is disputed by any character
-//    Card dispute = checkSuggestion(player, weapon, character, room.getRoomCard(), input);
-//                    board.printBoard();
-//                    if (dispute != null) { //A dispute has occured
-//        System.out.printf("%s, your suggestion has been refuted with the following card: %s. \n", player.getCharacter().toString(), dispute.toString());
-//    } else { // No dispute
-//        System.out.printf("%s, your suggestion has not been refuted.", player.getCharacter().toString());
-//    }
-
-//    }
-
-    /**
-     * Checks if anyone can refute the suggestion that has just been made.
-     *
-     * Loops through all the characters, even those who have made a false accusation,
-     * (Other than the player who made the suggestion)
-     * And checks if they have any card matching the suggestion.
-     *
-     * If they have one, they have to play it
-     * If they have more than one, they get to choose which they would like to play
-     *
-     * @param player the current player
-     * @param weapon the suggested murder weapon
-     * @param character the suggested murderer
-     * @param room the suggested murder location
-     * @param input the buffered reader to process input from the user
-     * @return the card that is used to refute the suggestion (null if no refuting occurred)
-     */
-    private Card checkSuggestion(Player player, WeaponCard weapon, CharacterCard character, RoomCard room, BufferedReader input) {
-        try {
-            for (Player p : players) {
-                if (p != player) { // skip the player who made the suggestion
-
-                    //get the players hand
-                    Set<Card> hand = p.getHand();
-                    List<Card> suggestions = new ArrayList<>();
-
-                    //Check if any of the items are in the hand
-                    if (hand.contains(weapon)) suggestions.add(weapon);
-                    if (hand.contains(character)) suggestions.add(character);
-                    if (hand.contains(room)) suggestions.add(room);
-
-
-                    System.out.println(p.getCharacter() + "'s turn to check the suggestion:");
-                    System.out.println("Press any letter to continue"); // for privacy reasons
-                    input.readLine();
-                    System.out.println(CLEAR_SCREEN);
-
-
-                    System.out.println(p.returnHand());
-                    System.out.printf("You have %d cards matching the suggestion\n", suggestions.size());
-                    System.out.println("Press any letter to continue"); // for privacy reasons
-                    input.readLine();
-
-                    if (suggestions.size() == 0) System.out.println("You cannot refute the suggestion\n" +CLEAR_SCREEN); // next player
-                    if (suggestions.size() == 1) { // must return this card
-                        System.out.println("Since you only have one card, you must use the " + suggestions.get(0).toString() + " to disprove the suggestion");
-                        System.out.println("Press any letter to continue");
-                        input.readLine();
-                        System.out.println(CLEAR_SCREEN);
-                        return suggestions.get(0);
-                    }
-                    if (suggestions.size() > 1) { // give them the option to choose
-                        System.out.println("What card would you like to use to disprove the suggestion? ");
-                        for (int i = 1; i <= suggestions.size(); i++) {
-                            System.out.printf("[%d] %s \n", i, suggestions.get(i - 1).toString());
-                        }
-
-                        int dispute = -1;
-                        while (dispute == -1) { // repeat until a valid input
-                            try {
-                                dispute = Integer.parseInt(input.readLine());
-                            } catch (IOException e) {
-                                System.out.println("Error on input" + e);
-                            } catch (NumberFormatException n) {
-                                System.out.println("Please enter a whole number only");
-                            }
-                        }
-                        System.out.println(CLEAR_SCREEN);
-                        return suggestions.get(dispute - 1);
-                    }
-                }
-            }
-            return null; // no one could disprove the suggestion, so return null
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-        return null;
     }
 
 
@@ -1009,82 +778,41 @@ public class Game extends GUI {
      *
      * @return a new list of all the weapons
      */
-    public List<WeaponCard> getWeapons() {
+     List<WeaponCard> getWeapons() {
         return new ArrayList<>(this.weapons);
     }
-
-    /**
-     * Checks if the current player wishes to make an accusation,
-     * if so they ask what they think occurred in the murder.
-     *
-     * If this is correct, they win the game
-     * If false, they are removed from being able to move/ make further accusations or suggestions.
-     *
-     * If they do not wish to make an accusation it simply returns
-     *
-     * @param input the buffered reader to process input from the user
-     * @param player the current player
-     * @return if the accusation was true or false
-     */
-//    public boolean processAccusation(BufferedReader input, Player player) {
-//        try {
-//            System.out.println("Would you like to make an accusation? (Y/N)");
-//
-//            boolean validInput = false; //checks for a yes or no answer
-//            while (!validInput) {
-//                String accuse = input.readLine();
-//                if (accuse.equalsIgnoreCase("yes") || accuse.equalsIgnoreCase("y")) {
-//
-//                   //Finds out what they think occured, and returns if this is true or false
-//                    boolean accusation = checkAccusation(input);
-//
-//                    if (accusation) { // they won, prints it for everyone to see
-//                        System.out.println("Congratulations, " + player.getCharacter().toString() + " has solved the murder!");
-//                        System.out.println("The murder occurred as follows:");
-//                        System.out.println(murderScenario.get(0) + " committed the crime in the " + murderScenario.get(1) + " with the " + murderScenario.get(2));
-//                        return true;
-//                    } else { // false, can no longer play
-//                        System.out.println("The accusation is incorrect, " + player.getCharacter().toString());
-//                        System.out.println("You can no longer win the game");
-//                        player.setIsStillPlaying(false);
-//                        System.out.println("Press any letter to continue");
-//                        input.readLine();
-//                        System.out.println(CLEAR_SCREEN);
-//                    }
-//                    validInput = true; // to break out of the loop
-//                } else if (accuse.equalsIgnoreCase("no") || accuse.equalsIgnoreCase("n")) {
-//                    // do not wish to make an accusation
-//                    validInput = true;
-//                }
-//                else { // invalid input
-//                    System.out.println("Please answer with Y or N.");
-//                }
-//            }
-//        } catch (IOException e) {
-//            System.out.println("Error processing Accusation" + e);
-//        }
-//        return false; // guessed false or didnt accuse
-//    }
-
 
 
     /**
      * Return board object for testing
-     * @return
+     * @return the current board
      */
     public Board getBoard(){
         return board;
     }
 
+    /**
+     * Sets the moves the current player has to the input
+     * @param m number of moves a player has
+     */
     public void setMoves(int m){
         moves = m;
     }
 
+    /**
+     * Gets the next player still in the game
+     * Resets the controls(dice, any grayed out buttons)
+     */
     public void nextTurn(){
         currentPlayer = getNextCharacter(currentPlayer);
         resetControls();
     }
 
+    /**
+     * Checks that a suggestion is allowed
+     * The player has to be inside a room in order to be allowed
+     * @return if the player can make a suggestion
+     */
     @Override
     public boolean processSuggestion(){
         return true;
@@ -1095,6 +823,13 @@ public class Game extends GUI {
 //        return true;
     }
 
+    /**
+     * Turns two strings into the corresponding cards, saves the suggested scenario, and checks if this can be refuted
+     *
+     * @param character the string of the character in this suggestion
+     * @param weapon the string of the weapon in this suggestion
+     * @return A list of cards that refute the suggestion, null if there are none, received from 'refuteSuggestions()'
+     */
     @Override
     public List<Card> checkSuggestion(String character, String weapon) {
         //Get the weapon and character they wish to suggest
@@ -1103,7 +838,7 @@ public class Game extends GUI {
         board.teleportCharacter(characterCard, players.get(currentPlayer).getPosition().getIsPartOf());
         board.teleportWeapon(weaponCard, players.get(currentPlayer).getPosition().getIsPartOf());
 
-
+        //Save the scenario
         suggestedCharacter = characterCard;
         suggestedWeapon = weaponCard;
         suggestedRoom = players.get(currentPlayer).getPosition().getIsPartOf().getRoomCard();
@@ -1111,7 +846,12 @@ public class Game extends GUI {
        return refuteSuggestion();
     }
 
-    public List<Card> refuteSuggestion() {
+    /**
+     * Loops through the players, and checks if they have a card (or cards) that match the suggestion
+     * If they do, the player and the refuted card is returned (with the character the first item of the list)
+     * @return a List of cards matching the suggestion or Null if no player could refute it.
+     */
+    private List<Card> refuteSuggestion() {
         while (true) { //must return so while true is okay
             if (refutingPlayer!=currentPlayer) {
                 Player player = players.get(refutingPlayer);
@@ -1174,7 +914,7 @@ public class Game extends GUI {
 
     /**
      * A simple main, making a new game.
-     * @param args
+     * @param args arguments of the game
      */
     public static void main(String args[]) {
         new Game();
