@@ -48,7 +48,7 @@ public class Game extends GUI {
     private int currentPlayer=0;
 
 
-    
+
     //------------------------
     // CONSTRUCTOR
     //------------------------
