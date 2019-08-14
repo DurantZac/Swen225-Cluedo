@@ -663,6 +663,7 @@ public abstract class GUI {
     }
 
     public void showAccusationWindow(){
+        System.out.println(getMurderScenario());
         JFrame popup = new JFrame();
         popup.setLayout(new FlowLayout());
         popup.setVisible(true);
@@ -692,7 +693,7 @@ public abstract class GUI {
                     String roomString = roomPick.getSelectedItem().toString();
                     popup.dispose();
                     if(checkAccusation(characterString,weaponString,roomString)){
-                        // Show winner
+                        showWinScreen();
                     }
                     else{
                         showLoseScreen();
@@ -797,4 +798,32 @@ public abstract class GUI {
         popup.revalidate();
         popup.repaint();
     }
+
+    public void showWinScreen(){
+        frame.dispose();
+        JFrame winScreen = new JFrame();
+        winScreen.setVisible(true);
+        winScreen.setLayout(new FlowLayout());
+
+        JLabel message = new JLabel(getPlayers().get(currentPlayer).getCharacter().toString() + " wins!");
+        JLabel message2 = new JLabel(getMurderScenario().get(0) + " committed the crime in the " + getMurderScenario().get(1) + " with the " + getMurderScenario().get(2));
+        winScreen.add(message);
+        winScreen.add(message2);
+
+        JButton endGame = new JButton("Close Game");
+        endGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        winScreen.add(endGame);
+
+        winScreen.pack();
+        winScreen.revalidate();
+        winScreen.repaint();
+    }
+
+    public abstract List<Card> getMurderScenario();
 }
