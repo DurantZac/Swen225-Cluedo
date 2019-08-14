@@ -16,6 +16,7 @@ public abstract class GUI {
     Controls controls;
     int playerNum = 1;
     int currentPlayer = 0;
+    int refutingPlayer=-1;
     JPanel diceSection = new JPanel(new GridBagLayout());
     boolean showCards = false;
 
