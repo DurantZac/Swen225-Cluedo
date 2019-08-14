@@ -306,24 +306,24 @@ public abstract class GUI {
                 Image spanner = ImageIO.read(getClass().getResource("spanner_Room.jpg"));
                 imageMap.put(getClass().getResource("spanner_Room.jpg"),spanner);
 
-                Image kitchen = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
-                imageMap.put(getClass().getResource("card_kitchen.jpg"),kitchen);
-                Image lounge = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
-                imageMap.put(getClass().getResource("card_kitchen.jpg"),lounge);
-                Image dining = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
-                imageMap.put(getClass().getResource("card_kitchen.jpg"),dining);
-                Image entertainment = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
-                imageMap.put(getClass().getResource("card_kitchen.jpg"),entertainment);
-                Image hall = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
-                imageMap.put(getClass().getResource("card_kitchen.jpg"),hall);
-                Image book = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
-                imageMap.put(getClass().getResource("card_kitchen.jpg"),book);
-                Image audi = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
-                imageMap.put(getClass().getResource("card_kitchen.jpg"),audi);
-                Image con = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
-                imageMap.put(getClass().getResource("card_kitchen.jpg"),con);
-                Image study = ImageIO.read(getClass().getResource("card_kitchen.jpg"));
-                imageMap.put(getClass().getResource("card_kitchen.jpg"),study);
+                Image kitchen = ImageIO.read(getClass().getResource("Kitchen_Icon.jpg"));
+                imageMap.put(getClass().getResource("Kitchen_Icon.jpg"),kitchen);
+                Image lounge = ImageIO.read(getClass().getResource("Lounge_Icon.jpg"));
+                imageMap.put(getClass().getResource("Lounge_Icon.jpg"),lounge);
+                Image dining = ImageIO.read(getClass().getResource("Dining_Icon.jpg"));
+                imageMap.put(getClass().getResource("Dining_Icon.jpg"),dining);
+                Image entertainment = ImageIO.read(getClass().getResource("Entertainment_Icon.jpg"));
+                imageMap.put(getClass().getResource("Entertainment_Icon.jpg"),entertainment);
+                Image hall = ImageIO.read(getClass().getResource("Hall_Icon.jpg"));
+                imageMap.put(getClass().getResource("Hall_Icon.jpg"),hall);
+                Image book = ImageIO.read(getClass().getResource("Book_Icon.jpg"));
+                imageMap.put(getClass().getResource("Book_Icon.jpg"),book);
+                Image audi = ImageIO.read(getClass().getResource("Auditorium_Icon.jpg"));
+                imageMap.put(getClass().getResource("Auditorium_Icon.jpg"),audi);
+                Image con = ImageIO.read(getClass().getResource("Conservatory_Icon.jpg"));
+                imageMap.put(getClass().getResource("Conservatory_Icon.jpg"),con);
+                Image study = ImageIO.read(getClass().getResource("Study_Icon.jpg"));
+                imageMap.put(getClass().getResource("Study_Icon.jpg"),study);
 
                 this.addMouseListener(new MouseAdapter() {
                     public void mouseReleased(MouseEvent e) {
@@ -818,7 +818,7 @@ public abstract class GUI {
         popup.repaint();
     }
 
-    private void showWinScreen(){
+    public void showWinScreen(){
         frame.dispose();
         JFrame winScreen = new JFrame();
         winScreen.setVisible(true);

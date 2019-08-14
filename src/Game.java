@@ -441,7 +441,7 @@ public class Game extends GUI {
         board.getBoardTile("Ay").setDefaultImage(c.getResource("WBL.jpg"));
 
         board.getBoardTile("Au").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Av").setDefaultImage(c.getResource("WL.jpg"));
+//        board.getBoardTile("Av").setDefaultImage(c.getResource("WL.jpg"));
         board.getBoardTile("Aw").setDefaultImage(c.getResource("WL.jpg"));
         board.getBoardTile("Ax").setDefaultImage(c.getResource("WL.jpg"));
         board.getBoardTile("At").setDefaultImage(c.getResource("WTL.jpg"));
@@ -459,7 +459,7 @@ public class Game extends GUI {
 
         board.getBoardTile("Ak").setDefaultImage(c.getResource("WL.jpg"));
         board.getBoardTile("Al").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Am").setDefaultImage(c.getResource("WL.jpg"));
+//        board.getBoardTile("Am").setDefaultImage(c.getResource("WL.jpg"));
         board.getBoardTile("An").setDefaultImage(c.getResource("WL.jpg"));
         board.getBoardTile("Ao").setDefaultImage(c.getResource("WL.jpg"));
         board.getBoardTile("Aj").setDefaultImage(c.getResource("WTL.jpg"));
@@ -521,7 +521,7 @@ public class Game extends GUI {
         board.getBoardTile("Lh").setDefaultImage(c.getResource("WB.jpg"));
         board.getBoardTile("Mh").setDefaultImage(c.getResource("WB.jpg"));
         board.getBoardTile("Nh").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Kc").setDefaultImage(c.getResource("Room.jpg"));
+//        board.getBoardTile("Kc").setDefaultImage(c.getResource("Room.jpg"));
 
 
         //Cons
@@ -537,7 +537,7 @@ public class Game extends GUI {
 
         board.getBoardTile("Xe").setDefaultImage(c.getResource("WBR.jpg"));
         board.getBoardTile("Xd").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Xc").setDefaultImage(c.getResource("WR.jpg"));
+//        board.getBoardTile("Xc").setDefaultImage(c.getResource("WR.jpg"));
         board.getBoardTile("Xb").setDefaultImage(c.getResource("WTR.jpg"));
 
 
@@ -552,7 +552,7 @@ public class Game extends GUI {
         board.getBoardTile("Vm").setDefaultImage(c.getResource("WB.jpg"));
         board.getBoardTile("Xm").setDefaultImage(c.getResource("WBR.jpg"));
 
-        board.getBoardTile("Xj").setDefaultImage(c.getResource("WR.jpg"));
+//        board.getBoardTile("Xj").setDefaultImage(c.getResource("WR.jpg"));
         board.getBoardTile("Xk").setDefaultImage(c.getResource("WR.jpg"));
         board.getBoardTile("Xl").setDefaultImage(c.getResource("WR.jpg"));
         board.getBoardTile("Xi").setDefaultImage(c.getResource("WTR.jpg"));
@@ -573,7 +573,7 @@ public class Game extends GUI {
 
         board.getBoardTile("Xr").setDefaultImage(c.getResource("WBR.jpg"));
         board.getBoardTile("Xq").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Xp").setDefaultImage(c.getResource("WTR.jpg"));
+//        board.getBoardTile("Xp").setDefaultImage(c.getResource("WTR.jpg"));
 
         board.getBoardTile("Wo").setDefaultImage(c.getResource("WTR.jpg"));
         board.getBoardTile("So").setDefaultImage(c.getResource("WTL.jpg"));
@@ -590,11 +590,11 @@ public class Game extends GUI {
         board.getBoardTile("Uy").setDefaultImage(c.getResource("WB.jpg"));
         board.getBoardTile("Vy").setDefaultImage(c.getResource("WB.jpg"));
         board.getBoardTile("Wy").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Xy").setDefaultImage(c.getResource("WB.jpg"));
+//        board.getBoardTile("Xy").setDefaultImage(c.getResource("WB.jpg"));
 
         //Hall
         board.getBoardTile("Ky").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Ly").setDefaultImage(c.getResource("WB.jpg"));
+//        board.getBoardTile("Ly").setDefaultImage(c.getResource("WB.jpg"));
         board.getBoardTile("My").setDefaultImage(c.getResource("WB.jpg"));
         board.getBoardTile("Ny").setDefaultImage(c.getResource("WB.jpg"));
         board.getBoardTile("Jy").setDefaultImage(c.getResource("WBL.jpg"));
