@@ -9,7 +9,7 @@ public class WeaponCard implements Card
 
   //WeaponCard Attributes
   private String weapon;
-  private Room location;
+  private Tile location;
   private int index;
   public java.net.URL image;
 
@@ -60,15 +60,17 @@ public class WeaponCard implements Card
    * @return the location the weapon is in
    */
   public Room getLocation(){
-    return location;
+    return location.getIsPartOf();
   }
 
   /**
    * Sets the location of the weapon to the room r
-   * @param r
+   * @param t
    */
-  public void setLocation(Room r){
-    location = r;
+  public void setLocation(Tile t){
+    location.removeWeapon();
+    location = t;
+    t.setWeapon(this);
   }
 
   /**

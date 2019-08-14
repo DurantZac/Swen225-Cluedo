@@ -217,7 +217,7 @@ public class Game extends GUI {
         Collections.shuffle(roomsShuffled);
         for (int i = 0; i < weapons.size(); i++) {
             WeaponCard w = (WeaponCard) (weapons.get(i));
-            w.setLocation(roomsShuffled.get(i));
+            w.setLocation(roomsShuffled.get(i).getEmptySpace());
         }
 
         //Add a random weapon to the murder scenario and remove this from the list

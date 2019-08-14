@@ -293,6 +293,9 @@ public abstract class GUI {
                 Image wtr = ImageIO.read(getClass().getResource("WTR.jpg"));
                 imageMap.put(getClass().getResource("WTR.jpg"),wtr);
 
+                Image knife = ImageIO.read(getClass().getResource("knife_Room.jpg"));
+                imageMap.put(getClass().getResource("knife_Room.jpg"),knife);
+
                 this.addMouseListener(new MouseAdapter() {
                     public void mouseReleased(MouseEvent e) {
                         int x = e.getX();
@@ -374,9 +377,20 @@ public abstract class GUI {
 
             //Setup hand stuff
             handSection = new JPanel(new GridLayout(2,3));
-            for(int i =0; i < 6; i++){
+            for(int i =0; i < getPlayers().get(0).getHand().size(); i++){
                 try {
                     BufferedImage myPicture = ImageIO.read(getClass().getResource("card_back.jpg"));
+                    JLabel card = new JLabel(new ImageIcon(myPicture));
+                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(card);
+                }
+                catch(IOException e){
+
+                }
+            }
+            for(int i =getPlayers().get(0).getHand().size(); i < 6; i++){
+                try {
+                    BufferedImage myPicture = ImageIO.read(getClass().getResource("card_blank.jpg"));
                     JLabel card = new JLabel(new ImageIcon(myPicture));
                     card.setSize(getWidth() / 15, getHeight() / 3);
                     handSection.add(card);
@@ -453,7 +467,7 @@ public abstract class GUI {
                     }
                 }
             });
-            constraints.gridx = 3;
+            constraints.gridx = 5;
             constraints.gridy = 2;
             this.add(showHide,constraints);
 
@@ -509,7 +523,7 @@ public abstract class GUI {
                     handSection.add(card);
                 }
                 for(int i = hand.size(); i < 6; i++){
-                    BufferedImage nullImage = ImageIO.read(getClass().getResource("card_back.jpg"));
+                    BufferedImage nullImage = ImageIO.read(getClass().getResource("card_blank.jpg"));
                     JLabel card = new JLabel(new ImageIcon(nullImage));
                     card.setSize(getWidth() / 15, getHeight() / 3);
                     handSection.add(card);
@@ -527,8 +541,14 @@ public abstract class GUI {
         public void hideCards(){
             handSection.removeAll();
             try{
-                for(int i = 0; i < 6; i++){
+                for(int i = 0; i < getPlayers().get(currentPlayer).getHand().size(); i++){
                     BufferedImage nullImage = ImageIO.read(getClass().getResource("card_back.jpg"));
+                    JLabel card = new JLabel(new ImageIcon(nullImage));
+                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    handSection.add(card);
+                }
+                for(int i = getPlayers().get(currentPlayer).getHand().size(); i < 6;i++){
+                    BufferedImage nullImage = ImageIO.read(getClass().getResource("card_blank.jpg"));
                     JLabel card = new JLabel(new ImageIcon(nullImage));
                     card.setSize(getWidth() / 15, getHeight() / 3);
                     handSection.add(card);
