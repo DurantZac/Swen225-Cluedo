@@ -306,9 +306,9 @@ public class Game extends GUI {
         Room k = roomCards.get(0).getRoom();
         for (char r = 'c'; r < 'g'; r++) {
             for (char c = 'b'; c < 'f'; c++) {
-                Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
-                t.setIsPartOf(k);
-                if (!k.getEntrances().contains(t)) k.addEmptySpace(t);
+                    Tile t = board.getBoardTile((Character.toUpperCase(c)) + String.valueOf(r));
+                    t.setIsPartOf(k);
+                    if (!k.getEntrances().contains(t) && t.getSymbol()!='#') k.addEmptySpace(t);
             }
         }
 
@@ -1103,7 +1103,6 @@ public class Game extends GUI {
                 if (hand.contains(suggestedRoom)) suggestions.add(suggestedRoom);
                 if (hand.contains(suggestedWeapon)) suggestions.add(suggestedWeapon);
 
-
                 if (suggestions.size()>1){
                     return suggestions;
                 }
@@ -1132,7 +1131,12 @@ public class Game extends GUI {
         WeaponCard weaponCard = checkWeapon(weapon);
         RoomCard roomCard = checkRoom(room);
 
-        return (character.equals(murderScenario.get(0)) && room.equals(murderScenario.get(1)) && weapon.equals(murderScenario.get(2)));
+
+        if (!(character.equals(murderScenario.get(0)) && room.equals(murderScenario.get(1)) && weapon.equals(murderScenario.get(2)))) {
+            players.get(currentPlayer).setIsStillPlaying(false);
+            return false;
+        }
+        return true;
     }
 
     /**
