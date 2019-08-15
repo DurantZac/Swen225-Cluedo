@@ -74,6 +74,54 @@ public class Tile
         defaultImage = getClass().getResource("Cor.jpg");
         this.activeImage = this.defaultImage;
         break;
+      case 'K':
+        isAccessible = true;
+        defaultImage = getClass().getResource("Kitchen_Icon.jpg");
+        this.activeImage = this.defaultImage;
+        break;
+      case 'S':
+        isAccessible = true;
+        defaultImage = getClass().getResource("Study_Icon.jpg");
+        this.activeImage = this.defaultImage;
+        break;
+      case 'B':
+        isAccessible = true;
+        defaultImage = getClass().getResource("Book_Icon.jpg");
+        this.activeImage = this.defaultImage;
+        break;
+      case 'H':
+        isAccessible = true;
+        defaultImage = getClass().getResource("Hall_Icon.jpg");
+        this.activeImage = this.defaultImage;
+        break;
+      case 'A':
+        isAccessible = true;
+        defaultImage = getClass().getResource("Auditorium_Icon.jpg");
+        this.activeImage = this.defaultImage;
+        break;
+      case 'E':
+        isAccessible = true;
+        defaultImage = getClass().getResource("Entertainment_Icon.jpg");
+        this.activeImage = this.defaultImage;
+        break;
+      case 'C':
+        isAccessible = true;
+        defaultImage = getClass().getResource("Conservatory_Icon.jpg");
+        this.activeImage = this.defaultImage;
+        break;
+      case 'D':
+        isAccessible = true;
+        defaultImage = getClass().getResource("Dining_Icon.jpg");
+        this.activeImage = this.defaultImage;
+        break;
+      case 'L':
+        isAccessible = true;
+        defaultImage = getClass().getResource("Lounge_Icon.jpg");
+        this.activeImage = this.defaultImage;
+        break;
+
+
+
       case '>':
         isAccessible =true;
         defaultImage = getClass().getResource("Room.jpg");
@@ -184,8 +232,10 @@ public class Tile
    void setIsPartOf(Room aNewIsPartOf)
   {
     isPartOf = aNewIsPartOf;
-    defaultImage = getClass().getResource("Room.jpg");
-    activeImage = defaultImage;
+    if(symbol == '_') {
+      defaultImage = getClass().getResource("Room.jpg");
+      activeImage = defaultImage;
+    }
   }
 
   /**

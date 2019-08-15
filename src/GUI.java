@@ -19,6 +19,7 @@ public abstract class GUI {
     private JPanel diceSection = new JPanel(new GridBagLayout());
     private boolean showCards = false;
     private JButton suggest;
+    JScrollPane scroller;
 
 
 
@@ -48,6 +49,26 @@ public abstract class GUI {
         menuBar.add(quitMenuItem);
 
         menuBar.setLayout(new GridBagLayout());
+
+        JMenuItem showNotes = new JMenuItem("Show Notes");
+        showNotes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showNotes();
+            }
+        });
+
+        menuBar.add(showNotes);
+
+        JMenuItem showKey = new JMenuItem("Show Key");
+        showKey.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showKey();
+            }
+        });
+
+        menuBar.add(showKey);
 
 
         frame = new JFrame("Cluedo");
@@ -306,6 +327,24 @@ public abstract class GUI {
                 Image spanner = ImageIO.read(getClass().getResource("spanner_Room.jpg"));
                 imageMap.put(getClass().getResource("spanner_Room.jpg"),spanner);
 
+                Image kitchen = ImageIO.read(getClass().getResource("Kitchen_Icon.jpg"));
+                imageMap.put(getClass().getResource("Kitchen_Icon.jpg"),kitchen);
+                Image lounge = ImageIO.read(getClass().getResource("Lounge_Icon.jpg"));
+                imageMap.put(getClass().getResource("Lounge_Icon.jpg"),lounge);
+                Image dining = ImageIO.read(getClass().getResource("Dining_Icon.jpg"));
+                imageMap.put(getClass().getResource("Dining_Icon.jpg"),dining);
+                Image entertainment = ImageIO.read(getClass().getResource("Entertainment_Icon.jpg"));
+                imageMap.put(getClass().getResource("Entertainment_Icon.jpg"),entertainment);
+                Image hall = ImageIO.read(getClass().getResource("Hall_Icon.jpg"));
+                imageMap.put(getClass().getResource("Hall_Icon.jpg"),hall);
+                Image book = ImageIO.read(getClass().getResource("Book_Icon.jpg"));
+                imageMap.put(getClass().getResource("Book_Icon.jpg"),book);
+                Image audi = ImageIO.read(getClass().getResource("Auditorium_Icon.jpg"));
+                imageMap.put(getClass().getResource("Auditorium_Icon.jpg"),audi);
+                Image con = ImageIO.read(getClass().getResource("Conservatory_Icon.jpg"));
+                imageMap.put(getClass().getResource("Conservatory_Icon.jpg"),con);
+                Image study = ImageIO.read(getClass().getResource("Study_Icon.jpg"));
+                imageMap.put(getClass().getResource("Study_Icon.jpg"),study);
 
                 this.addMouseListener(new MouseAdapter() {
                     public void mouseReleased(MouseEvent e) {
@@ -424,7 +463,7 @@ public abstract class GUI {
             setDice1(1);
             setDice2(1);
 
-            playerLabel = new JLabel(getPlayers().get(playerNum-1).getCharacter().toString() + "'s Turn");
+            playerLabel = new JLabel(getPlayers().get(currentPlayer).getCharacter().toString() + "'s Turn");
             constraints.gridx = 1;
             constraints.gridy = 0;
             add(playerLabel,constraints);
@@ -585,7 +624,7 @@ public abstract class GUI {
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
-            playerLabel.setText(getPlayers().get(playerNum-1).getCharacter().toString() +"'s turn");
+            playerLabel.setText(getPlayers().get(currentPlayer).getCharacter().toString() +"'s turn");
             repaint();
         }
 
@@ -726,6 +765,8 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loseScreen.dispose();
+                frame.revalidate();
+                frame.repaint();
             }
         });
         loseScreen.add(close);
@@ -798,7 +839,7 @@ public abstract class GUI {
         popup.repaint();
     }
 
-    private void showWinScreen(){
+    public void showWinScreen(){
         frame.dispose();
         JFrame winScreen = new JFrame();
         winScreen.setVisible(true);
@@ -844,4 +885,150 @@ public abstract class GUI {
         invalidMove.repaint();
     }
     public abstract List<Card> getMurderScenario();
+
+     public void showNotes(){
+         if(getPlayers() == null || getPlayers().size() == 0) return;
+         Player p = getPlayers().get(currentPlayer);
+         JFrame notes = new JFrame();
+         notes.setLayout(new GridBagLayout());
+         notes.setVisible(true);
+         notes.setSize(200,200);
+         notes.setMinimumSize(new Dimension(400,400));
+
+         StringBuilder sb = new StringBuilder();
+         sb.append("<html>");
+         sb.append(p.getNotes());
+         sb.append("</html>");
+
+         GridBagConstraints c = new GridBagConstraints();
+         c.weightx = 1;
+         c.fill = GridBagConstraints.HORIZONTAL;
+
+         JLabel previousNotes = new JLabel(sb.toString(), SwingConstants.CENTER);
+
+         scroller = new JScrollPane(previousNotes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+         scroller.setMinimumSize(new Dimension(200,200));
+
+         JTextField textField = new JTextField();
+         textField.addActionListener(new ActionListener() {
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                 p.setNotes(textField.getText());
+                 textField.setText("");
+                 notes.remove(scroller);
+
+                 StringBuilder builder = new StringBuilder();
+                 builder.append("<html>");
+                 builder.append(p.getNotes());
+                 builder.append("</html>");;
+                 previousNotes.setText(builder.toString());
+
+                 scroller = new JScrollPane(previousNotes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                 scroller.setMinimumSize(new Dimension(200,200));
+
+                 c.gridy = 0;
+                 notes.add(scroller);
+
+                 notes.revalidate();
+                 notes.repaint();
+             }
+         });
+
+         c.gridy=0;
+         notes.add(scroller,c);
+
+         c.gridy = 1;
+         notes.add(textField,c);
+
+         c.gridy = 2;
+         JButton close = new JButton("Close");
+         close.addActionListener(new ActionListener() {
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                 notes.dispose();
+             }
+         });
+
+         notes.add(close,c);
+
+         notes.pack();
+         notes.revalidate();
+         notes.repaint();
+     }
+
+     void showKey(){
+         JFrame key = new JFrame();
+         key.setVisible(true);
+         key.setLayout(new GridLayout(15,2));
+
+         JLabel m = new JLabel("M");
+         JLabel w = new JLabel("W");
+         JLabel g = new JLabel("G");
+         JLabel t = new JLabel("T");
+         JLabel p = new JLabel("P");
+         JLabel r = new JLabel("R");
+
+         JLabel l = new JLabel("L");
+         JLabel d = new JLabel("D");
+         JLabel k = new JLabel("K");
+         JLabel a = new JLabel("A");
+         JLabel c = new JLabel("C");
+         JLabel e = new JLabel("E");
+         JLabel b = new JLabel("B");
+         JLabel s = new JLabel("S");
+         JLabel h = new JLabel("H");
+
+         JLabel mustard = new JLabel("Col. Mustard");
+         JLabel white = new JLabel("Mrs White");
+         JLabel green = new JLabel("Rev. Green");
+         JLabel turq = new JLabel("Ms Turquoise");
+         JLabel plum = new JLabel("Prof. Plum");
+         JLabel red = new JLabel("Miss Red");
+
+         JLabel lounge = new JLabel("Lounge");
+         JLabel dining = new JLabel("Dining Room");
+         JLabel kitchen = new JLabel("Kitchen");
+         JLabel audi = new JLabel("Auditorium");
+         JLabel con = new JLabel("Conservatory");
+         JLabel enter = new JLabel("Entertainment Room");
+         JLabel book = new JLabel("Book Room");
+         JLabel study = new JLabel("Study");
+         JLabel hall = new JLabel("Hall");
+
+
+         key.add(m);
+         key.add(mustard);
+         key.add(w);
+         key.add(white);
+         key.add(g);
+         key.add(green);
+         key.add(t);
+         key.add(turq);
+         key.add(p);
+         key.add(plum);
+         key.add(r);
+         key.add(red);
+         key.add(l);
+         key.add(lounge);
+         key.add(d);
+         key.add(dining);
+         key.add(k);
+         key.add(kitchen);
+         key.add(a);
+         key.add(audi);
+         key.add(c);
+         key.add(con);
+         key.add(e);
+         key.add(enter);
+         key.add(b);
+         key.add(book);
+         key.add(s);
+         key.add(study);
+         key.add(h);
+         key.add(hall);
+
+         key.pack();
+         key.revalidate();
+         key.repaint();
+     }
 }
