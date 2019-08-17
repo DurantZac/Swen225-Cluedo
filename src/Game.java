@@ -37,7 +37,7 @@ public class Game extends GUI {
     private static int playerToAssignCharacter = 1;
 
     // Store moves from rollDice event
-    private int moves = 0;
+    public int moves = 0;
 
     private int refutingPlayer=0;
     private CharacterCard suggestedCharacter=null;
@@ -662,6 +662,7 @@ public class Game extends GUI {
      * @return if the move was valid
      */
     public boolean processMove(Tile t){
+        if(t == null) return false;
         if(board.movePlayer(players.get(currentPlayer),t,moves)){
             moves = 0;
             return true;
@@ -804,8 +805,10 @@ public class Game extends GUI {
      * Resets the controls(dice, any grayed out buttons)
      */
     public void nextTurn(){
-        currentPlayer = getNextCharacter(currentPlayer);
-        resetControls();
+        if(players.size() > 0) {
+            currentPlayer = getNextCharacter(currentPlayer);
+            resetControls();
+        }
     }
 
     /**

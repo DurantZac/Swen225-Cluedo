@@ -1,9 +1,11 @@
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -73,12 +75,11 @@ public abstract class GUI {
 
         frame = new JFrame("Cluedo");
         frame.setLayout(new GridLayout(10,2));
-        frame.setSize(new Dimension(500,500));
-        frame.setMinimumSize(new Dimension(500,500));
+        frame.setSize(new Dimension(600,600));
+        frame.setMinimumSize(new Dimension(600,600));
         frame.setMaximumSize(new Dimension(1920,1080));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setJMenuBar(menuBar);
-
         frame.pack();
         frame.setVisible(true);
 
@@ -120,6 +121,7 @@ public abstract class GUI {
      void chooseCharacters(){
         JLabel label = new JLabel("Player "+playerNum+ ", choose your character:");
         JPanel controls = new JPanel();
+
         JRadioButton mustard = new JRadioButton("Col. Mustard");
         mustard.addActionListener(new ActionListener() {
             @Override
@@ -206,7 +208,6 @@ public abstract class GUI {
         frame.setSize(new Dimension(800,1000));
         Screen screen = new Screen();
         screen.setVisible(true);
-        //screen.setBackground(Color.blue);
         screen.setSize(new Dimension(800,800));
 
 
@@ -247,11 +248,15 @@ public abstract class GUI {
         mainSplit.setOrientation(JSplitPane.VERTICAL_SPLIT);
         mainSplit.setTopComponent(screen);
         mainSplit.setBottomComponent(controls);
+        mainSplit.setVisible(true);
 
         frame.setContentPane(mainSplit);
         frame.revalidate();
         frame.repaint();
+
     }
+
+
 
     public abstract void setMoves(int moves);
     /**
@@ -355,11 +360,13 @@ public abstract class GUI {
                         int row = (int)(y/rowDis);
 
                         if(processMove(getBoard().getBoardTile(row,col))){
+                            if(getBoard().getBoardTile(row,col).getIsPartOf() != null)
                             suggest.setEnabled(true);
                         }
                         else{
                             showInvalidMoveScreen();
                         }
+
                         frame.revalidate();
                         frame.repaint();
                     }
@@ -487,7 +494,6 @@ public abstract class GUI {
             suggest.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    suggest.setEnabled(false);
                     if(processSuggestion()){
                         showSuggestionWindow();
                     }
@@ -681,6 +687,7 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(charPick.getSelectedIndex() != -1 && weapPick.getSelectedIndex() != -1){
+                    suggest.setEnabled(false);
                     String characterString = charPick.getSelectedItem().toString();
                     String weaponString = weapPick.getSelectedItem().toString();
                     popup.dispose();
@@ -701,7 +708,6 @@ public abstract class GUI {
     }
 
     public void showAccusationWindow(){
-        System.out.println(getMurderScenario());
         JFrame popup = new JFrame();
         popup.setLayout(new FlowLayout());
         popup.setVisible(true);
@@ -959,7 +965,7 @@ public abstract class GUI {
      void showKey(){
          JFrame key = new JFrame();
          key.setVisible(true);
-         key.setLayout(new GridLayout(15,2));
+         key.setLayout(new GridLayout(16,2));
 
          JLabel m = new JLabel("M");
          JLabel w = new JLabel("W");
@@ -1027,8 +1033,19 @@ public abstract class GUI {
          key.add(h);
          key.add(hall);
 
+         JButton close = new JButton("Close");
+         close.addActionListener(new ActionListener() {
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                 key.dispose();
+             }
+         });
+
+         key.add(close);
+
          key.pack();
          key.revalidate();
          key.repaint();
      }
+     
 }

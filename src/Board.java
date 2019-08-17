@@ -1,5 +1,6 @@
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 // line 17 "model.ump"
 // line 104 "model.ump"
@@ -112,6 +113,7 @@ public class Board
    * @return
    */
   public Tile getBoardTile(int row, int col){
+    if(row >= 25 || col >= 24) return null;
     return boardTiles[row][col];
   }
 
@@ -166,6 +168,8 @@ public class Board
     }
   }
 
+
+
   /**
    * Recursive Depth first search to find path from start to end using required number of moves
    * @param node Current Node
@@ -187,6 +191,7 @@ public class Board
     }
     return false;
   }
+
 
   /**
    * Teleports the player to a room they have been suggested in
