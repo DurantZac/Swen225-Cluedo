@@ -12,8 +12,6 @@ public class Room
   private String name;
   private List<Tile> entrances;
   private List<Tile> openSquares = new ArrayList<>();
-  public WeaponCard weapon = null;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -26,7 +24,7 @@ public class Room
   {
     name  = n;
     roomCard = new RoomCard(this);
-    entrances = new ArrayList<Tile>();
+    entrances = new ArrayList<>();
   }
 
   //------------------------
@@ -59,6 +57,13 @@ public class Room
     if (entrances.contains(aEntrance)) { return; }
     entrances.add(aEntrance);
     aEntrance.setIsPartOf(this);
+    List<Tile> removeAdajcent = new ArrayList<>();
+    for(Tile t : aEntrance.getAdjacent()){
+      if(!aEntrance.getIsAccessibleFull(t)){
+        removeAdajcent.add(t);
+      }
+    }
+    aEntrance.removeAdjacent(removeAdajcent);
   }
 
   /**

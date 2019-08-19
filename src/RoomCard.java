@@ -3,7 +3,6 @@ import java.net.URL;
 public class RoomCard implements Card
 {
   private Room room;
-  private int index;
   public java.net.URL image;
 
   //------------------------
@@ -24,39 +23,30 @@ public class RoomCard implements Card
     switch(aRoom.toString()){
       case "Entertainment Room":
         image = getClass().getResource("card_entertainment.jpg");
-        index = 7;
         break;
       case "Study":
         image = getClass().getResource("card_study.jpg");
-        index = 5;
         break;
       case "Lounge":
         image = getClass().getResource("card_lounge.jpg");
-        index = 3;
         break;
       case "Kitchen":
         image = getClass().getResource("card_kitchen.jpg");
-        index = 1;
         break;
       case "Conservatory":
         image = getClass().getResource("card_conservatory.jpg");
-        index = 8;
         break;
       case "Dining Room":
         image = getClass().getResource("card_dining.jpg");
-        index = 2;
         break;
       case "Hall":
         image = getClass().getResource("card_hall.jpg");
-        index = 4;
         break;
       case "Auditorium":
         image = getClass().getResource("card_auditorium.jpg");
-        index = 9;
         break;
       case "Book Room":
         image = getClass().getResource("card_book.jpg");
-        index = 6;
         break;
     }
   }
@@ -80,10 +70,7 @@ public class RoomCard implements Card
    */
   @Override
   public String toString() {
-    return room.toString();}
-
-  public int getIndex(){
-    return index;
+    return room.toString();
   }
 
   @Override

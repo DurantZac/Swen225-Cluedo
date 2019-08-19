@@ -1,6 +1,7 @@
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
 import java.awt.event.*;
@@ -10,7 +11,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-
+/**
+ * Gui class for displaying items and setting up events
+ */
 public abstract class GUI {
     private JFrame frame;
     private JMenuBar menuBar;
@@ -22,57 +25,67 @@ public abstract class GUI {
     private boolean showCards = false;
     private JButton suggest;
     JScrollPane scroller;
+    JLabel title;
+    JButton nextTurn = new JButton();
 
 
+    public int dice1;
+    public int dice2;
 
-    // this makes the program actually quit when the frame's close button is
-    // pressed.
+
+    // ABSTRACT METHODS
+    public abstract List<Tile> getFoundPath();
+    public abstract void removePathStep();
+    public abstract void setPlayers(int num);
+    public abstract void setCharacter(String character);
+    public abstract void setMoves(int moves);
+    public abstract Board getBoard();
+    public abstract int rollDice();
+    public abstract boolean processMove(Tile t);
+    public abstract void nextTurn();
+    public abstract List<Card> checkSuggestion(String character, String weapon);
+    public abstract boolean checkAccusation(String character, String weapon, String room);
+    public abstract List<Player> getPlayers();
+    public abstract  List<CharacterCard> getCharacters();
+    public abstract List<WeaponCard> getWeapons();
+    public abstract List<Card> getMurderScenario();
+
 
     /**
      * Create gui and add menu bar
      * Calls setup players
      */
     public GUI(){
+
+        //Setup title and menu bar
+        title = new JLabel(new ImageIcon(getClass().getResource("title.png")));
         menuBar = new JMenuBar();
 
         quitMenuItem = new JMenuItem("Quit");
-        quitMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int dialogButton = JOptionPane.YES_NO_OPTION;
-                int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to quit?","Warning",dialogButton);
-                if(dialogResult == JOptionPane.YES_OPTION){
-                    System.exit(0);
-                }
+        quitMenuItem.addActionListener(e -> {
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to quit?","Warning",dialogButton);
+            if(dialogResult == JOptionPane.YES_OPTION){
+                System.exit(0);
             }
         });
 
         JFrame.setDefaultLookAndFeelDecorated(true);
         menuBar.add(quitMenuItem);
-
         menuBar.setLayout(new GridBagLayout());
 
+        // Add notes button
         JMenuItem showNotes = new JMenuItem("Show Notes");
-        showNotes.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showNotes();
-            }
-        });
-
+        showNotes.addActionListener(e -> showNotes());
         menuBar.add(showNotes);
 
+        //Add key button
         JMenuItem showKey = new JMenuItem("Show Key");
-        showKey.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showKey();
-            }
-        });
-
+        showKey.addActionListener(e -> showKey());
         menuBar.add(showKey);
 
 
+        // Create main frame
         frame = new JFrame("Cluedo");
         frame.setLayout(new GridLayout(10,2));
         frame.setSize(new Dimension(600,600));
@@ -84,112 +97,110 @@ public abstract class GUI {
         frame.setVisible(true);
 
 
+        // Setup action timer loop to move players.
+        // Function is called every 400ms
+        // If player is currently moving, this function will animate the movement.
+        int delay = 400; //milliseconds
+        ActionListener taskPerformer = evt -> {
+            if(getFoundPath() == null || getFoundPath().size() == 0){
+                nextTurn.setEnabled(true);
+                return;
+            }
+            getBoard().takeStep(getPlayers().get(currentPlayer),getFoundPath().get(0));
+            removePathStep();
+        };
+
+        Timer timer = new Timer(delay, taskPerformer);
+        timer.start();
     }
+
 
     /**
      * Adds gui options for selecting number of players
      */
-     void setupPlayerSelect(){
-        JLabel label = new JLabel("How many players are playing?");
-        String[] playerNum = {"3","4","5","6"};
-        JComboBox players = new JComboBox(playerNum);
-        players.setSelectedIndex(-1);
-        players.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.remove(players);
-                frame.remove(label);
-                frame.revalidate();
-                frame.repaint();
-                setPlayers(Integer.parseInt(players.getSelectedItem().toString()));
-            }
-        });
-        frame.add(label);
-        frame.add(players);
-        frame.revalidate();
-        frame.repaint();
-    }
-
-    public abstract void setPlayers(int num);
-
-    public abstract void setCharacter(String character);
+     void setupPlayerSelect() {
+         frame.setLayout(new FlowLayout());
+         title.setSize(frame.getWidth(), frame.getHeight() / 3);
+         JLabel label = new JLabel("How many players are playing?");
+         String[] playerNum = {"3", "4", "5", "6"};
+         JComboBox players = new JComboBox(playerNum);
+         players.setSelectedIndex(-1);
+         players.addActionListener(e -> {
+             frame.remove(players);
+             frame.remove(label);
+             frame.revalidate();
+             frame.repaint();
+             setPlayers(Integer.parseInt(players.getSelectedItem().toString()));
+         });
+         frame.add(title);
+         frame.add(label);
+         frame.add(players);
+         frame.revalidate();
+         frame.repaint();
+     }
 
 
     /**
-     * Add gui items from selecting characters
+     * Add gui items for selecting characters
      */
      void chooseCharacters(){
+        frame.remove(title);
+        frame.setLayout(new GridLayout(10,2));
         JLabel label = new JLabel("Player "+playerNum+ ", choose your character:");
         JPanel controls = new JPanel();
 
+        //Set up radio buttons
         JRadioButton mustard = new JRadioButton("Col. Mustard");
-        mustard.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mustard.setEnabled(false);
-                playerNum++;
-                label.setText("Player "+playerNum + ", choose your character:");
-                frame.repaint();
-                setCharacter(mustard.getText());
-            }
+        mustard.addActionListener(e -> {
+            mustard.setEnabled(false);
+            playerNum++;
+            label.setText("Player "+playerNum + ", choose your character:");
+            frame.repaint();
+            setCharacter(mustard.getText());
         });
         JRadioButton white = new JRadioButton("Mrs White");
-        white.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                white.setEnabled(false);
-                playerNum++;
-                label.setText("Player "+playerNum + ", choose your character:");
-                frame.repaint();
-                setCharacter(white.getText());
-            }
+        white.addActionListener(e -> {
+            white.setEnabled(false);
+            playerNum++;
+            label.setText("Player "+playerNum + ", choose your character:");
+            frame.repaint();
+            setCharacter(white.getText());
         });
         JRadioButton green = new JRadioButton("Rev. Green");
-        green.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                green.setEnabled(false);
-                playerNum++;
-                label.setText("Player "+playerNum + ", choose your character:");
-                frame.repaint();
-                setCharacter(green.getText());
-            }
+        green.addActionListener(e -> {
+            green.setEnabled(false);
+            playerNum++;
+            label.setText("Player "+playerNum + ", choose your character:");
+            frame.repaint();
+            setCharacter(green.getText());
         });
         JRadioButton turquoise = new JRadioButton("Ms Turquoise");
-        turquoise.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                turquoise.setEnabled(false);
-                playerNum++;
-                label.setText("Player "+playerNum + ", choose your character:");
-                frame.repaint();
-                setCharacter(turquoise.getText());
-            }
+        turquoise.addActionListener(e -> {
+            turquoise.setEnabled(false);
+            playerNum++;
+            label.setText("Player "+playerNum + ", choose your character:");
+            frame.repaint();
+            setCharacter(turquoise.getText());
         });
         JRadioButton plum = new JRadioButton("Prof. Plum");
-        plum.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                plum.setEnabled(false);
-                playerNum++;
-                label.setText("Player "+playerNum + ", choose your character:");
-                frame.repaint();
-                setCharacter(plum.getText());
-            }
+        plum.addActionListener(e -> {
+            plum.setEnabled(false);
+            playerNum++;
+            label.setText("Player "+playerNum + ", choose your character:");
+            frame.repaint();
+            setCharacter(plum.getText());
         });
         JRadioButton red = new JRadioButton("Miss Red");
-        red.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                red.setEnabled(false);
-                playerNum++;
-                label.setText("Player "+playerNum + ", choose your character:");
-                frame.repaint();
-                setCharacter(red.getText());
-            }
+        red.addActionListener(e -> {
+            red.setEnabled(false);
+            playerNum++;
+            label.setText("Player "+playerNum + ", choose your character:");
+            frame.repaint();
+            setCharacter(red.getText());
         });
-        frame.add(label);
 
+        // Add elements to frame
+        frame.add(label);
         controls.add(mustard);
         controls.add(white);
         controls.add(green);
@@ -203,7 +214,11 @@ public abstract class GUI {
         frame.repaint();
     }
 
+    /**
+     * Setup gui elements for gameplay screen
+     */
      void setupGameplay(){
+        // Set up screen and counter
         playerNum = 1;
         frame.setSize(new Dimension(800,1000));
         Screen screen = new Screen();
@@ -211,29 +226,27 @@ public abstract class GUI {
         screen.setSize(new Dimension(800,800));
 
 
+        //Create controls panel for dice and buttons
         controls = new Controls(new GridBagLayout());
-        //controls.setBackground(Color.RED);
         controls.setVisible(true);
 
+        // Add roll dice button and event
         JButton rollDice = new JButton("Roll Dice");
-        rollDice.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        rollDice.addActionListener(e -> {
 
-                // Roll dice
-                int dice1 = rollDice();
-                int dice2 = rollDice();
+            // Roll dice
+            dice1 = rollDice();
+            dice2 = rollDice();
 
-                // Pass information to game class
-                setMoves(dice1 + dice2);
+            // Pass information to game class
+            setMoves(dice1 + dice2);
 
-                // Update gui
-                controls.setDice1(dice1);
-                controls.setDice2(dice2);
-                rollDice.setEnabled(false);
-                frame.revalidate();
-                frame.repaint();
-            }
+            // Update gui
+            controls.setDice1(dice1);
+            controls.setDice2(dice2);
+            rollDice.setEnabled(false);
+            frame.revalidate();
+            frame.repaint();
         });
 
         // Add dice button to panel
@@ -241,14 +254,15 @@ public abstract class GUI {
         controls.constraints.gridx = 0;
         diceSection.add(rollDice,controls.constraints);
 
-
+        //Split main frame into screen for displaying board, and controls for user actions
         JSplitPane mainSplit = new JSplitPane();
         mainSplit.setDividerSize(0);
-        mainSplit.setResizeWeight(0.99);
+        mainSplit.setResizeWeight(0.9);
         mainSplit.setOrientation(JSplitPane.VERTICAL_SPLIT);
         mainSplit.setTopComponent(screen);
         mainSplit.setBottomComponent(controls);
         mainSplit.setVisible(true);
+
 
         frame.setContentPane(mainSplit);
         frame.revalidate();
@@ -256,22 +270,22 @@ public abstract class GUI {
 
     }
 
-
-
-    public abstract void setMoves(int moves);
     /**
      * Class for main display screen
      */
-    class Screen extends JPanel{
+    class Screen extends JPanel implements MouseMotionListener{
         HashMap<java.net.URL,Image> imageMap = new HashMap<>();
+
         //Divide up grid
         double colDis;
         double rowDis;
 
+        List<JLabel> tiles = new ArrayList<JLabel>();
+
          Screen(){
             super(); // Super constructor
             try{
-                // Fill map with all possible images
+                // Fill map with all possible images that can be used on a tile
                 Image cor = ImageIO.read(getClass().getResource("Cor.jpg"));
                 imageMap.put(getClass().getResource("Cor.jpg"),cor);
                 Image room = ImageIO.read(getClass().getResource("Room.jpg"));
@@ -319,6 +333,7 @@ public abstract class GUI {
                 Image wtr = ImageIO.read(getClass().getResource("WTR.jpg"));
                 imageMap.put(getClass().getResource("WTR.jpg"),wtr);
 
+                //Weapons
                 Image knife = ImageIO.read(getClass().getResource("dagger_Room.jpg"));
                 imageMap.put(getClass().getResource("dagger_Room.jpg"),knife);
                 Image candle = ImageIO.read(getClass().getResource("candlestick_Room.jpg"));
@@ -332,6 +347,7 @@ public abstract class GUI {
                 Image spanner = ImageIO.read(getClass().getResource("spanner_Room.jpg"));
                 imageMap.put(getClass().getResource("spanner_Room.jpg"),spanner);
 
+                //Room icons
                 Image kitchen = ImageIO.read(getClass().getResource("Kitchen_Icon.jpg"));
                 imageMap.put(getClass().getResource("Kitchen_Icon.jpg"),kitchen);
                 Image lounge = ImageIO.read(getClass().getResource("Lounge_Icon.jpg"));
@@ -351,18 +367,26 @@ public abstract class GUI {
                 Image study = ImageIO.read(getClass().getResource("Study_Icon.jpg"));
                 imageMap.put(getClass().getResource("Study_Icon.jpg"),study);
 
+                // Add mouse listener for user to click on tiles
                 this.addMouseListener(new MouseAdapter() {
                     public void mouseReleased(MouseEvent e) {
+
+                        //Get col and row
                         int x = e.getX();
                         int y = e.getY();
 
                         int col = (int)(x/colDis);
                         int row = (int)(y/rowDis);
 
+                        // If move choice is valid, disable ending turn until animation is finished
                         if(processMove(getBoard().getBoardTile(row,col))){
-                            if(getBoard().getBoardTile(row,col).getIsPartOf() != null)
-                            suggest.setEnabled(true);
+                            nextTurn.setEnabled(false);
+                            // If player has entered a room, allow suggestions
+                            if(getBoard().getBoardTile(row,col).getIsPartOf() != null) {
+                                suggest.setEnabled(true);
+                            }
                         }
+                        // If invalid, display invalid popup
                         else{
                             showInvalidMoveScreen();
                         }
@@ -371,6 +395,18 @@ public abstract class GUI {
                         frame.repaint();
                     }
                 });
+
+                // Mouse motion listener for hover tool tips
+                addMouseMotionListener(this);
+                ToolTipManager.sharedInstance().setDismissDelay(500);
+
+                for(int i = 0; i < 600; i++){
+                    tiles.add(new JLabel(new ImageIcon()));
+                    add(tiles.get(i));
+                }
+
+                this.setLayout(new GridLayout(25,24));
+
             }
             catch(Exception e){
                 System.out.println(e);
@@ -378,32 +414,85 @@ public abstract class GUI {
         }
 
         /**
-         * Called when repainting
-         * @param g the graphics of the game
+         * Called when repainting to properly resize and repaint components
          */
-        @SuppressWarnings("IntegerDivisionInFloatingPointContext")
         @Override
         protected void paintComponent(Graphics g){
-            super.paintComponent(g);
+            super.paintComponent(g); // Super constructor
 
-             colDis = this.getWidth() / 24;
-             rowDis = this.getHeight() / 25;
-            // Paint images
-            for(int row = 0; row < getHeight()-rowDis-1; row+=rowDis) {
-                for (int col =0; col < getWidth()-colDis-1; col += colDis) {
+            // Reset cursor to default
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
-                    //Use boardTile url to find image
-                    Tile boardTile = getBoard().getBoardTile(Math.min((int)(row/rowDis),24),Math.min((int)(col/colDis),23));
-                    g.drawImage(imageMap.get(boardTile.getActiveImage()), col, row,getWidth()/24,getHeight()/25,null);
+            //Reset size of col and rows
+            colDis = this.getWidth() / 24;
+            rowDis = this.getHeight() / 25;
+
+            //Rerender board
+            int i =0;
+            for(int row = 0; row < 25; row++){
+                for(int col = 0; col < 24; col++) {
+                    Image tileImage = imageMap.get(getBoard().getBoardTile(row,col).getActiveImage()).getScaledInstance(getWidth()/24,getHeight()/25, Image.SCALE_FAST);
+                    tiles.get(i).setIcon(new ImageIcon(tileImage));
+                    tiles.get(i).setSize(getWidth() / 24, getHeight() / 25);
+                    tiles.get(i).setVisible(true);
+                    i++;
                 }
             }
+            frame.revalidate();
+            frame.repaint();
         }
 
+        @Override
+        public void mouseDragged(MouseEvent e) {
+
+        }
+
+        /**
+         * Called when mouse is moved, checks if tile mouse is over
+         * has special feature, if so, displays tooltip
+         * @param e
+         */
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            // Reset tool tip
+            setToolTipText("");
+
+            // Get tile
+            int x = e.getX();
+            int y = e.getY();
+            int col = (int)(x/colDis);
+            int row = (int)(y/rowDis);
+            Tile t = getBoard().getBoardTile(row,col);
+
+            if(t == null) return;
+
+            // Check if tile contains character
+            for(CharacterCard c : getCharacters()){
+                if(c.getPosition() == t){
+                    setToolTipText(c.toString());
+                }
+            }
+            // Check if tile contains weapon
+            for(WeaponCard w : getWeapons()){
+                if(w.location == t){
+                    setToolTipText(w.toString());
+                }
+            }
+
+            //Check if tile is an icon
+            if(t.getActiveImage().toString().contains("Icon")){
+                setToolTipText(t.getActiveImage().toString().substring(t.getActiveImage().toString().lastIndexOf("/") +1,t.getActiveImage().toString().lastIndexOf("_")));
+            }
+
+            frame.revalidate();
+            frame.repaint();
+        }
     }
 
+    /**
+     * Class for control panel
+     */
     class Controls extends JPanel{
-
-        // Dice section, will be placed on left side
 
         // Values for each dice
         private int dice1 = 1;
@@ -412,52 +501,30 @@ public abstract class GUI {
         // Labels for each image
         JLabel diceLabel1 = new JLabel();
         JLabel diceLabel2 = new JLabel();
+
+        // Label for player name
         JLabel playerLabel;
 
         // Placement data for elements
         GridBagConstraints constraints = new GridBagConstraints();
 
+        // Section for cards to be displayed
         JPanel handSection;
 
 
          Controls (GridBagLayout g){
             super(g);
 
-
-
+            //Add dice section
             constraints.ipadx = 0;
             constraints.ipady = 0;
-            // Create dice section
-            //diceSection.setBackground(Color.black);
             constraints.gridx = 0;
             constraints.gridy = 0;
             add(diceSection,constraints);
 
 
-            //Setup hand stuff
+            //Setup hand section
             handSection = new JPanel(new GridLayout(2,3));
-            for(int i =0; i < getPlayers().get(0).getHand().size(); i++){
-                try {
-                    BufferedImage myPicture = ImageIO.read(getClass().getResource("card_back.jpg"));
-                    JLabel card = new JLabel(new ImageIcon(myPicture));
-                    card.setSize(getWidth() / 15, getHeight() / 3);
-                    handSection.add(card);
-                }
-                catch(IOException e){
-
-                }
-            }
-            for(int i =getPlayers().get(0).getHand().size(); i < 6; i++){
-                try {
-                    BufferedImage myPicture = ImageIO.read(getClass().getResource("card_blank.jpg"));
-                    JLabel card = new JLabel(new ImageIcon(myPicture));
-                    card.setSize(getWidth() / 15, getHeight() / 3);
-                    handSection.add(card);
-                }
-                catch(IOException e){
-
-                }
-            }
             handSection.setBackground(Color.CYAN);
             handSection.setVisible(true);
             constraints.gridx = 5;
@@ -465,78 +532,85 @@ public abstract class GUI {
             add(handSection,constraints);
 
 
-
-            // Set initial values
-            setDice1(1);
-            setDice2(1);
-
+            //Setup player name label
             playerLabel = new JLabel(getPlayers().get(currentPlayer).getCharacter().toString() + "'s Turn");
             constraints.gridx = 1;
             constraints.gridy = 0;
             add(playerLabel,constraints);
 
-            // Next turn button
-            JButton nextTurn = new JButton("Next Turn");
-            nextTurn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    showCards = false;
-                    nextTurn();
-                    playerNum = currentPlayer +1;
-                }
+            // Add next turn button
+            nextTurn = new JButton("Next Turn");
+            nextTurn.addActionListener(e -> {
+                // Hide hand and disable suggestions
+                showCards = false;
+                suggest.setEnabled(false);
+
+                //Next player
+                nextTurn();
+                playerNum = currentPlayer +1;
             });
             constraints.gridx = 2;
             this.add(nextTurn,constraints);
 
-            // Suggest button
+            // Add suggest button
             suggest = new JButton("Suggest?");
             suggest.setEnabled(false);
-            suggest.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if(processSuggestion()){
-                        showSuggestionWindow();
-                    }
-                }
-            });
+            suggest.addActionListener(e -> showSuggestionWindow());
             constraints.gridx = 2;
             constraints.gridy = 1;
             this.add(suggest);
 
             // Accuse button
             JButton accuse = new JButton("Accuse?");
-            accuse.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //Pop up window to choose the 3 cards then call check accusation, returns if it was right
-                    //boolean correct=checkAccusation(String charcter, String weapon, String room);
-
-                    showAccusationWindow();
-                }
+            accuse.addActionListener(e -> {
+                //Pop up window to choose the 3 cards then call check accusation, returns if it was right
+                //boolean correct=checkAccusation(String character, String weapon, String room);
+                showAccusationWindow();
             });
             constraints.gridy= 2;
             this.add(accuse);
 
-            //Show/hide button
+            //Show/hide cards button
             JButton showHide = new JButton("Show/Hide");
-            showHide.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    showCards = !showCards;
-                    if(showCards){
-                        controls.showCards();
-                    }
-                    else{
-                        controls.hideCards();
-                    }
+            showHide.addActionListener(e -> {
+                showCards = !showCards;
+                if(showCards){
+                    controls.showCards();
+                }
+                else{
+                    controls.hideCards();
                 }
             });
             constraints.gridx = 5;
             constraints.gridy = 2;
             this.add(showHide,constraints);
 
+            //Create dice faces
+            createDice();
         }
 
+        /**
+         * Create default dice faces
+         */
+        void createDice(){
+            try {
+                Image image = ImageIO.read(getClass().getResource("roll" + dice1 + ".jpg"));
+                diceLabel1 = new JLabel(new ImageIcon(image));
+                diceLabel1.setSize(getWidth()/15, getHeight()/3);
+                constraints.gridx = 0;
+                constraints.gridy = 0;
+                diceSection.add(diceLabel1,constraints);
+
+                image = ImageIO.read(getClass().getResource("roll" + dice2 + ".jpg"));
+                diceLabel2 = new JLabel(new ImageIcon(image));
+                diceLabel2.setSize(getWidth()/15, getHeight()/3);
+                constraints.gridx = 0;
+                constraints.gridy = 1;
+                diceSection.add(diceLabel2,constraints);
+            }catch (IOException e){
+                System.out.println("Dice images could not be found: " + e);
+            }
+        }
         /**
          * Update dice 1
          * @param d1 dice roll 1
@@ -545,14 +619,15 @@ public abstract class GUI {
             diceSection.remove(diceLabel1);
             this.dice1 = d1;
             try {
-                BufferedImage myPicture = ImageIO.read(getClass().getResource("roll" + dice1 + ".jpg"));
+                Image myPicture = ImageIO.read(getClass().getResource("roll" + dice1 + ".jpg")).getScaledInstance(getWidth()/12,getHeight()/3, Image.SCALE_SMOOTH);
                 diceLabel1 = new JLabel(new ImageIcon(myPicture));
-                diceLabel1.setSize(getWidth()/15, getHeight()/3);
+                diceLabel1.setSize(getWidth()/12, getHeight()/3);
                 constraints.gridx = 0;
                 constraints.gridy = 0;
                 diceSection.add(diceLabel1,constraints);
+
             }catch (IOException e){
-                System.out.println(e);
+                System.out.println("Dice images could not be found: " + e);
             }
         }
 
@@ -564,93 +639,99 @@ public abstract class GUI {
             diceSection.remove(diceLabel2);
             this.dice2 = d2;
             try {
-                BufferedImage image = ImageIO.read(getClass().getResource("roll" + dice2 + ".jpg"));
+                Image image = ImageIO.read(getClass().getResource("roll" + dice2 + ".jpg")).getScaledInstance(getWidth()/12,getHeight()/3, Image.SCALE_SMOOTH);
                 diceLabel2 = new JLabel(new ImageIcon(image));
-                diceLabel2.setSize(getWidth()/15, getHeight()/3);
+                diceLabel2.setSize(getWidth()/12, getHeight()/3);
                 constraints.gridx = 0;
                 constraints.gridy = 1;
                 diceSection.add(diceLabel2,constraints);
             }catch (IOException e){
-
+                System.out.println("Dice images could not be found: " + e);
             }
         }
 
-         void showCards(){
+        /**
+         * Show players cards
+         */
+        void showCards(){
             handSection.removeAll();
             Player p = getPlayers().get(currentPlayer);
             try {
                 Set<Card> hand = p.getHand();
+
+                // Add cards in hand
                 for(Card c : hand){
-                    BufferedImage image = ImageIO.read(c.getImage());
+                    Image image = ImageIO.read(c.getImage()).getScaledInstance(getWidth()/10,getHeight()/3, Image.SCALE_SMOOTH);
                     JLabel card = new JLabel(new ImageIcon(image));
-                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    card.setSize(getWidth() / 10, getHeight() / 3);
                     handSection.add(card);
                 }
+
+                // Add blanks for remaining slots
                 for(int i = hand.size(); i < 6; i++){
-                    BufferedImage nullImage = ImageIO.read(getClass().getResource("card_blank.jpg"));
+                    Image nullImage = ImageIO.read(getClass().getResource("card_blank.jpg")).getScaledInstance(getWidth()/10,getHeight()/3, Image.SCALE_SMOOTH);
                     JLabel card = new JLabel(new ImageIcon(nullImage));
-                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    card.setSize(getWidth() / 10, getHeight() / 3);
                     handSection.add(card);
                 }
                 frame.revalidate();
                 frame.repaint();
             }catch (IOException e){
-
-            }
-            catch (IllegalArgumentException i){
-                System.out.println(i);
+                System.out.println("Card images could not be found: " + e);
             }
         }
 
+        /**
+         * Hide players cards
+         */
          void hideCards(){
             handSection.removeAll();
             try{
+                // Set players cards to show card backs
                 for(int i = 0; i < getPlayers().get(currentPlayer).getHand().size(); i++){
-                    BufferedImage nullImage = ImageIO.read(getClass().getResource("card_back.jpg"));
+                    Image nullImage = ImageIO.read(getClass().getResource("card_back.jpg")).getScaledInstance(getWidth()/10,getHeight()/3, Image.SCALE_SMOOTH);
                     JLabel card = new JLabel(new ImageIcon(nullImage));
-                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    card.setSize(getWidth() / 10, getHeight() / 3);
                     handSection.add(card);
                 }
+
+                // Add blanks in remaining slots
                 for(int i = getPlayers().get(currentPlayer).getHand().size(); i < 6;i++){
-                    BufferedImage nullImage = ImageIO.read(getClass().getResource("card_blank.jpg"));
+                    Image nullImage = ImageIO.read(getClass().getResource("card_blank.jpg")).getScaledInstance(getWidth()/10,getHeight()/3, Image.SCALE_SMOOTH);
                     JLabel card = new JLabel(new ImageIcon(nullImage));
-                    card.setSize(getWidth() / 15, getHeight() / 3);
+                    card.setSize(getWidth() / 10, getHeight() / 3);
                     handSection.add(card);
                 }
+
                 frame.revalidate();
                 frame.repaint();
                 frame.repaint();
             }
             catch (IOException e){
-
+                System.out.println("Card images could not be found: " + e);
             }
         }
 
 
+        /**
+         * Repaint and resize the controls section
+         * @param g
+         */
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
             playerLabel.setText(getPlayers().get(currentPlayer).getCharacter().toString() +"'s turn");
+            playerLabel.setSize(getWidth()/5,getHeight()/10);
+            nextTurn.setSize(getWidth()/10, getHeight()/10);
+            setDice1(dice1);
+            setDice2(dice2);
+            if(showCards) showCards();
+            else hideCards();
             repaint();
         }
 
     }
 
-    public abstract Board getBoard();
-
-    public abstract int rollDice();
-
-    public abstract boolean processMove(Tile t);
-
-    public abstract void nextTurn();
-
-    public abstract boolean processSuggestion();
-
-    public abstract List<Card> checkSuggestion(String character, String weapon);
-
-    public abstract boolean checkAccusation(String character, String weapon, String room);
-
-    public abstract List<Player> getPlayers();
 
     /**
      * Enable controls for next player and reset dice to 1's
@@ -666,12 +747,18 @@ public abstract class GUI {
         frame.repaint();
     }
 
+    /**
+     * Display popup for allowing suggestions
+     */
     private void showSuggestionWindow(){
+        //Setup popup
         JFrame popup = new JFrame();
         popup.setLayout(new GridLayout(3,2));
         popup.setVisible(true);
         popup.setSize(500,500);
         popup.setMinimumSize(new Dimension(200,200));
+
+        //Setup dropboxes
         JLabel character = new JLabel("Character: ");
         JLabel weapon = new JLabel("Weapon");
         String[] characters = {"Col. Mustard","Mrs White", "Rev. Green","Ms Turquoise","Prof. Plum","Miss Red"};
@@ -683,36 +770,39 @@ public abstract class GUI {
 
         //Submit button
         JButton submit = new JButton("Submit");
-        submit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(charPick.getSelectedIndex() != -1 && weapPick.getSelectedIndex() != -1){
-                    suggest.setEnabled(false);
-                    String characterString = charPick.getSelectedItem().toString();
-                    String weaponString = weapPick.getSelectedItem().toString();
-                    popup.dispose();
-                    showRefuteWindow(checkSuggestion(characterString,weaponString));
-                }
+        submit.addActionListener(e -> {
+            if(charPick.getSelectedIndex() != -1 && weapPick.getSelectedIndex() != -1){
+                suggest.setEnabled(false);
+                String characterString = charPick.getSelectedItem().toString();
+                String weaponString = weapPick.getSelectedItem().toString();
+                popup.dispose();
+                showRefuteWindow(checkSuggestion(characterString,weaponString));
             }
         });
 
+        // Add items
         popup.add(character);
         popup.add(charPick);
         popup.add(weapon);
         popup.add(weapPick);
         popup.add(submit);
-
         popup.pack();
         popup.revalidate();
         popup.repaint();
     }
 
+    /**
+     * Show accusation popup
+     */
     public void showAccusationWindow(){
+        // Setup popup
         JFrame popup = new JFrame();
         popup.setLayout(new FlowLayout());
         popup.setVisible(true);
         popup.setSize(500,500);
         popup.setMinimumSize(new Dimension(200,200));
+
+        // Setup accusation options
         JLabel character = new JLabel("Character: ");
         JLabel weapon = new JLabel("Weapon: ");
         JLabel room = new JLabel("Room: ");
@@ -728,24 +818,22 @@ public abstract class GUI {
 
         //Submit button
         JButton submit = new JButton("Submit");
-        submit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(charPick.getSelectedIndex() != -1 && weapPick.getSelectedIndex() != -1){
-                    String characterString = charPick.getSelectedItem().toString();
-                    String weaponString = weapPick.getSelectedItem().toString();
-                    String roomString = roomPick.getSelectedItem().toString();
-                    popup.dispose();
-                    if(checkAccusation(characterString,weaponString,roomString)){
-                        showWinScreen();
-                    }
-                    else{
-                        showLoseScreen();
-                    }
+        submit.addActionListener(e -> {
+            if(charPick.getSelectedIndex() != -1 && weapPick.getSelectedIndex() != -1){
+                String characterString = charPick.getSelectedItem().toString();
+                String weaponString = weapPick.getSelectedItem().toString();
+                String roomString = roomPick.getSelectedItem().toString();
+                popup.dispose();
+                if(checkAccusation(characterString,weaponString,roomString)){
+                    showWinScreen();
+                }
+                else{
+                    showLoseScreen();
                 }
             }
         });
 
+        // Add items
         popup.add(character);
         popup.add(charPick);
         popup.add(weapon);
@@ -753,60 +841,68 @@ public abstract class GUI {
         popup.add(room);
         popup.add(roomPick);
         popup.add(submit);
-
         popup.pack();
         popup.revalidate();
         popup.repaint();
     }
 
+    /**
+     * Show incorrect accusation popup
+     */
     private void showLoseScreen(){
+        //Setup popup
         JFrame loseScreen = new JFrame();
         loseScreen.setVisible(true);
         loseScreen.setLayout(new FlowLayout());
         JLabel message = new JLabel("That accusation was incorrect! You are out of the game!");
         loseScreen.add(message);
 
+        //Add close button
         JButton close = new JButton("Close");
-        close.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                loseScreen.dispose();
-                frame.revalidate();
-                frame.repaint();
-            }
+        close.addActionListener(e -> {
+            loseScreen.dispose();
+            frame.revalidate();
+            frame.repaint();
         });
+
+        // Add items
         loseScreen.add(close);
         loseScreen.pack();
         loseScreen.revalidate();
         loseScreen.repaint();
     }
 
-
+    /**
+     * Show popup for suggestions to be refuted
+     * @param cards Cards player can refute with, first card is refuting player
+     */
     private void showRefuteWindow(List<Card> cards){
         frame.revalidate();
         frame.repaint();
+
+        // Setup popup
         JFrame popup = new JFrame();
         popup.setVisible(true);
         popup.setLayout(new FlowLayout());
+
+        // If null, not refuted
         if(cards == null || cards.size() < 2){
             // Nobody can refute
             JLabel message = new JLabel("Nobody can refute your suggestion");
             popup.add(message);
             JButton close = new JButton("Close");
-            close.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    popup.dispose();
-                }
-            });
+            close.addActionListener(e -> popup.dispose());
             popup.add(close);
 
         }
         else{
+            // Get refuting character
             CharacterCard character = (CharacterCard)cards.get(0);
             cards.remove(0);
             JLabel charName = new JLabel(character.toString() + " please chose which card you wish to refute with.");
             popup.add(charName);
+
+            //Show options to refute with
             String[] options = new String[cards.size()];
             for(int i = 0; i < cards.size(); i++){
                 options[i] = cards.get(i).toString();
@@ -814,39 +910,40 @@ public abstract class GUI {
             JComboBox optionBox = new JComboBox(options);
             optionBox.setSelectedIndex(-1);
             popup.add(optionBox);
+
+            // Add submit box and allow original player to close box
             JButton submit = new JButton("Submit");
-            submit.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String value = optionBox.getSelectedItem().toString();
-                    popup.dispose();
-                    JFrame showRefute = new JFrame();
-                    showRefute.setVisible(true);
-                    showRefute.setLayout(new FlowLayout());
-                    JLabel message = new JLabel("Your suggestion has been refuted with: " + value);
-                    showRefute.add(message);
-                    JButton close = new JButton("Close");
-                    close.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            showRefute.dispose();
-                        }
-                    });
-                    showRefute.add(close);
-                    showRefute.pack();
-                    showRefute.revalidate();
-                    showRefute.repaint();
-                }
+            submit.addActionListener(e -> {
+                String value = optionBox.getSelectedItem().toString();
+                popup.dispose();
+                JFrame showRefute = new JFrame();
+                showRefute.setVisible(true);
+                showRefute.setLayout(new FlowLayout());
+                JLabel message = new JLabel("Your suggestion has been refuted with: " + value);
+                showRefute.add(message);
+                JButton close = new JButton("Close");
+                close.addActionListener(e1 -> showRefute.dispose());
+                showRefute.add(close);
+                showRefute.pack();
+                showRefute.revalidate();
+                showRefute.repaint();
             });
             popup.add(submit);
         }
+
         popup.pack();
         popup.revalidate();
         popup.repaint();
     }
 
+    /**
+     * Show win screen from either correct accusation or last player standing
+     */
     public void showWinScreen(){
+        //Close main screen
         frame.dispose();
+
+        //Set up win screen
         JFrame winScreen = new JFrame();
         winScreen.setVisible(true);
         winScreen.setLayout(new FlowLayout());
@@ -856,44 +953,43 @@ public abstract class GUI {
         winScreen.add(message);
         winScreen.add(message2);
 
+        // End game button
         JButton endGame = new JButton("Close Game");
-        endGame.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        endGame.addActionListener(e -> System.exit(0));
 
         winScreen.add(endGame);
-
         winScreen.pack();
         winScreen.revalidate();
         winScreen.repaint();
     }
 
+    /**
+     * Show popup for invalid moves
+     */
     private void showInvalidMoveScreen(){
+        //Set up popup
         JFrame invalidMove = new JFrame();
         invalidMove.setVisible(true);
         invalidMove.setLayout(new FlowLayout());
         JLabel message = new JLabel("That move is not valid.");
         invalidMove.add(message);
 
+        // Add close button
         JButton close = new JButton("Close");
-        close.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                invalidMove.dispose();
-            }
-        });
+        close.addActionListener(e -> invalidMove.dispose());
         invalidMove.add(close);
         invalidMove.pack();
         invalidMove.revalidate();
         invalidMove.repaint();
     }
-    public abstract List<Card> getMurderScenario();
 
+    /**
+     * Show notes screen, displaying current player's stored notes
+     */
      public void showNotes(){
          if(getPlayers() == null || getPlayers().size() == 0) return;
+
+         // Setup popup
          Player p = getPlayers().get(currentPlayer);
          JFrame notes = new JFrame();
          notes.setLayout(new GridBagLayout());
@@ -901,11 +997,13 @@ public abstract class GUI {
          notes.setSize(200,200);
          notes.setMinimumSize(new Dimension(400,400));
 
+         // Build string
          StringBuilder sb = new StringBuilder();
          sb.append("<html>");
          sb.append(p.getNotes());
          sb.append("</html>");
 
+         // Layout elements
          GridBagConstraints c = new GridBagConstraints();
          c.weightx = 1;
          c.fill = GridBagConstraints.HORIZONTAL;
@@ -915,137 +1013,130 @@ public abstract class GUI {
          scroller = new JScrollPane(previousNotes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
          scroller.setMinimumSize(new Dimension(200,200));
 
+         // Load text field from players notes
          JTextField textField = new JTextField();
-         textField.addActionListener(new ActionListener() {
-             @Override
-             public void actionPerformed(ActionEvent e) {
-                 p.setNotes(textField.getText());
-                 textField.setText("");
-                 notes.remove(scroller);
+         textField.addActionListener(e -> {
+             p.setNotes(textField.getText());
+             textField.setText("");
+             notes.remove(scroller);
 
-                 StringBuilder builder = new StringBuilder();
-                 builder.append("<html>");
-                 builder.append(p.getNotes());
-                 builder.append("</html>");;
-                 previousNotes.setText(builder.toString());
+             StringBuilder builder = new StringBuilder();
+             builder.append("<html>");
+             builder.append(p.getNotes());
+             builder.append("</html>");;
+             previousNotes.setText(builder.toString());
 
-                 scroller = new JScrollPane(previousNotes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-                 scroller.setMinimumSize(new Dimension(200,200));
+             scroller = new JScrollPane(previousNotes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+             scroller.setMinimumSize(new Dimension(200,200));
 
-                 c.gridy = 0;
-                 notes.add(scroller);
+             c.gridy = 0;
+             notes.add(scroller);
 
-                 notes.revalidate();
-                 notes.repaint();
-             }
+             notes.revalidate();
+             notes.repaint();
          });
 
+         // Add elements to popup
          c.gridy=0;
          notes.add(scroller,c);
 
          c.gridy = 1;
          notes.add(textField,c);
 
+         //Add close button
          c.gridy = 2;
          JButton close = new JButton("Close");
-         close.addActionListener(new ActionListener() {
-             @Override
-             public void actionPerformed(ActionEvent e) {
-                 notes.dispose();
-             }
-         });
+         close.addActionListener(e -> notes.dispose());
 
          notes.add(close,c);
-
          notes.pack();
          notes.revalidate();
          notes.repaint();
      }
 
-     void showKey(){
-         JFrame key = new JFrame();
-         key.setVisible(true);
-         key.setLayout(new GridLayout(16,2));
+    /**
+     * Show key popup
+     */
+    void showKey(){
+        //Setup popup
+        JFrame key = new JFrame();
+        key.setVisible(true);
+        key.setLayout(new GridLayout(16,2));
 
-         JLabel m = new JLabel("M");
-         JLabel w = new JLabel("W");
-         JLabel g = new JLabel("G");
-         JLabel t = new JLabel("T");
-         JLabel p = new JLabel("P");
-         JLabel r = new JLabel("R");
+        // Add items
+        JLabel m = new JLabel("M");
+        JLabel w = new JLabel("W");
+        JLabel g = new JLabel("G");
+        JLabel t = new JLabel("T");
+        JLabel p = new JLabel("P");
+        JLabel r = new JLabel("R");
 
-         JLabel l = new JLabel("L");
-         JLabel d = new JLabel("D");
-         JLabel k = new JLabel("K");
-         JLabel a = new JLabel("A");
-         JLabel c = new JLabel("C");
-         JLabel e = new JLabel("E");
-         JLabel b = new JLabel("B");
-         JLabel s = new JLabel("S");
-         JLabel h = new JLabel("H");
+        JLabel l = new JLabel("L");
+        JLabel d = new JLabel("D");
+        JLabel k = new JLabel("K");
+        JLabel a = new JLabel("A");
+        JLabel c = new JLabel("C");
+        JLabel e = new JLabel("E");
+        JLabel b = new JLabel("B");
+        JLabel s = new JLabel("S");
+        JLabel h = new JLabel("H");
 
-         JLabel mustard = new JLabel("Col. Mustard");
-         JLabel white = new JLabel("Mrs White");
-         JLabel green = new JLabel("Rev. Green");
-         JLabel turq = new JLabel("Ms Turquoise");
-         JLabel plum = new JLabel("Prof. Plum");
-         JLabel red = new JLabel("Miss Red");
+        JLabel mustard = new JLabel("Col. Mustard");
+        JLabel white = new JLabel("Mrs White");
+        JLabel green = new JLabel("Rev. Green");
+        JLabel turq = new JLabel("Ms Turquoise");
+        JLabel plum = new JLabel("Prof. Plum");
+        JLabel red = new JLabel("Miss Red");
 
-         JLabel lounge = new JLabel("Lounge");
-         JLabel dining = new JLabel("Dining Room");
-         JLabel kitchen = new JLabel("Kitchen");
-         JLabel audi = new JLabel("Auditorium");
-         JLabel con = new JLabel("Conservatory");
-         JLabel enter = new JLabel("Entertainment Room");
-         JLabel book = new JLabel("Book Room");
-         JLabel study = new JLabel("Study");
-         JLabel hall = new JLabel("Hall");
+        JLabel lounge = new JLabel("Lounge");
+        JLabel dining = new JLabel("Dining Room");
+        JLabel kitchen = new JLabel("Kitchen");
+        JLabel audi = new JLabel("Auditorium");
+        JLabel con = new JLabel("Conservatory");
+        JLabel enter = new JLabel("Entertainment Room");
+        JLabel book = new JLabel("Book Room");
+        JLabel study = new JLabel("Study");
+        JLabel hall = new JLabel("Hall");
 
 
-         key.add(m);
-         key.add(mustard);
-         key.add(w);
-         key.add(white);
-         key.add(g);
-         key.add(green);
-         key.add(t);
-         key.add(turq);
-         key.add(p);
-         key.add(plum);
-         key.add(r);
-         key.add(red);
-         key.add(l);
-         key.add(lounge);
-         key.add(d);
-         key.add(dining);
-         key.add(k);
-         key.add(kitchen);
-         key.add(a);
-         key.add(audi);
-         key.add(c);
-         key.add(con);
-         key.add(e);
-         key.add(enter);
-         key.add(b);
-         key.add(book);
-         key.add(s);
-         key.add(study);
-         key.add(h);
-         key.add(hall);
+        key.add(m);
+        key.add(mustard);
+        key.add(w);
+        key.add(white);
+        key.add(g);
+        key.add(green);
+        key.add(t);
+        key.add(turq);
+        key.add(p);
+        key.add(plum);
+        key.add(r);
+        key.add(red);
+        key.add(l);
+        key.add(lounge);
+        key.add(d);
+        key.add(dining);
+        key.add(k);
+        key.add(kitchen);
+        key.add(a);
+        key.add(audi);
+        key.add(c);
+        key.add(con);
+        key.add(e);
+        key.add(enter);
+        key.add(b);
+        key.add(book);
+        key.add(s);
+        key.add(study);
+        key.add(h);
+        key.add(hall);
 
-         JButton close = new JButton("Close");
-         close.addActionListener(new ActionListener() {
-             @Override
-             public void actionPerformed(ActionEvent e) {
-                 key.dispose();
-             }
-         });
+        // Add close button
+        JButton close = new JButton("Close");
+        close.addActionListener(e1 -> key.dispose());
 
-         key.add(close);
-
-         key.pack();
-         key.revalidate();
-         key.repaint();
+        key.add(close);
+        key.pack();
+        key.revalidate();
+        key.repaint();
      }
-     
 }

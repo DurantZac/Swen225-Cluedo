@@ -75,23 +75,6 @@ public class Player
   }
 
   /**
-   * Formatted string, showing what cards a player has in their hand
-   * @return the finished string
-   */
-  public String returnHand(){
-    String s="You have "+ hand.size()+" cards, they are: ";
-    boolean first=true;
-
-    for (Card c: hand){
-      if (!first)
-        s+=", ";
-      s+=c.toString();
-      first=false;
-    }
-    return s;
-  }
-
-  /**
    * @return the hand as a set which can be iterated through
    */
   public Set<Card> getHand(){

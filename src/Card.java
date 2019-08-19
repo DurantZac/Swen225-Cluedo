@@ -3,6 +3,5 @@
 public interface Card
 {
     String toString ();
-    int getIndex();
     java.net.URL getImage();
 }

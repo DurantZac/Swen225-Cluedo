@@ -24,11 +24,6 @@ public class Tile
   private int row;
   private int col;
 
-
-  public URL getDefaultImage() {
-    return defaultImage;
-  }
-
   public void setDefaultImage(URL defaultImage) {
     this.defaultImage = defaultImage;
     this.activeImage = defaultImage;
@@ -36,10 +31,6 @@ public class Tile
 
   public URL getActiveImage() {
     return activeImage;
-  }
-
-  public void setActiveImage(URL activeImage) {
-    this.activeImage = activeImage;
   }
 
   //URL's to default and current image in resources folder
@@ -51,14 +42,6 @@ public class Tile
   private Room isPartOf;
   private List<Tile> adjacent = new ArrayList<>();
 
-  //Colours
-  private static String ANSI_RESET = "";
-  private static String ANSI_RED = "";
-  private static String ANSI_GREEN = "";
-  private static String ANSI_YELLOW ="";
-  private static String ANSI_BLUE= "";
-  private static String ANSI_PURPLE= "";
-  private static String ANSI_CYAN = "";
 
 
   /**
@@ -123,20 +106,8 @@ public class Tile
 
 
       case '>':
-        isAccessible =true;
-        defaultImage = getClass().getResource("Room.jpg");
-        this.activeImage = this.defaultImage;
-        break;
       case '<':
-        isAccessible =true;
-        defaultImage = getClass().getResource("Room.jpg");
-        this.activeImage = this.defaultImage;
-        break;
       case '^':
-        isAccessible =true;
-        defaultImage = getClass().getResource("Room.jpg");
-        this.activeImage = this.defaultImage;
-        break;
       case 'v':
         isAccessible =true;
         defaultImage = getClass().getResource("Room.jpg");
@@ -161,17 +132,6 @@ public class Tile
         isAccessible =false;
         defaultImage = getClass().getResource("WT.jpg");
         this.activeImage = this.defaultImage;
-    }
-
-
-    if ( System.console() != null && System.getenv().get("TERM") != null){
-      ANSI_RESET = "\u001B[0m";
-      ANSI_RED = "\u001B[31m";
-      ANSI_GREEN = "\u001B[32m";
-      ANSI_YELLOW = "\u001B[33m";
-      ANSI_BLUE = "\u001B[34m";
-      ANSI_PURPLE = "\u001B[35m";
-      ANSI_CYAN = "\u001B[36m";
     }
 
 
@@ -251,7 +211,11 @@ public class Tile
    * @param t Tile to add
    */
    void addAdjacent(Tile t){
-    adjacent.add(t);
+     adjacent.add(t);
+  }
+
+  void removeAdjacent(List<Tile> t){
+     adjacent.removeAll(t);
   }
 
   /**
@@ -278,11 +242,18 @@ public class Tile
     setIsAccessible(true);
   }
 
+  /**
+   * Add weapon to this tile
+   * @param w
+   */
   void setWeapon(WeaponCard w){
     activeImage = w.icon;
     setIsAccessible(false);
   }
 
+  /**
+   * Remove weapon from this tile
+   */
   void removeWeapon(){
      activeImage = defaultImage;
      getIsPartOf().addEmptySpace(this);
@@ -295,22 +266,7 @@ public class Tile
    */
   public String toString(){
     String s="|";
-    switch(this.symbol){
-      case 'R':
-        return "|" + ANSI_RED + symbol + ANSI_RESET;
-      case 'G':
-        return "|" + ANSI_GREEN + symbol + ANSI_RESET;
-      case 'T':
-        return "|" + ANSI_CYAN + symbol + ANSI_RESET;
-      case 'W':
-        return "|" + ANSI_BLUE + symbol + ANSI_RESET;
-      case 'M':
-        return "|" + ANSI_YELLOW + symbol + ANSI_RESET;
-      case 'P':
-        return "|" + ANSI_PURPLE + symbol + ANSI_RESET;
-    }
     s+=symbol;
-
     return s;
   }
 
@@ -331,6 +287,10 @@ public class Tile
     col = c;
   }
 
+  /**
+   * Return symbol of this tile
+   * @return
+   */
   public char getSymbol() {
     return symbol;
   }

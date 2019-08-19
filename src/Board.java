@@ -54,10 +54,196 @@ public class Board
   }
 
 
-  //------------------------
-  // INTERFACE
-  //------------------------
+    /**
+     * Marks the walls of the room as the correct wall shape
+     * Purely stylistic
+     */
+    public void positionWalls(){
+        Class c = getClass();
 
+        //Library
+        getBoardTile("Gt").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Gu").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Gv").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Gw").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Gx").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Gy").setDefaultImage(c.getResource("WBR.jpg"));
+
+        getBoardTile("By").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Cy").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Dy").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Ey").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Fy").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Ay").setDefaultImage(c.getResource("WBL.jpg"));
+
+        getBoardTile("Au").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Aw").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Ax").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("At").setDefaultImage(c.getResource("WTL.jpg"));
+
+
+        //Dining
+        getBoardTile("Hp").setDefaultImage(c.getResource("WBR.jpg"));
+        getBoardTile("Gp").setDefaultImage(c.getResource("Room.jpg"));
+        getBoardTile("Fp").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Ep").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Dp").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Cp").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Bp").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Ap").setDefaultImage(c.getResource("WBL.jpg"));
+
+        getBoardTile("Ak").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Al").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("An").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Ao").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Aj").setDefaultImage(c.getResource("WTL.jpg"));
+
+        getBoardTile("Ej").setDefaultImage(c.getResource("WTR.jpg"));
+        getBoardTile("Ek").setDefaultImage(c.getResource("Room.jpg"));
+
+        getBoardTile("Hk").setDefaultImage(c.getResource("WTR.jpg"));
+        getBoardTile("Fp").setDefaultImage(c.getResource("WB.jpg"));
+
+        getBoardTile("Hl").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Hn").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Ho").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Hm").setDefaultImage(c.getResource("Room.jpg"));
+
+        //Kitchen
+        getBoardTile("Bg").setDefaultImage(c.getResource("WBL.jpg"));
+        getBoardTile("Cg").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Dg").setDefaultImage(c.getResource("WB.jpg"));
+
+        getBoardTile("Af").setDefaultImage(c.getResource("WBL.jpg"));
+        getBoardTile("Ad").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Ae").setDefaultImage(c.getResource("WL.jpg"));
+
+        getBoardTile("Ab").setDefaultImage(c.getResource("WTL.jpg"));
+        getBoardTile("Fb").setDefaultImage(c.getResource("WTR.jpg"));
+
+        getBoardTile("Fc").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Fd").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Fe").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Ff").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Fg").setDefaultImage(c.getResource("WBR.jpg"));
+
+        //Auditorium
+        getBoardTile("Id").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Ie").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("If").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Ig").setDefaultImage(c.getResource("WL.jpg"));
+
+        getBoardTile("Ic").setDefaultImage(c.getResource("WTL.jpg"));
+        getBoardTile("Ih").setDefaultImage(c.getResource("WBL.jpg"));
+
+        getBoardTile("Kb").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Ka").setDefaultImage(c.getResource("WTL.jpg"));
+
+        getBoardTile("Na").setDefaultImage(c.getResource("WTR.jpg"));
+        getBoardTile("Nb").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Nc").setDefaultImage(c.getResource("Room.jpg"));
+
+        getBoardTile("Pc").setDefaultImage(c.getResource("WTR.jpg"));
+        getBoardTile("Pd").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Pe").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Pf").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Pg").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Ph").setDefaultImage(c.getResource("WBR.jpg"));
+
+        getBoardTile("Kh").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Lh").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Mh").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Nh").setDefaultImage(c.getResource("WB.jpg"));
+
+
+        //Cons
+        getBoardTile("Sb").setDefaultImage(c.getResource("WTL.jpg"));
+        getBoardTile("Sc").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Sd").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Se").setDefaultImage(c.getResource("WL.jpg"));
+
+        getBoardTile("Tf").setDefaultImage(c.getResource("WBL.jpg"));
+        getBoardTile("Uf").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Vf").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Wf").setDefaultImage(c.getResource("WBR.jpg"));
+
+        getBoardTile("Xe").setDefaultImage(c.getResource("WBR.jpg"));
+        getBoardTile("Xd").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Xb").setDefaultImage(c.getResource("WTR.jpg"));
+
+
+        //Entertainment Room
+        getBoardTile("Si").setDefaultImage(c.getResource("WTL.jpg"));
+        getBoardTile("Sk").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Sl").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Sm").setDefaultImage(c.getResource("WBL.jpg"));
+
+        getBoardTile("Tm").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Um").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Vm").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Xm").setDefaultImage(c.getResource("WBR.jpg"));
+
+        getBoardTile("Xk").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Xl").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Xi").setDefaultImage(c.getResource("WTR.jpg"));
+
+
+        //Book Room
+        getBoardTile("Sr").setDefaultImage(c.getResource("Room.jpg"));
+        getBoardTile("Sp").setDefaultImage(c.getResource("Room.jpg"));
+
+        getBoardTile("Rp").setDefaultImage(c.getResource("WTL.jpg"));
+        getBoardTile("Rr").setDefaultImage(c.getResource("WBL.jpg"));
+
+        getBoardTile("Ss").setDefaultImage(c.getResource("WBL.jpg"));
+        getBoardTile("Ts").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Us").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Vs").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Ws").setDefaultImage(c.getResource("WBR.jpg"));
+
+        getBoardTile("Xr").setDefaultImage(c.getResource("WBR.jpg"));
+        getBoardTile("Xq").setDefaultImage(c.getResource("WR.jpg"));
+
+        getBoardTile("Wo").setDefaultImage(c.getResource("WTR.jpg"));
+        getBoardTile("So").setDefaultImage(c.getResource("WTL.jpg"));
+
+
+        //Study
+        getBoardTile("Rv").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Rw").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Rx").setDefaultImage(c.getResource("WL.jpg"));
+
+        getBoardTile("Ry").setDefaultImage(c.getResource("WBL.jpg"));
+        getBoardTile("Sy").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Ty").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Uy").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Vy").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Wy").setDefaultImage(c.getResource("WB.jpg"));
+
+        //Hall
+        getBoardTile("Ky").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("My").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Ny").setDefaultImage(c.getResource("WB.jpg"));
+        getBoardTile("Jy").setDefaultImage(c.getResource("WBL.jpg"));
+        getBoardTile("Oy").setDefaultImage(c.getResource("WBR.jpg"));
+
+        getBoardTile("Ox").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Ow").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Ou").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Ot").setDefaultImage(c.getResource("WR.jpg"));
+        getBoardTile("Os").setDefaultImage(c.getResource("WTR.jpg"));
+        getBoardTile("Js").setDefaultImage(c.getResource("WTL.jpg"));
+
+        getBoardTile("Jt").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Ju").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Jv").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Jw").setDefaultImage(c.getResource("WL.jpg"));
+        getBoardTile("Jx").setDefaultImage(c.getResource("WL.jpg"));
+
+        getBoardTile("If").setDefaultImage(c.getResource("Room.jpg"));
+        getBoardTile("Pf").setDefaultImage(c.getResource("Room.jpg"));
+    }
+  
   /**
    *  Gets the tile corresponding to XY coordinates.
    *  String must be 2 letters, with one being upper case and one being lower
@@ -113,87 +299,97 @@ public class Board
    * @return
    */
   public Tile getBoardTile(int row, int col){
-    if(row >= 25 || col >= 24) return null;
+    if(row >= 25 || col >= 24) {
+      return null;
+    }
     return boardTiles[row][col];
   }
 
   /**
-   * Prints the board based on the 2D array of tiles.
-   */
-  public void printBoard(){
-    System.out.println(toString());
-  }
-
-  /**
-   * Checks if move is valid, if so move player, update tiles and return true
+   * Checks if move is valid, if so, return path found
    * If not return false
    * @param p player
    * @param goal node target
    * @param moves number of moves to use
-   * @return success or fail
+   * @return Tile path
    */
-  public boolean movePlayer(Player p, Tile goal, int moves) {
-    if(goal == null) return false;
-    Tile startTile = p.getPosition();
-    if(goal.getIsPartOf() == null && !goal.getIsAccessible()) return false;
+  public List<Tile> movePlayer(Player p, Tile goal, int moves) {
+      if(goal == null) return null;
+      Tile startTile = p.getPosition();
+      if(goal.getIsPartOf() == null && !goal.getIsAccessible()) return null;
 
-    // Find if path available
-    boolean valid = false;
-    if(startTile.getIsPartOf() == null){
-      valid = pathFinding(startTile,goal,moves,0,new ArrayList<>());
-    }
-    else{ // If in room, try all exits
-      if(startTile.getIsPartOf() == goal.getIsPartOf()) return false;
-      for(Tile t : p.getPosition().getIsPartOf().getEntrances()){
-        valid = valid || pathFinding(t,goal,moves,0,new ArrayList<>());
+      // Find if path available
+      List<Tile> path = new ArrayList<>();
+      if(startTile.getIsPartOf() == null){
+          path = pathFinding(startTile,goal,moves,0,new ArrayList<>());
       }
-    }
+      else{ // If in room, try all exits
+          if(startTile.getIsPartOf() == goal.getIsPartOf()) return null;
+          for(Tile t : p.getPosition().getIsPartOf().getEntrances()){
+              List<Tile> option = pathFinding(t,goal,moves,0,new ArrayList<>());
+              if(option != null) path = option;
+          }
+      }
+      return path;
+  }
 
-    if(valid){
-      // Move
+    /**
+     * Move player p to tile t.
+     * Called to move player step by step along a path
+     * @param p
+     * @param t
+     */
+  public void takeStep(Player p, Tile t){
       Tile oldPos = p.getPosition();
       if(oldPos.getIsPartOf() != null) oldPos.getIsPartOf().addEmptySpace(oldPos);
       oldPos.removeCharacter();
-      if(goal.getIsPartOf() != null){
-        Tile t = goal.getIsPartOf().getEmptySpace();
-        p.getCharacter().setPosition(t);
+      if(t.getIsPartOf() != null){
+          t = t.getIsPartOf().getEmptySpace();
+          p.getCharacter().setPosition(t);
       }
       else{
-        p.getCharacter().setPosition(goal);
+          p.getCharacter().setPosition(t);
       }
-      return true;
-    }
-    else{
-      return false;
-    }
   }
 
 
 
-  /**
+
+    /**
    * Recursive Depth first search to find path from start to end using required number of moves
    * @param node Current Node
    * @param goal End Node
    * @param moveGoal Moves to use
    * @param moveCount Moves used so far
    * @param visited List of nodes that have been visited
-   * @return True if path found, false otherwise
+   * @return Path if path found, null otherwise
    */
-  private boolean pathFinding(Tile node, Tile goal, int moveGoal, int moveCount, List<Tile> visited){
-    if(node == goal && moveCount == moveGoal) return true;
-    if(node.getIsPartOf() != null && node.getIsPartOf() == goal.getIsPartOf() && moveCount <= moveGoal) return true;
-    if(moveCount >= moveGoal) return false;
-    visited.add(node);
-    for(Tile neigh : node.getAdjacent()){
-      if(!visited.contains(neigh) && neigh.getIsAccessibleFull(node)) {
-        if (pathFinding(neigh, goal, moveGoal, moveCount + 1, new ArrayList<>(visited))) return true;
-      }
+    private List<Tile> pathFinding(Tile node, Tile goal, int moveGoal, int moveCount, List<Tile> visited){
+        List<Tile> path = null;
+        if(node == goal && moveCount == moveGoal){
+            visited.add(node);
+            return visited;
+        }
+        else if(node.getIsPartOf() != null && node.getIsPartOf() == goal.getIsPartOf() && moveCount <= moveGoal){
+            visited.add(node);
+            return visited;
+        }
+        else if(moveCount >= moveGoal) return null;
+        else{visited.add(node);}
+        for(Tile neigh : node.getAdjacent()){
+            if(!visited.contains(neigh)) {
+                if(neigh.getSymbol() != '_' && !neigh.getIsAccessibleFull(node)) continue;
+                List<Tile> option = pathFinding(neigh, goal, moveGoal, moveCount + 1, new ArrayList<>(visited));
+                path = option != null ? option : path;
+            }
+        }
+        return path;
+
     }
-    return false;
-  }
 
 
-  /**
+
+    /**
    * Teleports the player to a room they have been suggested in
    * @param c charactercard object
    * @param goal room to move to

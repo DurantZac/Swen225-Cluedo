@@ -9,8 +9,7 @@ public class WeaponCard implements Card
 
   //WeaponCard Attributes
   private String weapon;
-  private Tile location;
-  private int index;
+  public Tile location;
   public java.net.URL image;
   public java.net.URL icon;
 
@@ -29,32 +28,26 @@ public class WeaponCard implements Card
       case "Dagger":
         image = getClass().getResource("card_dagger.jpg");
         icon = getClass().getResource("dagger_Room.jpg");
-        index = 1;
         break;
       case "Rope":
         image = getClass().getResource("card_rope.jpg");
         icon = getClass().getResource("rope_Room.jpg");
-        index = 2;
         break;
       case "CandleStick":
         image = getClass().getResource("card_candlestick.jpg");
         icon = getClass().getResource("candlestick_Room.jpg");
-        index = 3;
         break;
       case "Revolver":
         image = getClass().getResource("card_revolver.jpg");
         icon = getClass().getResource("revolver_Room.jpg");
-        index = 4;
         break;
       case "Spanner":
         image = getClass().getResource("card_spanner.jpg");
         icon = getClass().getResource("spanner_Room.jpg");
-        index = 5;
         break;
       case "Lead Pipe":
         image = getClass().getResource("card_lead.jpg");
         icon = getClass().getResource("lead_Room.jpg");
-        index = 6;
         break;
     }
   }
@@ -95,10 +88,6 @@ public class WeaponCard implements Card
   public String toString()
   {
     return weapon;
-  }
-
-  public int getIndex(){
-    return index;
   }
 
   @Override

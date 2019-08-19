@@ -25,6 +25,10 @@ public class Game extends GUI {
 
     private List<Player> players = new ArrayList<>();
 
+    public List<CharacterCard> getCharacters() {
+        return characters;
+    }
+
     private List<CharacterCard> characters = new ArrayList<>();
 
     private List <Card> allCards = new ArrayList<>();
@@ -32,6 +36,7 @@ public class Game extends GUI {
     private List<CharacterCard> unusedCharacters;
 
     private List<Room> rooms = new ArrayList<>();
+
     private List<WeaponCard> weapons = new ArrayList<>();
 
     private static int playerToAssignCharacter = 1;
@@ -44,6 +49,9 @@ public class Game extends GUI {
     private RoomCard suggestedRoom=null;
     private WeaponCard suggestedWeapon=null;
 
+    private List<Tile> foundPath = new ArrayList<>();
+
+
     //------------------------
     // CONSTRUCTOR
     //------------------------
@@ -54,6 +62,24 @@ public class Game extends GUI {
         createBoard();
         setupPlayerSelect();
     }
+
+    /**
+     * Get the path currently found for current player
+     * @return Tile list of path
+     */
+    @Override
+    public List<Tile> getFoundPath() {
+        return foundPath;
+    }
+
+    /**
+     * Remove index 0 tile from path
+     */
+    @Override
+    public void removePathStep() {
+        foundPath.remove(0);
+    }
+
 
     /**
      * Set the total number of players to input from user
@@ -161,8 +187,8 @@ public class Game extends GUI {
                 "|M|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|_|_|_|_|#|" + "\n" +
                 "|X|_|_|_|_|_|_|_|_|#|#|^|^|#|#|_|_|_|#|#|#|#|#|X|" + "\n" +
                 "|#|#|#|#|#|#|^|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|P|" + "\n" +
-                "|#|_|_|_|_|_|_|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|X|" + "\n" +
-                "|L|_|_|_|_|_|_|_|_|#|_|_|_|_|>|_|_|^|#|#|#|#|#|#|" + "\n" +
+                "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|X|" + "\n" +
+                "|L|_|_|_|_|_|#|_|_|#|_|_|_|_|>|_|_|^|#|#|#|#|#|#|" + "\n" +
                 "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|" + "\n" +
                 "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|" + "\n" +
                 "|#|#|#|#|#|#|#|R|X|#|#|H|#|#|#|X|_|#|#|#|#|#|#|S|" + "\n";
@@ -414,209 +440,10 @@ public class Game extends GUI {
             }
         }
 
-        positionWalls();
+        board.positionWalls();
 
     }
 
-    /**
-     * Marks the walls of the room as the correct wall shape
-     * Purely stylistic
-     */
-    private void positionWalls(){
-        Class c = getClass();
-
-        //Library
-        board.getBoardTile("Gt").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Gu").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Gv").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Gw").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Gx").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Gy").setDefaultImage(c.getResource("WBR.jpg"));
-
-        board.getBoardTile("By").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Cy").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Dy").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Ey").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Fy").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Ay").setDefaultImage(c.getResource("WBL.jpg"));
-
-        board.getBoardTile("Au").setDefaultImage(c.getResource("WL.jpg"));
-//        board.getBoardTile("Av").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Aw").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Ax").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("At").setDefaultImage(c.getResource("WTL.jpg"));
-
-
-        //Dining
-        board.getBoardTile("Hp").setDefaultImage(c.getResource("WBR.jpg"));
-        board.getBoardTile("Gp").setDefaultImage(c.getResource("Room.jpg"));
-        board.getBoardTile("Fp").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Ep").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Dp").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Cp").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Bp").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Ap").setDefaultImage(c.getResource("WBL.jpg"));
-
-        board.getBoardTile("Ak").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Al").setDefaultImage(c.getResource("WL.jpg"));
-//        board.getBoardTile("Am").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("An").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Ao").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Aj").setDefaultImage(c.getResource("WTL.jpg"));
-
-        board.getBoardTile("Ej").setDefaultImage(c.getResource("WTR.jpg"));
-        board.getBoardTile("Ek").setDefaultImage(c.getResource("Room.jpg"));
-
-        board.getBoardTile("Hk").setDefaultImage(c.getResource("WTR.jpg"));
-        board.getBoardTile("Fp").setDefaultImage(c.getResource("WB.jpg"));
-
-        board.getBoardTile("Hl").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Hn").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Ho").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Hm").setDefaultImage(c.getResource("Room.jpg"));
-
-        //Kitchen
-        board.getBoardTile("Bg").setDefaultImage(c.getResource("WBL.jpg"));
-        board.getBoardTile("Cg").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Dg").setDefaultImage(c.getResource("WB.jpg"));
-
-        board.getBoardTile("Af").setDefaultImage(c.getResource("WBL.jpg"));
-//        board.getBoardTile("Ac").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Ad").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Ae").setDefaultImage(c.getResource("WL.jpg"));
-
-        board.getBoardTile("Ab").setDefaultImage(c.getResource("WTL.jpg"));
-        board.getBoardTile("Fb").setDefaultImage(c.getResource("WTR.jpg"));
-
-        board.getBoardTile("Fc").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Fd").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Fe").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Ff").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Fg").setDefaultImage(c.getResource("WBR.jpg"));
-
-        //Auditorium
-        board.getBoardTile("Id").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Ie").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("If").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Ig").setDefaultImage(c.getResource("WL.jpg"));
-
-        board.getBoardTile("Ic").setDefaultImage(c.getResource("WTL.jpg"));
-        board.getBoardTile("Ih").setDefaultImage(c.getResource("WBL.jpg"));
-
-        board.getBoardTile("Kb").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Ka").setDefaultImage(c.getResource("WTL.jpg"));
-
-        board.getBoardTile("Na").setDefaultImage(c.getResource("WTR.jpg"));
-        board.getBoardTile("Nb").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Nc").setDefaultImage(c.getResource("Room.jpg"));
-
-        board.getBoardTile("Pc").setDefaultImage(c.getResource("WTR.jpg"));
-        board.getBoardTile("Pd").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Pe").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Pf").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Pg").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Ph").setDefaultImage(c.getResource("WBR.jpg"));
-
-        board.getBoardTile("Kh").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Lh").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Mh").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Nh").setDefaultImage(c.getResource("WB.jpg"));
-//        board.getBoardTile("Kc").setDefaultImage(c.getResource("Room.jpg"));
-
-
-        //Cons
-        board.getBoardTile("Sb").setDefaultImage(c.getResource("WTL.jpg"));
-        board.getBoardTile("Sc").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Sd").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Se").setDefaultImage(c.getResource("WL.jpg"));
-
-        board.getBoardTile("Tf").setDefaultImage(c.getResource("WBL.jpg"));
-        board.getBoardTile("Uf").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Vf").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Wf").setDefaultImage(c.getResource("WBR.jpg"));
-
-        board.getBoardTile("Xe").setDefaultImage(c.getResource("WBR.jpg"));
-        board.getBoardTile("Xd").setDefaultImage(c.getResource("WR.jpg"));
-//        board.getBoardTile("Xc").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Xb").setDefaultImage(c.getResource("WTR.jpg"));
-
-
-        //Entertainment Room
-        board.getBoardTile("Si").setDefaultImage(c.getResource("WTL.jpg"));
-        board.getBoardTile("Sk").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Sl").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Sm").setDefaultImage(c.getResource("WBL.jpg"));
-
-        board.getBoardTile("Tm").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Um").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Vm").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Xm").setDefaultImage(c.getResource("WBR.jpg"));
-
-//        board.getBoardTile("Xj").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Xk").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Xl").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Xi").setDefaultImage(c.getResource("WTR.jpg"));
-
-
-        //Book Room
-        board.getBoardTile("Sr").setDefaultImage(c.getResource("Room.jpg"));
-        board.getBoardTile("Sp").setDefaultImage(c.getResource("Room.jpg"));
-
-        board.getBoardTile("Rp").setDefaultImage(c.getResource("WTL.jpg"));
-        board.getBoardTile("Rr").setDefaultImage(c.getResource("WBL.jpg"));
-
-        board.getBoardTile("Ss").setDefaultImage(c.getResource("WBL.jpg"));
-        board.getBoardTile("Ts").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Us").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Vs").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Ws").setDefaultImage(c.getResource("WBR.jpg"));
-
-        board.getBoardTile("Xr").setDefaultImage(c.getResource("WBR.jpg"));
-        board.getBoardTile("Xq").setDefaultImage(c.getResource("WR.jpg"));
-//        board.getBoardTile("Xp").setDefaultImage(c.getResource("WTR.jpg"));
-
-        board.getBoardTile("Wo").setDefaultImage(c.getResource("WTR.jpg"));
-        board.getBoardTile("So").setDefaultImage(c.getResource("WTL.jpg"));
-
-
-        //Study
-        board.getBoardTile("Rv").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Rw").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Rx").setDefaultImage(c.getResource("WL.jpg"));
-
-        board.getBoardTile("Ry").setDefaultImage(c.getResource("WBL.jpg"));
-        board.getBoardTile("Sy").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Ty").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Uy").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Vy").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Wy").setDefaultImage(c.getResource("WB.jpg"));
-//        board.getBoardTile("Xy").setDefaultImage(c.getResource("WB.jpg"));
-
-        //Hall
-        board.getBoardTile("Ky").setDefaultImage(c.getResource("WB.jpg"));
-//        board.getBoardTile("Ly").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("My").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Ny").setDefaultImage(c.getResource("WB.jpg"));
-        board.getBoardTile("Jy").setDefaultImage(c.getResource("WBL.jpg"));
-        board.getBoardTile("Oy").setDefaultImage(c.getResource("WBR.jpg"));
-
-        board.getBoardTile("Ox").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Ow").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Ou").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Ot").setDefaultImage(c.getResource("WR.jpg"));
-        board.getBoardTile("Os").setDefaultImage(c.getResource("WTR.jpg"));
-        board.getBoardTile("Js").setDefaultImage(c.getResource("WTL.jpg"));
-
-        board.getBoardTile("Jt").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Ju").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Jv").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Jw").setDefaultImage(c.getResource("WL.jpg"));
-        board.getBoardTile("Jx").setDefaultImage(c.getResource("WL.jpg"));
-
-        board.getBoardTile("If").setDefaultImage(c.getResource("Room.jpg"));
-        board.getBoardTile("Pf").setDefaultImage(c.getResource("Room.jpg"));
-
-    }
 
     //------------------------
     // INTERFACE
@@ -654,22 +481,17 @@ public class Game extends GUI {
 
     /**
      * Take tile t and check if current player can reach this tile with currents moves.
-     * If so, move the player, if not, return false for now.
-     * Will need to use player field and moves fields that are updated.
-     * Moves are updated on dice roll.
-     * Player not currently updating
+     * If so return true, false otherwise
      * @param t Tile to move to
      * @return if the move was valid
      */
     public boolean processMove(Tile t){
         if(t == null) return false;
-        if(board.movePlayer(players.get(currentPlayer),t,moves)){
-            moves = 0;
-            return true;
-        }
-        else{
-            return false;
-        }
+        foundPath = board.movePlayer(players.get(currentPlayer),t,moves);
+        if(foundPath == null || foundPath.size() == 0) return false;
+        moves = 0;
+        foundPath.remove(0);
+        return true;
     }
 
 
@@ -779,7 +601,7 @@ public class Game extends GUI {
      *
      * @return a new list of all the weapons
      */
-     List<WeaponCard> getWeapons() {
+     public List<WeaponCard> getWeapons() {
         return new ArrayList<>(this.weapons);
     }
 
@@ -811,20 +633,6 @@ public class Game extends GUI {
         }
     }
 
-    /**
-     * Checks that a suggestion is allowed
-     * The player has to be inside a room in order to be allowed
-     * @return if the player can make a suggestion
-     */
-    @Override
-    public boolean processSuggestion(){
-        return true;
-//        Room room = players.get(currentPlayer).getPosition().getIsPartOf();
-//        if (room == null) { // only allow them to make suggestions in a room
-//            return false;
-//        }
-//        return true;
-    }
 
     /**
      * Turns two strings into the corresponding cards, saves the suggested scenario, and checks if this can be refuted

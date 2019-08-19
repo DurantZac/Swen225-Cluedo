@@ -10,7 +10,6 @@ public class CharacterCard implements Card
   private String character;
   private char characterSymbol;
   private Tile position;
-  private int index;
   public java.net.URL image;
 
   //------------------------
@@ -34,32 +33,26 @@ public class CharacterCard implements Card
       case "Mrs White":
         image = getClass().getResource("card_white.jpg");
         characterSymbol = 'W';
-        index = 2;
         break;
       case "Rev. Green":
         image = getClass().getResource("card_green.jpg");
         characterSymbol = 'G';
-        index = 3;
         break;
       case "Col. Mustard":
         image = getClass().getResource("card_mustard.jpg");
         characterSymbol = 'M';
-        index = 1;
         break;
       case "Miss Red":
         image = getClass().getResource("card_red.jpg");
         characterSymbol = 'R';
-        index = 6;
         break;
       case "Prof. Plum":
         image = getClass().getResource("card_plum.jpg");
         characterSymbol = 'P';
-        index = 4;
         break;
       case "Ms Turquoise":
         image = getClass().getResource("card_turquoise.jpg");
         characterSymbol = 'T';
-        index = 5;
         break;
     }
   }
@@ -105,10 +98,6 @@ public class CharacterCard implements Card
    */
   public Tile getPosition(){
     return position;
-  }
-
-  public int getIndex(){
-    return index;
   }
 
   @Override
