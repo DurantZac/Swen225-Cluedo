@@ -19,7 +19,8 @@ public class WeaponCard implements Card
 
   /**
    * Constructor, makes a weapon card with a given string
-   * @param aWeapon
+   * Adds the image for the room and the card
+   * @param aWeapon the weapon as a string
    */
   public WeaponCard(String aWeapon)
   {

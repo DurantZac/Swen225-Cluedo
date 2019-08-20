@@ -23,6 +23,7 @@ public class Game extends GUI {
         return murderScenario;
     }
 
+    //Players and characters
     private List<Player> players = new ArrayList<>();
 
     public List<CharacterCard> getCharacters() {
@@ -31,9 +32,11 @@ public class Game extends GUI {
 
     private List<CharacterCard> characters = new ArrayList<>();
 
-    private List <Card> allCards = new ArrayList<>();
-
     private List<CharacterCard> unusedCharacters;
+
+    //Other cards
+
+    private List <Card> allCards = new ArrayList<>();
 
     private List<Room> rooms = new ArrayList<>();
 
@@ -44,6 +47,7 @@ public class Game extends GUI {
     // Store moves from rollDice event
     public int moves = 0;
 
+    //Variables associated with suggestions
     private int refutingPlayer=0;
     private CharacterCard suggestedCharacter=null;
     private RoomCard suggestedRoom=null;
@@ -211,7 +215,6 @@ public class Game extends GUI {
     /**
      * Create character cards, room cards and weapon cards
      * Also generates rooms, marks entrances and chooses murder scenario
-     *
      *
      * @param characters , a list of character cards which are created in the game constructor,
      *                  as these are required previously.
@@ -419,8 +422,6 @@ public class Game extends GUI {
                 }
             }
         }
-
-
 
         //Auditorium
         Room a = roomCards.get(8).getRoom();
@@ -705,15 +706,17 @@ public class Game extends GUI {
         WeaponCard weaponCard = checkWeapon(weapon);
         RoomCard roomCard = checkRoom(room);
 
-
+        //Incorrect accusations
         if (!(characterCard.equals(murderScenario.get(0)) && roomCard.equals(murderScenario.get(1)) && weaponCard.equals(murderScenario.get(2)))) {
+            //remove player and go to the next one
             players.get(currentPlayer).setIsStillPlaying(false);
             nextTurn();
-            if(players.stream().filter(p -> p.getIsStillPlaying() == true).count() == 1){
+            if(players.stream().filter(p -> p.getIsStillPlaying() == true).count() == 1){//check if only one player is left
                 showWinScreen();
             }
             return false;
         }
+        //Correct (game won)
         return true;
     }
 

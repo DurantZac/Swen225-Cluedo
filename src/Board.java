@@ -2,8 +2,6 @@
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-// line 17 "model.ump"
-// line 104 "model.ump"
 public class Board
 {
 
@@ -39,7 +37,6 @@ public class Board
     }
 
     game = aGame;
-
 
     // Add adjacent tiles
     for(char row = 'a'; row < 'z'; row++){
@@ -293,13 +290,12 @@ public class Board
 
   /**
    * Return tile at row,col
-   * Return tile at row,col
-   * @param row
-   * @param col
-   * @return
+   * @param row the row of the tile
+   * @param col the column of the tile
+   * @return the tile corresponding to the row and column
    */
   public Tile getBoardTile(int row, int col){
-    if(row >= 25 || col >= 24) {
+    if(row >= 25 || col >= 24) { // check its a valid tile
       return null;
     }
     return boardTiles[row][col];
@@ -336,19 +332,19 @@ public class Board
     /**
      * Move player p to tile t.
      * Called to move player step by step along a path
-     * @param p
-     * @param t
+     * @param p the player moving
+     * @param t the tile to move to
      */
   public void takeStep(Player p, Tile t){
       Tile oldPos = p.getPosition();
-      if(oldPos.getIsPartOf() != null) oldPos.getIsPartOf().addEmptySpace(oldPos);
+      if(oldPos.getIsPartOf() != null) oldPos.getIsPartOf().addEmptySpace(oldPos); //the player is in a room
       oldPos.removeCharacter();
       if(t.getIsPartOf() != null){
           t = t.getIsPartOf().getEmptySpace();
-          p.getCharacter().setPosition(t);
+          p.getCharacter().setPosition(t); // move them out of the room
       }
       else{
-          p.getCharacter().setPosition(t);
+          p.getCharacter().setPosition(t); // just move the player
       }
   }
 
@@ -366,39 +362,38 @@ public class Board
    */
     private List<Tile> pathFinding(Tile node, Tile goal, int moveGoal, int moveCount, List<Tile> visited){
         List<Tile> path = null;
-        if(node == goal && moveCount == moveGoal){
+        if(node == goal && moveCount == moveGoal){ //Whole path found
             visited.add(node);
             return visited;
         }
-        else if(node.getIsPartOf() != null && node.getIsPartOf() == goal.getIsPartOf() && moveCount <= moveGoal){
+        else if(node.getIsPartOf() != null && node.getIsPartOf() == goal.getIsPartOf() && moveCount <= moveGoal){ // in a room
             visited.add(node);
             return visited;
         }
-        else if(moveCount >= moveGoal) return null;
+        else if(moveCount >= moveGoal) return null; // out of moves
         else{visited.add(node);}
-        for(Tile neigh : node.getAdjacent()){
+        for(Tile neigh : node.getAdjacent()){ //add all the neighbours
             if(!visited.contains(neigh)) {
                 if(neigh.getSymbol() != '_' && !neigh.getIsAccessibleFull(node)) continue;
-                List<Tile> option = pathFinding(neigh, goal, moveGoal, moveCount + 1, new ArrayList<>(visited));
+                List<Tile> option = pathFinding(neigh, goal, moveGoal, moveCount + 1, new ArrayList<>(visited)); //search at this neighbour
                 path = option != null ? option : path;
             }
         }
         return path;
-
     }
 
 
 
     /**
    * Teleports the player to a room they have been suggested in
-   * @param c charactercard object
+   * @param c character card object
    * @param goal room to move to
    */
   public void teleportCharacter(CharacterCard c, Room goal){
     Tile oldPos = c.getPosition();
-    if(oldPos.getIsPartOf() != null) oldPos.getIsPartOf().addEmptySpace(oldPos);
-    oldPos.removeCharacter();
-    Tile t = goal.getEmptySpace();
+    if(oldPos.getIsPartOf() != null) oldPos.getIsPartOf().addEmptySpace(oldPos); //remove player from old room
+    oldPos.removeCharacter(); // remove player from the old tile
+    Tile t = goal.getEmptySpace(); //move player to a free space in the room
     c.setPosition(t);
   }
 

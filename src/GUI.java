@@ -102,7 +102,7 @@ public abstract class GUI {
         // If player is currently moving, this function will animate the movement.
         int delay = 400; //milliseconds
         ActionListener taskPerformer = evt -> {
-            if(getFoundPath() == null || getFoundPath().size() == 0){
+            if(getFoundPath() == null || getFoundPath().size() == 0){ // no player currently moving
                 nextTurn.setEnabled(true);
                 return;
             }
@@ -286,6 +286,8 @@ public abstract class GUI {
             super(); // Super constructor
             try{
                 // Fill map with all possible images that can be used on a tile
+
+                //Corridors, Rooms and Players
                 Image cor = ImageIO.read(getClass().getResource("Cor.jpg"));
                 imageMap.put(getClass().getResource("Cor.jpg"),cor);
                 Image room = ImageIO.read(getClass().getResource("Room.jpg"));
@@ -375,6 +377,7 @@ public abstract class GUI {
                         int x = e.getX();
                         int y = e.getY();
 
+                        //Find corresponding tile on the grid
                         int col = (int)(x/colDis);
                         int row = (int)(y/rowDis);
 
@@ -427,7 +430,7 @@ public abstract class GUI {
             colDis = this.getWidth() / 24;
             rowDis = this.getHeight() / 25;
 
-            //Rerender board
+            //Re-render board
             int i =0;
             for(int row = 0; row < 25; row++){
                 for(int col = 0; col < 24; col++) {
@@ -450,7 +453,7 @@ public abstract class GUI {
         /**
          * Called when mouse is moved, checks if tile mouse is over
          * has special feature, if so, displays tooltip
-         * @param e
+         * @param e the mouse event
          */
         @Override
         public void mouseMoved(MouseEvent e) {
@@ -498,7 +501,7 @@ public abstract class GUI {
         private int dice1 = 1;
         private int dice2 = 1;
 
-        // Labels for each image
+        // Labels for each dice
         JLabel diceLabel1 = new JLabel();
         JLabel diceLabel2 = new JLabel();
 
@@ -715,21 +718,26 @@ public abstract class GUI {
 
         /**
          * Repaint and resize the controls section
-         * @param g
+         * @param g the graphics
          */
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
+            //Label which player's turn it is
             playerLabel.setText(getPlayers().get(currentPlayer).getCharacter().toString() +"'s turn");
             playerLabel.setSize(getWidth()/5,getHeight()/10);
             nextTurn.setSize(getWidth()/10, getHeight()/10);
+
+            //Set the dice
             setDice1(dice1);
             setDice2(dice2);
+
+            //show the cards
             if(showCards) showCards();
             else hideCards();
+
             repaint();
         }
-
     }
 
 
@@ -1010,6 +1018,7 @@ public abstract class GUI {
 
          JLabel previousNotes = new JLabel(sb.toString(), SwingConstants.CENTER);
 
+         //enable scrolling as text size increases
          scroller = new JScrollPane(previousNotes, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
          scroller.setMinimumSize(new Dimension(200,200));
 
@@ -1063,7 +1072,7 @@ public abstract class GUI {
         key.setVisible(true);
         key.setLayout(new GridLayout(16,2));
 
-        // Add items
+        // Make items
         JLabel m = new JLabel("M");
         JLabel w = new JLabel("W");
         JLabel g = new JLabel("G");
@@ -1098,7 +1107,7 @@ public abstract class GUI {
         JLabel study = new JLabel("Study");
         JLabel hall = new JLabel("Hall");
 
-
+        //add them to the Key
         key.add(m);
         key.add(mustard);
         key.add(w);
